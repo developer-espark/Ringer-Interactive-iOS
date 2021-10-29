@@ -12,17 +12,15 @@ public class ContactSave {
         case .authorized:
             completionHandler(true)
         case .denied:
-            completionHandler(false)
             self.showSettingsAlert(completionHandler)
         case .restricted, .notDetermined:
             CNContactStore().requestAccess(for: .contacts) { granted, error in
                 if granted {
                     completionHandler(true)
                 } else {
-//                    DispatchQueue.main.async {
-//                        self.showSettingsAlert(completionHandler)
-//                    }
-                    completionHandler(false)
+                    DispatchQueue.main.async {
+                        self.showSettingsAlert(completionHandler)
+                    }
                 }
             }
         @unknown default:
@@ -35,16 +33,17 @@ public class ContactSave {
         if
             let settings = URL(string: UIApplication.openSettingsURLString),
             UIApplication.shared.canOpenURL(settings) {
-                alert.addAction(UIAlertAction(title: "Open Settings", style: .default) { action in
-                    completionHandler(false)
+                alert.addAction(UIAlertAction(title: "Settings", style: .default) { action in
                     UIApplication.shared.open(settings)
                 })
         }
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel) { action in
-            completionHandler(false)
         })
-        
-        UIApplication.shared.windows.first?.rootViewController?.present(alert, animated: true)
+        let topWindow: UIWindow? = UIWindow(frame: UIScreen.main.bounds)
+        topWindow?.rootViewController = UIViewController()
+        topWindow?.windowLevel = UIWindow.Level.alert + 1
+        topWindow?.makeKeyAndVisible()
+        topWindow?.rootViewController?.present(alert, animated: true)
     }
     
     func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
