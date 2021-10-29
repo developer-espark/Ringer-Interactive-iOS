@@ -19,7 +19,7 @@ public class ContactSave {
                     print("Authorized")
                 } else {
                     DispatchQueue.main.async {
-                        self.showSettingsAlert(completionHandler)
+                        self.showSettingsAlert()
                     }
                 }
             }
