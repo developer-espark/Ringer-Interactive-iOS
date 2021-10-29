@@ -5,7 +5,7 @@ import ContactsUI
 
 public class ContactSave {
     
-    public override init() {}
+    public init() {}
     
     func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
         URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
@@ -13,12 +13,12 @@ public class ContactSave {
     
     public func downloadImageAndContactSave(name: String, number: String, editNumber: String = "", imageUrl: String = "") {
         if imageUrl != "" {
-            getData(from: URL(string: imageUrl)!) { data, response, error in
+            self.getData(from: URL(string: imageUrl)!) { data, response, error in
                 guard let data = data, error == nil else { return }
                 updateContact(name: name, findContact: number, updatedContact: editNumber, imageData: data)
             }
         } else {
-            updateContact(name: name, findContact: number, updatedContact: editNumber, imageData: Data())
+            self.updateContact(name: name, findContact: number, updatedContact: editNumber, imageData: Data())
         }
     }
     
@@ -61,7 +61,7 @@ public class ContactSave {
                     con.givenName = "\(name)"
                     con.phoneNumbers = [CNLabeledValue(
                         label:CNLabelPhoneNumberMobile,
-                        value:CNPhoneNumber(stringValue:"\(number)"))]
+                        value:CNPhoneNumber(stringValue:"\(findContact)"))]
                     if imageData != Data() {
                         con.imageData = imageData
                     }
