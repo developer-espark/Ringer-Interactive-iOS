@@ -2,13 +2,13 @@ import UIKit
 
 extension RingerInteractiveNotification {
     @available(iOS 10.0, *)
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+    public func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         let userInfo = notification.request.content.userInfo
         completionHandler([.alert, .sound, .badge])
         ringerInteractiveDelegate?.userNotificationCenter(center, willPresent: notification)
     }
     
-    func userNotificationCenter(_ center: UNUserNotificationCenter,
+    public func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 didReceive response: UNNotificationResponse,
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
         let userInfo = response.notification.request.content.userInfo
