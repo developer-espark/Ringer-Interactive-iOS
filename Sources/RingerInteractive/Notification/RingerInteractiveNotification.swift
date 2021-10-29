@@ -5,7 +5,7 @@ import FirebaseAuth
 import FirebaseMessaging
 
 
-public protocol ringerInteractiveProtocol {
+public protocol ringerInteractiveDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification)
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 didReceive response: UNNotificationResponse)
@@ -14,9 +14,9 @@ public protocol ringerInteractiveProtocol {
 
 public class RingerInteractiveNotification: UIResponder, MessagingDelegate, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     
-    public var ringerInteractiveDelegate : ringerInteractiveProtocol?
+    public var ringerInteractiveDelegate : ringerInteractiveDelegate?
     
-    public init() {}
+    public override init() {}
 }
 
 //MARK: Application Delegate
