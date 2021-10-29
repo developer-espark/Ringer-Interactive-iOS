@@ -12,7 +12,7 @@ public class ContactSave {
         case .authorized:
             print("Authorized")
         case .denied:
-            self.showSettingsAlert(completionHandler)
+            self.showSettingsAlert()
         case .restricted, .notDetermined:
             CNContactStore().requestAccess(for: .contacts) { granted, error in
                 if granted {
@@ -28,7 +28,7 @@ public class ContactSave {
         }
     }
     
-    func showSettingsAlert(_ completionHandler: @escaping (_ accessGranted: Bool) -> Void) {
+    func showSettingsAlert() {
         let alert = UIAlertController(title: nil, message: "This app requires access to Contacts to proceed. Go to Settings to grant access.", preferredStyle: .alert)
         if
             let settings = URL(string: UIApplication.openSettingsURLString),
