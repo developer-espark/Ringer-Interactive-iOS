@@ -4,7 +4,6 @@ import FirebaseCore
 import FirebaseAuth
 import FirebaseMessaging
 
-
 public protocol ringerInteractiveDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification)
     func userNotificationCenter(_ center: UNUserNotificationCenter,
@@ -48,6 +47,7 @@ extension RingerInteractiveNotification {
     public func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
         Messaging.messaging().token { token, error in
             if let error = error {
+                print(error)
             } else if let token = token {
                 self.ringerInteractiveDelegate?.tokenGenerate(token: token)
             }
@@ -55,7 +55,7 @@ extension RingerInteractiveNotification {
     }
     
     public func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        let token = deviceToken.map { String(format: "%02.2hhx", $0) }.joined()
+        _ = deviceToken.map { String(format: "%02.2hhx", $0) }.joined()
         Messaging.messaging().apnsToken = deviceToken
     }
     
@@ -67,4 +67,5 @@ extension RingerInteractiveNotification {
     
     public func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
     }
+    
 }

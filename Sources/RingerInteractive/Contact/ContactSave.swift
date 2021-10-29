@@ -7,6 +7,43 @@ public class ContactSave {
     
     public init() {}
     
+    public func requestAccess(completionHandler: @escaping (_ accessGranted: Bool) -> Void) {
+        switch CNContactStore.authorizationStatus(for: .contacts) {
+        case .authorized:
+            completionHandler(true)
+        case .denied:
+            showSettingsAlert(completionHandler)
+        case .restricted, .notDetermined:
+            CNContactStore().requestAccess(for: .contacts) { granted, error in
+                if granted {
+                    completionHandler(true)
+                } else {
+                    DispatchQueue.main.async {
+                        self.showSettingsAlert(completionHandler)
+                    }
+                }
+            }
+        @unknown default:
+            print("Default")
+        }
+    }
+    
+    private func showSettingsAlert(_ completionHandler: @escaping (_ accessGranted: Bool) -> Void) {
+        let alert = UIAlertController(title: nil, message: "This app requires access to Contacts to proceed. Go to Settings to grant access.", preferredStyle: .alert)
+        if
+            let settings = URL(string: UIApplication.openSettingsURLString),
+            UIApplication.shared.canOpenURL(settings) {
+                alert.addAction(UIAlertAction(title: "Open Settings", style: .default) { action in
+                    completionHandler(false)
+                    UIApplication.shared.open(settings)
+                })
+        }
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel) { action in
+            completionHandler(false)
+        })
+        UIApplication.shared.windows.first?.rootViewController?.navigationController?.present(alert, animated: true)
+    }
+    
     func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
         URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
     }
@@ -15,7 +52,7 @@ public class ContactSave {
         if imageUrl != "" {
             self.getData(from: URL(string: imageUrl)!) { data, response, error in
                 guard let data = data, error == nil else { return }
-                updateContact(name: name, findContact: number, updatedContact: editNumber, imageData: data)
+                self.updateContact(name: name, findContact: number, updatedContact: editNumber, imageData: data)
             }
         } else {
             self.updateContact(name: name, findContact: number, updatedContact: editNumber, imageData: Data())
