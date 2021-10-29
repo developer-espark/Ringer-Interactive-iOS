@@ -12,15 +12,17 @@ public class ContactSave {
         case .authorized:
             completionHandler(true)
         case .denied:
+            completionHandler(false)
             self.showSettingsAlert(completionHandler)
         case .restricted, .notDetermined:
             CNContactStore().requestAccess(for: .contacts) { granted, error in
                 if granted {
                     completionHandler(true)
                 } else {
-                    DispatchQueue.main.async {
-                        self.showSettingsAlert(completionHandler)
-                    }
+//                    DispatchQueue.main.async {
+//                        self.showSettingsAlert(completionHandler)
+//                    }
+                    completionHandler(false)
                 }
             }
         @unknown default:
@@ -41,7 +43,8 @@ public class ContactSave {
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel) { action in
             completionHandler(false)
         })
-        UIApplication.shared.windows.first?.rootViewController.present(alert, animated: true)
+        
+        UIApplication.shared.windows.first?.rootViewController?.present(alert, animated: true)
     }
     
     func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
