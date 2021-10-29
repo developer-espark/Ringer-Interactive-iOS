@@ -19,7 +19,7 @@ public class RingerInteractiveNotification: UIResponder, MessagingDelegate, UIAp
 //MARK: Application Delegate
 extension RingerInteractiveNotification {
     
-    init() {}
+    public init() {}
     
     public func notificationRegister() {
         Messaging.messaging().delegate = self
