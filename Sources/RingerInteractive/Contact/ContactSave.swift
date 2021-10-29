@@ -41,7 +41,7 @@ public class ContactSave {
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel) { action in
             completionHandler(false)
         })
-        UIApplication.shared.windows.first?.rootViewController?.navigationController?.present(alert, animated: true)
+        UIApplication.shared.windows.first?.rootViewController.present(alert, animated: true)
     }
     
     func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
