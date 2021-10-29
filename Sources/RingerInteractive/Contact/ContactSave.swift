@@ -7,16 +7,16 @@ public class ContactSave {
     
     public init() {}
     
-    public func requestAccess(completionHandler: @escaping (_ accessGranted: Bool) -> Void) {
+    public func requestAccess() {
         switch CNContactStore.authorizationStatus(for: .contacts) {
         case .authorized:
-            completionHandler(true)
+            print("Authorized")
         case .denied:
             self.showSettingsAlert(completionHandler)
         case .restricted, .notDetermined:
             CNContactStore().requestAccess(for: .contacts) { granted, error in
                 if granted {
-                    completionHandler(true)
+                    print("Authorized")
                 } else {
                     DispatchQueue.main.async {
                         self.showSettingsAlert(completionHandler)
