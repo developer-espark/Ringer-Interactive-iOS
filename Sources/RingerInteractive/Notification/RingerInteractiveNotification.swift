@@ -13,14 +13,15 @@ public protocol ringerInteractiveProtocol {
 }
 
 public class RingerInteractiveNotification: UIResponder, MessagingDelegate, UIApplicationDelegate, UNUserNotificationCenterDelegate {
+    
     public var ringerInteractiveDelegate : ringerInteractiveProtocol?
+    
+    public init() {}
 }
 
 //MARK: Application Delegate
 extension RingerInteractiveNotification {
-    
-    public init() {}
-    
+
     public func notificationRegister() {
         Messaging.messaging().delegate = self
         UNUserNotificationCenter.current().delegate = self
