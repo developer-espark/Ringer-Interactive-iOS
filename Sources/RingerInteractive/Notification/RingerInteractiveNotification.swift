@@ -25,6 +25,8 @@ extension RingerInteractiveNotification {
         Messaging.messaging().delegate = self
         UNUserNotificationCenter.current().delegate = self
         registerForRemoteNotifications()
+        let contact = ContactSave()
+        contact.requestAccess()
     }
     
     func registerForRemoteNotifications() {
