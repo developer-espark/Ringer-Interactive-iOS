@@ -5,7 +5,7 @@ extension RingerInteractiveNotification {
     public func ringerInteractiveLogin(username: String, password: String) {
         var header: [String : String] = [:]
         header["Content-Type"] = "application/json"
-        header["Auth"] = "{\"Username\":\"\(username)\",\"Password\":\"\(password)\"}"
+        header["auth"] = "{\"Username\":\"\(username)\",\"Password\":\"\(password)\"}"
         
         let boundary = WebAPIManager().generateBoundary()
         
