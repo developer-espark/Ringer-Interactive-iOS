@@ -11,7 +11,7 @@ typealias Parameters = [String: Any]
 
 class WebAPIManager: NSObject {
     
-    class func makeAPIRequest(method: String = "POST", isFormDataRequest: Bool, header: [String : String], path: String, isImageUpload: Bool,images:[Media], params: [String:Any], baseUrl: String = baseURL, boundary:String, completion: @escaping (_ response: [AnyHashable: Any],_ status: Int) -> Void) {
+    class func makeAPIRequest(method: String = "POST", isFormDataRequest: Bool, header: [String : String], path: String, isImageUpload: Bool,images:[Media], auth: Bool = false, authDic: [String:Any] = [:], params: [String:Any], baseUrl: String = baseURL, boundary:String, completion: @escaping (_ response: [AnyHashable: Any],_ status: Int) -> Void) {
         
         
         let baseURL = baseUrl + path
@@ -25,6 +25,8 @@ class WebAPIManager: NSObject {
             }
         }
         
+        
+        
         if isImageUpload{
             let dataBody = WebAPIManager().createDataBody(withParameters: params, media: images, boundary: boundary)
             request.httpBody = dataBody
@@ -37,6 +39,10 @@ class WebAPIManager: NSObject {
                 }
                 request.httpBody = httpBody
             }
+        }
+        
+        if auth {
+            request.setBasicAuth(username: (authDic["username"] as? String), password: (authDic["password"] as? String))
         }
         
         let session = URLSession.shared
@@ -115,5 +121,14 @@ extension Data {
         if let data = string.data(using: .utf8) {
             append(data)
         }
+    }
+}
+
+extension URLRequest {
+    mutating func setBasicAuth(username: String, password: String) {
+        let encodedAuthInfo = String(format: "%@:%@", username, password)
+            .data(using: String.Encoding.utf8)!
+            .base64EncodedString()
+        addValue("Basic \(encodedAuthInfo)", forHTTPHeaderField: "Authorization")
     }
 }

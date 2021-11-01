@@ -5,11 +5,14 @@ extension RingerInteractiveNotification {
     public func ringerInteractiveLogin(username: String, password: String) {
         var header: [String : String] = [:]
         header["Content-Type"] = "application/json"
-        header["auth"] = "{\"Username\":\"\(username)\",\"Password\":\"\(password)\"}"
+        
+        var authDic = [String:Any]()
+        authDic["username"] = username
+        authDic["password"] = password
         
         let boundary = WebAPIManager().generateBoundary()
         
-        WebAPIManager.makeAPIRequest(method: "GET", isFormDataRequest: false, header: header, path: Constant.Api.token_with_authorities, isImageUpload: false, images: [], params: [:], baseUrl: "https://sandbox.thrio.io/", boundary: boundary) { response, status in
+        WebAPIManager.makeAPIRequest(method: "GET", isFormDataRequest: false, header: header, path: Constant.Api.token_with_authorities, isImageUpload: false, images: [], auth: true, authDic: authDic, params: [:], baseUrl: "https://sandbox.thrio.io/", boundary: boundary) { response, status in
             if status == 200 {
                 let responseDataDic = response as! [String :Any]
                 baseURL = "\(responseDataDic["location"] ?? "")/"
