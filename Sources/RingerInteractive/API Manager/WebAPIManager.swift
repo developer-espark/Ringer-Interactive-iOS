@@ -42,7 +42,7 @@ class WebAPIManager: NSObject {
         }
         
         if auth {
-            request.setBasicAuth(username: (authDic["username"] as? String), password: (authDic["password"] as? String))
+            request.setBasicAuth(username: ((authDic["username"] as? String) ?? ""), password: ((authDic["password"] as? String) ?? ""))
         }
         
         let session = URLSession.shared
