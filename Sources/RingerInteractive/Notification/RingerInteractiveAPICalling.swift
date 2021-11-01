@@ -36,7 +36,28 @@ extension RingerInteractiveNotification {
         WebAPIManager.makeAPIRequest(method: "GET", isFormDataRequest: false, header: header, path: Constant.Api.getContact, isImageUpload: false, images: [], params: [:], boundary: boundary) { response, status in
             if status == 200 {
                 let responseDataDic = response as! [String :Any]
-                print(responseDataDic)
+                let contactListModel = ContactListModel(fromDictionary: responseDataDic)
+                for i in contactListModel.objects {
+                    if i.avatar != nil && i.avatar != "" {
+                        ringerInteractiveGetContactImage(contactId: i.contactId)
+                    }
+                }
+            } else {
+                let responseDataDic = response as! [String :Any]
+                print("\(responseDataDic["error"] ?? "")")
+            }
+        }
+    }
+    
+    func ringerInteractiveGetContactImage(contactId : String) {
+        var header: [String : String] = [:]
+        header["Content-Type"] = "application/json"
+        header["Authorization"] = GlobalFunction.getUserToken()
+        
+        let boundary = WebAPIManager().generateBoundary()
+        WebAPIManager.makeAPIRequest(method: "GET", isFormDataRequest: false, header: header, path: Constant.Api.getContactImage + "\(contactId)/avatar", isImageUpload: false, images: [], params: [:], boundary: boundary) { response, status in
+            if status == 200 {
+                
             } else {
                 let responseDataDic = response as! [String :Any]
                 print("\(responseDataDic["error"] ?? "")")
