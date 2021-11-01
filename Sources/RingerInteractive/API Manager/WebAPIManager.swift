@@ -48,7 +48,7 @@ class WebAPIManager: NSObject {
             if let data = data {
                 do {
                     let json = try JSONSerialization.jsonObject(with: data, options: []) as? [AnyHashable : Any]
-                    completion(json ?? [:], json!["code"] as? Int ?? 200)
+                    completion(json ?? [:], (json!["code"] as? Int) ?? 200)
                 } catch {
                     var dict = [AnyHashable: Any]()
                     dict["error"] = "Oops! Something went wrong. Please try again."

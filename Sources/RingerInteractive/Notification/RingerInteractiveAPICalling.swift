@@ -16,7 +16,7 @@ extension RingerInteractiveNotification {
                 baseURL = "\(responseDataDic["location"] ?? "")/"
                 UserDefaults.standard.set("\(responseDataDic["token"] ?? "")/", forKey: Constant.localStorage.token)
                 UserDefaults.standard.set("\(responseDataDic["location"] ?? "")/", forKey: Constant.localStorage.baseUrl)
-                ringerInteractiveGetContact()
+                self.ringerInteractiveGetContact()
             } else {
                 let responseDataDic = response as! [String :Any]
                 print("\(responseDataDic["error"] ?? "")")
