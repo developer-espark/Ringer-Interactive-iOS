@@ -39,7 +39,9 @@ extension RingerInteractiveNotification {
                 let contactListModel = ContactListModel(fromDictionary: responseDataDic)
                 for i in contactListModel.objects {
                     if i.avatar != nil && i.avatar != "" {
-                        self.ringerInteractiveGetContactImage(contactId: i.contactId)
+                        DispatchQueue.main.asyncAfter(deadline: .now()+2) {
+                            self.ringerInteractiveGetContactImage(contactId: i.contactId)
+                        }
                     }
                 }
             } else {
