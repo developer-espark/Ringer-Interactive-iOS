@@ -16,6 +16,9 @@ public class RingerInteractiveNotification: UIResponder, MessagingDelegate, UIAp
     public var ringerInteractiveDelegate : ringerInteractiveDelegate?
     
     public override init() {}
+    
+    let group = DispatchGroup()
+    
 }
 
 //MARK: Application Delegate

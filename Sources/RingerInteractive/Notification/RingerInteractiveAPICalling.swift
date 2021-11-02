@@ -2,8 +2,6 @@ import UIKit
 
 extension RingerInteractiveNotification {
     
-    let group = DispatchGroup()
-    
     public func ringerInteractiveLogin(username: String, password: String) {
         var header: [String : String] = [:]
         header["Content-Type"] = "application/json"
