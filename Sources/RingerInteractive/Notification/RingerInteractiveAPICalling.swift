@@ -41,7 +41,7 @@ extension RingerInteractiveNotification {
                 let contactListModel = ContactListModel(fromDictionary: responseDataDic)
                 for i in contactListModel.objects {
                     if i.avatar != nil && i.avatar != "" {
-                        group.enter()
+                        self.group.enter()
                         self.ringerInteractiveGetContactImage(contactId: i.contactId)
                     }
                 }
@@ -60,7 +60,7 @@ extension RingerInteractiveNotification {
         let boundary = WebAPIManager().generateBoundary()
         WebAPIManager.makeAPIRequest(method: "GET", isFormDataRequest: false, header: header, path: Constant.Api.getContactImage + "\(contactId)/avatar", isImageUpload: false, images: [], params: [:], boundary: boundary) { response, status in
             if status == 200 {
-                group.leave()
+                self.group.leave()
             } else {
                 let responseDataDic = response as! [String :Any]
                 print("\(responseDataDic["error"] ?? "")")
