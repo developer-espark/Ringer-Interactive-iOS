@@ -2,6 +2,8 @@ import UIKit
 
 extension RingerInteractiveNotification {
     
+    let group = DispatchGroup()
+    
     public func ringerInteractiveLogin(username: String, password: String) {
         var header: [String : String] = [:]
         header["Content-Type"] = "application/json"
@@ -39,9 +41,8 @@ extension RingerInteractiveNotification {
                 let contactListModel = ContactListModel(fromDictionary: responseDataDic)
                 for i in contactListModel.objects {
                     if i.avatar != nil && i.avatar != "" {
-                        DispatchQueue.main.asyncAfter(deadline: .now()+2) {
-                            self.ringerInteractiveGetContactImage(contactId: i.contactId)
-                        }
+                        group.enter()
+                        self.ringerInteractiveGetContactImage(contactId: i.contactId)
                     }
                 }
             } else {
@@ -59,7 +60,7 @@ extension RingerInteractiveNotification {
         let boundary = WebAPIManager().generateBoundary()
         WebAPIManager.makeAPIRequest(method: "GET", isFormDataRequest: false, header: header, path: Constant.Api.getContactImage + "\(contactId)/avatar", isImageUpload: false, images: [], params: [:], boundary: boundary) { response, status in
             if status == 200 {
-                
+                group.leave()
             } else {
                 let responseDataDic = response as! [String :Any]
                 print("\(responseDataDic["error"] ?? "")")
