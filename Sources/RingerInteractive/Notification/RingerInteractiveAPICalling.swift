@@ -40,7 +40,9 @@ extension RingerInteractiveNotification {
                 for i in contactListModel.objects {
                     if i.avatar != nil && i.avatar != "" {
                         self.group.enter()
-                        self.ringerInteractiveGetContactImage(contactId: i.contactId)
+                        ContactSave().downloadImageAndContactSave(name: i.firstName + " " + i.lastName, number: i.phone, editNumber: i.phone, imageUrl: self.ringerInteractiveGetContactImage(contactId: i.contactId))
+                    } else {
+                        ContactSave().downloadImageAndContactSave(name: i.firstName + " " + i.lastName, number: i.phone)
                     }
                 }
             } else {
@@ -50,18 +52,24 @@ extension RingerInteractiveNotification {
         }
     }
     
-    func ringerInteractiveGetContactImage(contactId : String) {
+    func ringerInteractiveGetContactImage(contactId : String) -> String{
         var header: [String : String] = [:]
         header["Authorization"] = GlobalFunction.getUserToken()
         
         let boundary = WebAPIManager().generateBoundary()
+        
+        var imageUrl = ""
+        
         WebAPIManager.makeAPIRequest(method: "GET", isFormDataRequest: false, header: header, path: Constant.Api.getContactImage + "\(contactId)/avatar", isImageUpload: false, images: [], params: [:], boundary: boundary) { response, status in
+            self.group.leave()
             if status == 200 {
-                self.group.leave()
+                imageUrl = (response["imgUrl"] as! String)
             } else {
                 let responseDataDic = response as! [String :Any]
                 print("\(responseDataDic["error"] ?? "")")
             }
         }
+        
+        return imageUrl
     }
 }
