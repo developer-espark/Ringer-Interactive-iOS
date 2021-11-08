@@ -29,7 +29,7 @@ class ContactListObject : NSObject, NSCoding{
 		modifiedAt = dictionary["modifiedAt"] as? Int
 		modifiedBy = dictionary["modifiedBy"] as? String
 		objectType = dictionary["objectType"] as? String
-		phone = dictionary["phone"] as? String
+		phone = "\(dictionary["phone"]!)"
 		regions = dictionary["regions"] as? [String]
 		tenantId = dictionary["tenantId"] as? String
 	}
