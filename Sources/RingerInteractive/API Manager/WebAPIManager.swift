@@ -1,15 +1,16 @@
 import UIKit
 
 typealias Parameters = [String: Any]
+var mainURL = ""
 
 class WebAPIManager: NSObject {
     
     class func makeAPIRequest(method: String = "POST", isFormDataRequest: Bool, header: [String : String], path: String, isImageUpload: Bool,images:[Media], auth: Bool = false, authDic: [String:Any] = [:], params: [String:Any], baseUrl: String = baseURL, boundary:String, completion: @escaping (_ response: [AnyHashable: Any],_ status: Int) -> Void) {
         
         
-        let baseURL = baseUrl + path
+        mainURL = baseUrl + path
 
-        var request = URLRequest(url: URL(string: baseURL)!)
+        var request = URLRequest(url: URL(string: mainURL)!)
         request.httpMethod = method
         
         if header.count > 0{
@@ -46,8 +47,15 @@ class WebAPIManager: NSObject {
 
             if let data = data {
                 do {
-                    let json = try JSONSerialization.jsonObject(with: data, options: []) as? [AnyHashable : Any]
-                    completion(json ?? [:], (json!["code"] as? Int) ?? 200)
+                    if mainURL == "\(String(describing: response!.url!))" {
+                        let json = try JSONSerialization.jsonObject(with: data, options: []) as? [AnyHashable : Any]
+                        completion(json ?? [:], (json!["code"] as? Int) ?? 200)
+                    } else {
+                        var dict = [AnyHashable: Any]()
+                        dict["imgUrl"] = response?.url
+                        completion(dict, (response as? HTTPURLResponse)?.statusCode ?? 200)
+                    }
+                    
                 } catch {
                     var dict = [AnyHashable: Any]()
                     dict["error"] = "Oops! Something went wrong. Please try again."
