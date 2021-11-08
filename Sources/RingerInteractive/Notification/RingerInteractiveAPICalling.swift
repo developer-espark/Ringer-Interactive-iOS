@@ -52,7 +52,6 @@ extension RingerInteractiveNotification {
     
     func ringerInteractiveGetContactImage(contactId : String) {
         var header: [String : String] = [:]
-        header["Content-Type"] = "application/json"
         header["Authorization"] = GlobalFunction.getUserToken()
         
         let boundary = WebAPIManager().generateBoundary()
