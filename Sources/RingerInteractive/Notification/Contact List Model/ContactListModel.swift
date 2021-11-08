@@ -1,9 +1,4 @@
-//
-//	ContactListModel.swift
-//	Model file generated using JSONExport: https://github.com/Ahmed-Ali/JSONExport
-
 import Foundation
-
 
 class ContactListModel : NSObject, NSCoding{
 
@@ -13,10 +8,6 @@ class ContactListModel : NSObject, NSCoding{
 	var previous : String!
 	var total : Int!
 
-
-	/**
-	 * Instantiate the instance using the passed dictionary values to set the properties values
-	 */
 	init(fromDictionary dictionary: [String:Any]){
 		count = dictionary["count"] as? Int
 		next = dictionary["next"] as? String
@@ -31,9 +22,6 @@ class ContactListModel : NSObject, NSCoding{
 		total = dictionary["total"] as? Int
 	}
 
-	/**
-	 * Returns all the available property values in the form of [String:Any] object where the key is the approperiate json key and the value is the value of the corresponding property
-	 */
 	func toDictionary() -> [String:Any]
 	{
 		var dictionary = [String:Any]()
@@ -59,10 +47,6 @@ class ContactListModel : NSObject, NSCoding{
 		return dictionary
 	}
 
-    /**
-    * NSCoding required initializer.
-    * Fills the data from the passed decoder
-    */
     @objc required init(coder aDecoder: NSCoder)
 	{
          count = aDecoder.decodeObject(forKey: "count") as? Int
@@ -73,10 +57,6 @@ class ContactListModel : NSObject, NSCoding{
 
 	}
 
-    /**
-    * NSCoding required method.
-    * Encodes mode properties into the decoder
-    */
     @objc func encode(with aCoder: NSCoder)
 	{
 		if count != nil{

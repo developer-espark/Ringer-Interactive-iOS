@@ -1,10 +1,3 @@
-//
-//  File.swift
-//  
-//
-//  Created by HariKrishna Kundariya on 01/11/21.
-//
-
 import Foundation
 
 var baseURL = "https://sandbox.thrio.io/"

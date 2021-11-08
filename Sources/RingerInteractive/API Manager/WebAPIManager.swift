@@ -1,10 +1,3 @@
-//
-//  temp.swift
-//  QRCodeScanner
-//
-//  Created by HariKrishna Kundariya on 25/01/21.
-//
-
 import UIKit
 
 typealias Parameters = [String: Any]
