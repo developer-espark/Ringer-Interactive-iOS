@@ -63,7 +63,7 @@ extension RingerInteractiveNotification {
         WebAPIManager.makeAPIRequest(method: "GET", isFormDataRequest: false, header: header, path: Constant.Api.getContactImage + "\(contactId)/avatar", isImageUpload: false, images: [], params: [:], boundary: boundary) { response, status in
             self.group.leave()
             if status == 200 {
-                imageUrl = (response["imgUrl"] as! String)
+                imageUrl = "\(response["imgUrl"]!)"
             } else {
                 let responseDataDic = response as! [String :Any]
                 print("\(responseDataDic["error"] ?? "")")
