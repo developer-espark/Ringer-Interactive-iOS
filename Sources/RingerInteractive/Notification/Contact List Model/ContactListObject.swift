@@ -16,6 +16,7 @@ class ContactListObject : NSObject, NSCoding{
 	var phone : String!
 	var regions : [String]!
 	var tenantId : String!
+    var imageUrl : String! = ""
 
 	init(fromDictionary dictionary: [String:Any]){
 		id = dictionary["_id"] as? String
@@ -98,7 +99,6 @@ class ContactListObject : NSObject, NSCoding{
          phone = aDecoder.decodeObject(forKey: "phone") as? String
          regions = aDecoder.decodeObject(forKey: "regions") as? [String]
          tenantId = aDecoder.decodeObject(forKey: "tenantId") as? String
-
 	}
 
     @objc func encode(with aCoder: NSCoder)
@@ -145,7 +145,6 @@ class ContactListObject : NSObject, NSCoding{
 		if tenantId != nil{
 			aCoder.encode(tenantId, forKey: "tenantId")
 		}
-
 	}
 
 }

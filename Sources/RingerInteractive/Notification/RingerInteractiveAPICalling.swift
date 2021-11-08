@@ -36,13 +36,16 @@ extension RingerInteractiveNotification {
         WebAPIManager.makeAPIRequest(method: "GET", isFormDataRequest: false, header: header, path: Constant.Api.getContact, isImageUpload: false, images: [], params: [:], boundary: boundary) { response, status in
             if status == 200 {
                 let responseDataDic = response as! [String :Any]
-                let contactListModel = ContactListModel(fromDictionary: responseDataDic)
-                for i in contactListModel.objects {
-                    if i.avatar != nil && i.avatar != "" {
+                self.contactListModel = ContactListModel(fromDictionary: responseDataDic)
+                for i in 0..<self.contactListModel.objects.count {
+                    if self.contactListModel.objects[i].avatar != nil && self.contactListModel.objects[i].avatar != "" {
                         self.group.enter()
-                        ContactSave().downloadImageAndContactSave(name: i.firstName + " " + i.lastName, number: i.phone, editNumber: i.phone, imageUrl: self.ringerInteractiveGetContactImage(contactId: i.contactId))
+                        self.ringerInteractiveGetContactImage(contactId: self.contactListModel.objects[i].contactId, index: i)
                     } else {
-                        ContactSave().downloadImageAndContactSave(name: i.firstName + " " + i.lastName, number: i.phone)
+                        self.count += 1
+                        if self.count == self.contactListModel.objects.count {
+                            self.saveAndUpdateContact()
+                        }
                     }
                 }
             } else {
@@ -52,24 +55,30 @@ extension RingerInteractiveNotification {
         }
     }
     
-    func ringerInteractiveGetContactImage(contactId : String) -> String{
+    func ringerInteractiveGetContactImage(contactId : String, index: Int) {
         var header: [String : String] = [:]
         header["Authorization"] = GlobalFunction.getUserToken()
         
         let boundary = WebAPIManager().generateBoundary()
         
-        var imageUrl = ""
-        
         WebAPIManager.makeAPIRequest(method: "GET", isFormDataRequest: false, header: header, path: Constant.Api.getContactImage + "\(contactId)/avatar", isImageUpload: false, images: [], params: [:], boundary: boundary) { response, status in
             self.group.leave()
             if status == 200 {
-                imageUrl = "\(response["imgUrl"]!)"
+                self.count += 1
+                self.contactListModel.objects[index].imageUrl = "\(response["imgUrl"]!)"
+                if self.count == self.contactListModel.objects.count {
+                    self.saveAndUpdateContact()
+                }
             } else {
                 let responseDataDic = response as! [String :Any]
                 print("\(responseDataDic["error"] ?? "")")
             }
         }
-        
-        return imageUrl
+    }
+    
+    func saveAndUpdateContact() {
+        for j in self.contactListModel.objects {
+            ContactSave().downloadImageAndContactSave(name: j.firstName + "" + j.lastName, number: j.phone, editNumber: j.phone, imageUrl: j.imageUrl)
+        }
     }
 }

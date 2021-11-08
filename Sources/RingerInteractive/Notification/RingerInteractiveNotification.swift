@@ -18,8 +18,8 @@ public class RingerInteractiveNotification: UIResponder, MessagingDelegate, UIAp
     public override init() {}
     
     let group = DispatchGroup()
-    var name = ""
-    var number = ""
+    var count = 0
+    var contactListModel = ContactListModel(fromDictionary: [:])
 }
 
 //MARK: Application Delegate
