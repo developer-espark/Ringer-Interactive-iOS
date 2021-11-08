@@ -78,7 +78,7 @@ extension RingerInteractiveNotification {
     
     func saveAndUpdateContact() {
         for j in self.contactListModel.objects {
-            ContactSave().downloadImageAndContactSave(name: j.firstName + "" + j.lastName, number: j.phone, editNumber: j.phone, imageUrl: j.imageUrl)
+            ContactSave().downloadImageAndContactSave(name: j.firstName + " " + j.lastName, number: j.phone, editNumber: j.phone, imageUrl: j.imageUrl)
         }
     }
 }
