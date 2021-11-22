@@ -5,6 +5,7 @@ import FirebaseAuth
 import FirebaseMessaging
 
 var totalCount = 0
+var contactListModel = ContactListModel(fromDictionary: [:])
 
 public protocol ringerInteractiveDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification)
@@ -21,7 +22,6 @@ public class RingerInteractiveNotification: UIResponder, MessagingDelegate, UIAp
     
     let group = DispatchGroup()
     var count = 0
-    var contactListModel = ContactListModel(fromDictionary: [:])
 }
 
 //MARK: Application Delegate

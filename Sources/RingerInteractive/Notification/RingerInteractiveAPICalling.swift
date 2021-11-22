@@ -36,14 +36,14 @@ extension RingerInteractiveNotification {
         WebAPIManager.makeAPIRequest(method: "GET", isFormDataRequest: false, header: header, path: Constant.Api.getContact, isImageUpload: false, images: [], params: [:], boundary: boundary) { response, status in
             if status == 200 {
                 let responseDataDic = response as! [String :Any]
-                self.contactListModel = ContactListModel(fromDictionary: responseDataDic)
-                for i in 0..<self.contactListModel.objects.count {
-                    if self.contactListModel.objects[i].avatar != nil && self.contactListModel.objects[i].avatar != "" {
+                contactListModel = ContactListModel(fromDictionary: responseDataDic)
+                for i in 0..<contactListModel.objects.count {
+                    if contactListModel.objects[i].avatar != nil && contactListModel.objects[i].avatar != "" {
                         self.group.enter()
-                        self.ringerInteractiveGetContactImage(contactId: self.contactListModel.objects[i].contactId, index: i)
+                        self.ringerInteractiveGetContactImage(contactId: contactListModel.objects[i].contactId, index: i)
                     } else {
                         self.count += 1
-                        if self.count == self.contactListModel.objects.count {
+                        if self.count == contactListModel.objects.count {
                             self.saveAndUpdateContact(index: 0)
                         }
                     }
@@ -65,8 +65,8 @@ extension RingerInteractiveNotification {
             self.group.leave()
             if status == 200 {
                 self.count += 1
-                self.contactListModel.objects[index].imageUrl = "\(response["imgUrl"]!)"
-                if self.count == self.contactListModel.objects.count {
+                contactListModel.objects[index].imageUrl = "\(response["imgUrl"]!)"
+                if self.count == contactListModel.objects.count {
                     self.saveAndUpdateContact(index: 0)
                 }
             } else {
@@ -83,7 +83,7 @@ extension RingerInteractiveNotification {
 //    }
     
     func saveAndUpdateContact(index:Int) {
-        if index < self.contactListModel.objects.count {
+        if index < contactListModel.objects.count {
             
             self.group.enter()
             ContactSave().downloadImageAndContactSave(name: contactListModel.objects[index].firstName + " " + contactListModel.objects[index].lastName, number: contactListModel.objects[index].phone, editNumber: contactListModel.objects[index].phone, imageUrl: contactListModel.objects[index].imageUrl)
