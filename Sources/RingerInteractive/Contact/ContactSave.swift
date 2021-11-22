@@ -33,9 +33,9 @@ public class ContactSave {
         if
             let settings = URL(string: UIApplication.openSettingsURLString),
             UIApplication.shared.canOpenURL(settings) {
-                alert.addAction(UIAlertAction(title: "Settings", style: .default) { action in
-                    UIApplication.shared.open(settings)
-                })
+            alert.addAction(UIAlertAction(title: "Settings", style: .default) { action in
+                UIApplication.shared.open(settings)
+            })
         }
         alert.addAction(UIAlertAction(title: "Cancel", style: .cancel) { action in
         })
@@ -68,49 +68,180 @@ public class ContactSave {
         try! store.execute(saveRequest)
     }
     
-    func updateContact(name: String, findContact: String, updatedContact: String, imageData: Data) {
-        let store = CNContactStore()
-        OperationQueue().addOperation{[store] in
-            let predicate = CNContact.predicateForContacts(matching: CNPhoneNumber(stringValue:"\(findContact)"))
-            let toFetch = [CNContactFormatter.descriptorForRequiredKeys(for: .fullName),
-                           CNContactEmailAddressesKey,
-                           CNContactPhoneNumbersKey,
-                           CNContactImageDataAvailableKey,
-                           CNContactThumbnailImageDataKey,CNContactViewController.descriptorForRequiredKeys()] as [Any]
+    //    func updateContact(name: String, findContact: String, updatedContact: String, imageData: Data) {
+    //        let store = CNContactStore()
+    //        OperationQueue().addOperation{[store] in
+    //            let predicate = CNContact.predicateForContacts(matching: CNPhoneNumber(stringValue:"\(findContact)"))
+    //            let toFetch = [CNContactFormatter.descriptorForRequiredKeys(for: .fullName),
+    //                           CNContactEmailAddressesKey,
+    //                           CNContactPhoneNumbersKey,
+    //                           CNContactImageDataAvailableKey,
+    //                           CNContactThumbnailImageDataKey,CNContactViewController.descriptorForRequiredKeys()] as [Any]
+    //
+    //            do{
+    //                let contacts = try store.unifiedContacts(matching: predicate,
+    //                                                         keysToFetch: toFetch as! [CNKeyDescriptor])
+    //                if contacts.count > 0 {
+    //                    for Contact in contacts{
+    //                        let contactChange = Contact.mutableCopy() as! CNMutableContact
+    //                        contactChange.givenName = "\(name)"
+    //                        contactChange.phoneNumbers = [CNLabeledValue(
+    //                            label:CNLabelPhoneNumberMobile,
+    //                            value:CNPhoneNumber(stringValue:"\(updatedContact)"))]
+    //                        if imageData != Data() {
+    //                            contactChange.imageData = imageData
+    //                        }
+    //                        let req = CNSaveRequest()
+    //                        req.update(contactChange)
+    //                        try store.execute(req)
+    //                    }
+    //                } else {
+    //                    let con = CNMutableContact()
+    //                    con.givenName = "\(name)"
+    //                    con.phoneNumbers = [CNLabeledValue(
+    //                        label:CNLabelPhoneNumberMobile,
+    //                        value:CNPhoneNumber(stringValue:"\(findContact)"))]
+    //                    if imageData != Data() {
+    //                        con.imageData = imageData
+    //                    }
+    //                    self.saveNewContact(con: con)
+    //                }
+    //            }
+    //            catch let err{
+    //                print(err)
+    //            }
+    //        }
+    //    }
+    
+    func updateContects(name: String, findContact: String, updatedContact: String, imageData: Data) {
+        var numberCheck = true
+        var numberIsMobile = false
+        var contactData = self.getContacts()
+        
+        for con in contactData {
+            groups.enter()
+            var numberIndex = -1
+            var numberData = ""
+            var updateNumberCheck = true
+            var updateContact = false
             
-            do{
-                let contacts = try store.unifiedContacts(matching: predicate,
-                                                         keysToFetch: toFetch as! [CNKeyDescriptor])
-                if contacts.count > 0 {
-                    for Contact in contacts{
-                        let contactChange = Contact.mutableCopy() as! CNMutableContact
-                        contactChange.givenName = "\(name)"
-                        contactChange.phoneNumbers = [CNLabeledValue(
-                            label:CNLabelPhoneNumberMobile,
-                            value:CNPhoneNumber(stringValue:"\(updatedContact)"))]
-                        if imageData != Data() {
-                            contactChange.imageData = imageData
-                        }
-                        let req = CNSaveRequest()
-                        req.update(contactChange)
-                        try store.execute(req)
-                    }
-                } else {
-                    let con = CNMutableContact()
-                    con.givenName = "\(name)"
-                    con.phoneNumbers = [CNLabeledValue(
-                        label:CNLabelPhoneNumberMobile,
-                        value:CNPhoneNumber(stringValue:"\(findContact)"))]
-                    if imageData != Data() {
-                        con.imageData = imageData
-                    }
-                    self.saveNewContact(con: con)
+            for phoneNumber in con.phoneNumbers {
+                var numbers = ""
+                if let number = phoneNumber.value as? CNPhoneNumber,
+                   let label = phoneNumber.label {
+                    numbers = number.stringValue.replacingOccurrences(of: "[(\\) \\-\\\\]", with: "", options: .regularExpression, range: nil)
+                }
+                if phoneNumber.label == "_$!<Mobile>!$_" && numbers == findContact {
+                    updateContact = true
                 }
             }
-            catch let err{
-                print(err)
+            
+            for phoneNumber in con.phoneNumbers {
+                if let number = phoneNumber.value as? CNPhoneNumber,
+                   let label = phoneNumber.label {
+                    numberData = number.stringValue.replacingOccurrences(of: "[(\\) \\-\\\\]", with: "", options: .regularExpression, range: nil)
+                    numberIndex += 1
+                }
+                
+                if phoneNumber.label != "_$!<Mobile>!$_" {
+                    numberIndex += 1
+                    updateNumberCheck = false
+                }
+                
+                if num == findContact {
+                    numberIsMobile = true
+                    break
+                } else {
+                    numberIsMobile = false
+                }
             }
+            
+            if numberIsMobile {
+                groups.enter()
+                let store = CNContactStore()
+                numberCheck = false
+                totalCount += 1
+                
+                OperationQueue().addOperation{[self, store] in
+                    
+                    let contactChange = con.mutableCopy() as! CNMutableContact
+                    let phoneNumberValue = CNPhoneNumber(stringValue: updatedContact)
+                    contactChange.givenName = "\(name)"
+                    contactChange.phoneNumbers.firstIndex(of: CNLabeledValue(
+                        label:CNLabelPhoneNumberMobile,
+                        value:CNPhoneNumber(stringValue:"\(updatedContact)")))
+                    
+                    if updateNumberCheck || updateContact {
+                        contactChange.phoneNumbers.remove(at: numberIndex)
+                    }
+                    contactChange.phoneNumbers.insert(CNLabeledValue(
+                        label:CNLabelPhoneNumberMobile,
+                        value:CNPhoneNumber(stringValue:"\(updatedContact)")), at: numberIndex)
+                    
+                    if !imageData.isEmpty {
+                        groups.enter()
+                        contactChange.imageData = imageData
+                        groups.leave()
+                    }
+                    groups.leave()
+                    groups.enter()
+                    let saveRequest = CNSaveRequest()
+                    saveRequest.update(contactChange)
+                    
+                    do  {
+                        try store.execute(saveRequest)
+                    } catch {
+                        print("error")
+                    }
+                    groups.leave()
+                    RingerInteractiveNotification().saveAndUpdateContact(i: totalCount)
+                }
+            }
+        }
+        
+        if numberCheck {
+            let con = CNMutableContact()
+            con.givenName = "\(name)"
+            con.phoneNumbers = [CNLabeledValue(
+                label:CNLabelPhoneNumberMobile,
+                value:CNPhoneNumber(stringValue:"\(findContact)"))]
+            if imageData != Data() {
+                con.imageData = imageData
+            }
+            self.saveNewContact(con: con)
         }
     }
     
+    func getContacts() -> [CNContact] {
+        
+        let contactStore = CNContactStore()
+        let keysToFetch = [
+            CNContactFormatter.descriptorForRequiredKeys(for: .fullName),
+            CNContactPhoneNumbersKey,
+            CNContactEmailAddressesKey,
+            CNContactImageDataAvailableKey,
+            CNContactThumbnailImageDataKey,
+            CNContactViewController.descriptorForRequiredKeys()] as [Any]
+        
+        var allContainers: [CNContainer] = []
+        do {
+            allContainers = try contactStore.containers(matching: nil)
+        } catch {
+            print("Error fetching containers")
+        }
+        
+        var results: [CNContact] = []
+        
+        for container in allContainers {
+            let fetchPredicate = CNContact.predicateForContactsInContainer(withIdentifier: container.identifier)
+            
+            do {
+                let containerResults = try contactStore.unifiedContacts(matching: fetchPredicate, keysToFetch: keysToFetch as! [CNKeyDescriptor])
+                results.append(contentsOf: containerResults)
+            } catch {
+                print("Error fetching containers")
+            }
+        }
+        return results
+    }
 }

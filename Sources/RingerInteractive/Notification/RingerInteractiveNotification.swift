@@ -4,6 +4,8 @@ import FirebaseCore
 import FirebaseAuth
 import FirebaseMessaging
 
+var totalCount = 0
+
 public protocol ringerInteractiveDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification)
     func userNotificationCenter(_ center: UNUserNotificationCenter,
