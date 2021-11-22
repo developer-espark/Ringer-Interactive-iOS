@@ -67,6 +67,8 @@ public class ContactSave {
         let saveRequest = CNSaveRequest()
         saveRequest.add(con, toContainerWithIdentifier:nil)
         try! store.execute(saveRequest)
+        totalCount += 1
+        RingerInteractiveNotification().saveAndUpdateContact(index: totalCount)
     }
     
     //    func updateContact(name: String, findContact: String, updatedContact: String, imageData: Data) {
