@@ -6,6 +6,7 @@ import ContactsUI
 public class ContactSave {
     
     public init() {}
+    var groups = DispatchGroup()
     
     public func requestAccess() {
         switch CNContactStore.authorizationStatus(for: .contacts) {
@@ -113,13 +114,13 @@ public class ContactSave {
     //        }
     //    }
     
-    func updateContects(name: String, findContact: String, updatedContact: String, imageData: Data) {
+    func updateContact(name: String, findContact: String, updatedContact: String, imageData: Data) {
         var numberCheck = true
         var numberIsMobile = false
-        var contactData = self.getContacts()
+        let contactData = self.getContacts()
         
         for con in contactData {
-            groups.enter()
+            self.groups.enter()
             var numberIndex = -1
             var numberData = ""
             var updateNumberCheck = true
@@ -128,7 +129,7 @@ public class ContactSave {
             for phoneNumber in con.phoneNumbers {
                 var numbers = ""
                 if let number = phoneNumber.value as? CNPhoneNumber,
-                   let label = phoneNumber.label {
+                   let _ = phoneNumber.label {
                     numbers = number.stringValue.replacingOccurrences(of: "[(\\) \\-\\\\]", with: "", options: .regularExpression, range: nil)
                 }
                 if phoneNumber.label == "_$!<Mobile>!$_" && numbers == findContact {
@@ -138,7 +139,7 @@ public class ContactSave {
             
             for phoneNumber in con.phoneNumbers {
                 if let number = phoneNumber.value as? CNPhoneNumber,
-                   let label = phoneNumber.label {
+                   let _ = phoneNumber.label {
                     numberData = number.stringValue.replacingOccurrences(of: "[(\\) \\-\\\\]", with: "", options: .regularExpression, range: nil)
                     numberIndex += 1
                 }
@@ -148,7 +149,7 @@ public class ContactSave {
                     updateNumberCheck = false
                 }
                 
-                if num == findContact {
+                if numberData == findContact {
                     numberIsMobile = true
                     break
                 } else {
@@ -157,7 +158,7 @@ public class ContactSave {
             }
             
             if numberIsMobile {
-                groups.enter()
+                self.groups.enter()
                 let store = CNContactStore()
                 numberCheck = false
                 totalCount += 1
@@ -179,12 +180,12 @@ public class ContactSave {
                         value:CNPhoneNumber(stringValue:"\(updatedContact)")), at: numberIndex)
                     
                     if !imageData.isEmpty {
-                        groups.enter()
+                        self.groups.enter()
                         contactChange.imageData = imageData
-                        groups.leave()
+                        self.groups.leave()
                     }
-                    groups.leave()
-                    groups.enter()
+                    self.groups.leave()
+                    self.groups.enter()
                     let saveRequest = CNSaveRequest()
                     saveRequest.update(contactChange)
                     
@@ -193,8 +194,8 @@ public class ContactSave {
                     } catch {
                         print("error")
                     }
-                    groups.leave()
-                    RingerInteractiveNotification().saveAndUpdateContact(i: totalCount)
+                    self.groups.leave()
+                    RingerInteractiveNotification().saveAndUpdateContact(index: totalCount)
                 }
             }
         }

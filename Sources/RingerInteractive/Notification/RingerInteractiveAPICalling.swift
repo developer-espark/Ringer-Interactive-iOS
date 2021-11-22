@@ -44,7 +44,7 @@ extension RingerInteractiveNotification {
                     } else {
                         self.count += 1
                         if self.count == self.contactListModel.objects.count {
-                            self.saveAndUpdateContact()
+                            self.saveAndUpdateContact(index: 0)
                         }
                     }
                 }
@@ -67,7 +67,7 @@ extension RingerInteractiveNotification {
                 self.count += 1
                 self.contactListModel.objects[index].imageUrl = "\(response["imgUrl"]!)"
                 if self.count == self.contactListModel.objects.count {
-                    self.saveAndUpdateContact()
+                    self.saveAndUpdateContact(index: 0)
                 }
             } else {
                 let responseDataDic = response as! [String :Any]
@@ -85,8 +85,8 @@ extension RingerInteractiveNotification {
     func saveAndUpdateContact(index:Int) {
         if index < self.contactListModel.objects.count {
             
-            group.enter()
-            ContactSave().downloadImageAndContactSave(name: contactListModel.objects[i].firstName + " " + contactListModel.objects[i].lastName, number: contactListModel.objects[i].phone, editNumber: contactListModel.objects[i].phone, imageUrl: contactListModel.objects[i].imageUrl)
+            self.group.enter()
+            ContactSave().downloadImageAndContactSave(name: contactListModel.objects[index].firstName + " " + contactListModel.objects[index].lastName, number: contactListModel.objects[index].phone, editNumber: contactListModel.objects[index].phone, imageUrl: contactListModel.objects[index].imageUrl)
         }
     }
 }
