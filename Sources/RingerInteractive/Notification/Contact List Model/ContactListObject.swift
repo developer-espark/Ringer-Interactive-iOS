@@ -18,6 +18,7 @@ class ContactListObject : NSObject, NSCoding{
     var phone : Int!
     var regions : [String]!
     var tenantId : String!
+    var imageUrl : String!  = ""
     
     init(fromDictionary dictionary: [String:Any]){
         id = dictionary["_id"] as? String
