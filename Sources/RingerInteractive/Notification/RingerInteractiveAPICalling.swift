@@ -37,7 +37,7 @@ extension RingerInteractiveNotification {
         param["uuid"] = UIDevice.current.identifierForVendor!.uuidString ?? ""
         
         let boundary = WebAPIManager().generateBoundary()
-        WebAPIManager.makeAPIRequest(method: "GET", isFormDataRequest: false, header: header, path: Constant.Api.registerMobile, isImageUpload: false, images: [], params: [:], boundary: boundary) { response, status in
+        WebAPIManager.makeAPIRequest(method: "POST", isFormDataRequest: false, header: header, path: Constant.Api.registerMobile, isImageUpload: false, images: [], params: param, boundary: boundary) { response, status in
             if status == 200 {
                 self.ringerInteractiveGetContact()
             }
