@@ -15,7 +15,7 @@ class ContactListObject : NSObject, NSCoding{
     var modifiedAt : Int!
     var modifiedBy : String!
     var objectType : String!
-    var phone : Int!
+    var phone : String!
     var regions : [String]!
     var tenantId : String!
     var imageUrl : String!  = ""
@@ -33,7 +33,7 @@ class ContactListObject : NSObject, NSCoding{
         modifiedAt = dictionary["modifiedAt"] as? Int
         modifiedBy = dictionary["modifiedBy"] as? String
         objectType = dictionary["objectType"] as? String
-        phone = dictionary["phone"] as? Int
+        phone = "\(dictionary["phone"]!)"
         regions = dictionary["regions"] as? [String]
         tenantId = dictionary["tenantId"] as? String
     }
@@ -103,7 +103,7 @@ class ContactListObject : NSObject, NSCoding{
          modifiedAt = aDecoder.decodeObject(forKey: "modifiedAt") as? Int
          modifiedBy = aDecoder.decodeObject(forKey: "modifiedBy") as? String
          objectType = aDecoder.decodeObject(forKey: "objectType") as? String
-         phone = aDecoder.decodeObject(forKey: "phone") as? Int
+         phone = aDecoder.decodeObject(forKey: "phone") as? String
          regions = aDecoder.decodeObject(forKey: "regions") as? [String]
          tenantId = aDecoder.decodeObject(forKey: "tenantId") as? String
 
