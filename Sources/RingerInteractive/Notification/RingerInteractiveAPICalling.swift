@@ -32,7 +32,7 @@ extension RingerInteractiveNotification {
         header["Authorization"] = GlobalFunction.getUserToken()
         
         var param : [String : Any] = [:]
-        param["firebaseToken"] = fcmToken
+        param["firebaseToken"] = firebaseToken
         param["os"] = "ios"
         param["uuid"] = UIDevice.current.identifierForVendor!.uuidString ?? ""
         

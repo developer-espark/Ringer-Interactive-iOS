@@ -6,7 +6,7 @@ import FirebaseMessaging
 
 var totalCount = 0
 var contactListModel = ContactListModel(fromDictionary: [:])
-var fcmToken = ""
+var firebaseToken = ""
 
 public protocol ringerInteractiveDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification)
@@ -58,7 +58,7 @@ extension RingerInteractiveNotification {
             if let error = error {
                 print(error)
             } else if let token = token {
-                fcmToken = token ?? ""
+                firebaseToken = token ?? ""
                 self.ringerInteractiveDelegate?.tokenGenerate(token: token)
             }
         }
