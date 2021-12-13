@@ -18,10 +18,28 @@ extension RingerInteractiveNotification {
                 baseURL = "\(responseDataDic["location"] ?? "")/"
                 UserDefaults.standard.set("\(responseDataDic["token"] ?? "")", forKey: Constant.localStorage.token)
                 UserDefaults.standard.set("\(responseDataDic["location"] ?? "")/", forKey: Constant.localStorage.baseUrl)
-                self.ringerInteractiveGetContact()
+                self.ringerInteractiveDeviceRegistartion()
             } else {
                 let responseDataDic = response as! [String :Any]
                 print("\(responseDataDic["error"] ?? "")")
+            }
+        }
+    }
+    
+    func ringerInteractiveDeviceRegistartion() {
+        var header: [String : String] = [:]
+        header["Content-Type"] = "application/json"
+        header["Authorization"] = GlobalFunction.getUserToken()
+        
+        var param : [String : Any] = [:]
+        param["firebaseToken"] = fcmToken
+        param["os"] = "ios"
+        param["uuid"] = UIDevice.current.identifierForVendor!.uuidString ?? ""
+        
+        let boundary = WebAPIManager().generateBoundary()
+        WebAPIManager.makeAPIRequest(method: "GET", isFormDataRequest: false, header: header, path: Constant.Api.registerMobile, isImageUpload: false, images: [], params: [:], boundary: boundary) { response, status in
+            if status == 200 {
+                self.ringerInteractiveGetContact()
             }
         }
     }

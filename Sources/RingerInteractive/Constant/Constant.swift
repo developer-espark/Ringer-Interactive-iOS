@@ -9,6 +9,7 @@ class Constant: NSObject {
         static let getContact = "data/api/types/contact"
         static let getContactImage = "data/api/types/contact/"
         static let getGalleryImage = "data/api/types/gallery/"
+        static let registerMobile = "data/api/types/mobileregistration"
     }
     
     struct localStorage {
