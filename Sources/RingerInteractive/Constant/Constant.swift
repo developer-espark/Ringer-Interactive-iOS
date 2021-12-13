@@ -8,6 +8,7 @@ class Constant: NSObject {
         static let token_with_authorities = "provider/token-with-authorities"
         static let getContact = "data/api/types/contact"
         static let getContactImage = "data/api/types/contact/"
+        static let getGalleryImage = "data/api/types/gallery/"
     }
     
     struct localStorage {

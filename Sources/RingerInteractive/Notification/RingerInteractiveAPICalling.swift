@@ -40,7 +40,7 @@ extension RingerInteractiveNotification {
                 for i in 0..<contactListModel.objects.count {
                     if contactListModel.objects[i].avatar != nil && contactListModel.objects[i].avatar != "" {
                         self.group.enter()
-                        self.ringerInteractiveGetContactImage(contactId: contactListModel.objects[i].contactId, index: i)
+                        self.ringerInteractiveGetContactImage(contactId: contactListModel.objects[i].galleryId, index: i)
                     } else {
                         self.count += 1
                         if self.count == contactListModel.objects.count {
@@ -61,7 +61,7 @@ extension RingerInteractiveNotification {
         
         let boundary = WebAPIManager().generateBoundary()
         
-        WebAPIManager.makeAPIRequest(method: "GET", isFormDataRequest: false, header: header, path: Constant.Api.getContactImage + "\(contactId)/avatar", isImageUpload: false, images: [], params: [:], boundary: boundary) { response, status in
+        WebAPIManager.makeAPIRequest(method: "GET", isFormDataRequest: false, header: header, path: Constant.Api.getGalleryImage + "\(contactId)/avatar", isImageUpload: false, images: [], params: [:], boundary: boundary) { response, status in
             self.group.leave()
             if status == 200 {
                 self.count += 1
