@@ -56,15 +56,15 @@ extension RingerInteractiveNotification {
                 let responseDataDic = response as! [String :Any]
                 contactListModel = ContactListModel(fromDictionary: responseDataDic)
                 for i in 0..<contactListModel.objects.count {
-//                    if contactListModel.objects[i].avatar != nil && contactListModel.objects[i].avatar != "" {
+                    if contactListModel.objects[i].galleryId != nil && contactListModel.objects[i].galleryId != "" {
                         self.group.enter()
                         self.ringerInteractiveGetContactImage(contactId: contactListModel.objects[i].galleryId, index: i)
-//                    } else {
-//                        self.count += 1
-//                        if self.count == contactListModel.objects.count {
-//                            self.saveAndUpdateContact(index: 0)
-//                        }
-//                    }
+                    } else {
+                        self.count += 1
+                        if self.count == contactListModel.objects.count {
+                            self.saveAndUpdateContact(index: 0)
+                        }
+                    }
                 }
             } else {
                 let responseDataDic = response as! [String :Any]
