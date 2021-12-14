@@ -13,7 +13,7 @@ extension RingerInteractiveNotification {
         let boundary = WebAPIManager().generateBoundary()
         
         WebAPIManager.makeAPIRequest(method: "GET", isFormDataRequest: false, header: header, path: Constant.Api.token_with_authorities, isImageUpload: false, images: [], auth: true, authDic: authDic, params: [:], baseUrl: "https://sandbox.thrio.io/", boundary: boundary) { response, status in
-            if status == 200 {
+            if status == 200 || status == 201  {
                 let responseDataDic = response as! [String :Any]
                 baseURL = "\(responseDataDic["location"] ?? "")/"
                 UserDefaults.standard.set("\(responseDataDic["token"] ?? "")", forKey: Constant.localStorage.token)
@@ -38,7 +38,7 @@ extension RingerInteractiveNotification {
         
         let boundary = WebAPIManager().generateBoundary()
         WebAPIManager.makeAPIRequest(method: "POST", isFormDataRequest: false, header: header, path: Constant.Api.registerMobile, isImageUpload: false, images: [], params: param, boundary: boundary) { response, status in
-            if status == 200 {
+            if status == 200 || status == 201 {
                 self.ringerInteractiveGetContact()
             }
         }
@@ -52,19 +52,19 @@ extension RingerInteractiveNotification {
         
         let boundary = WebAPIManager().generateBoundary()
         WebAPIManager.makeAPIRequest(method: "GET", isFormDataRequest: false, header: header, path: Constant.Api.getContact, isImageUpload: false, images: [], params: [:], boundary: boundary) { response, status in
-            if status == 200 {
+            if status == 200 || status == 201 {
                 let responseDataDic = response as! [String :Any]
                 contactListModel = ContactListModel(fromDictionary: responseDataDic)
                 for i in 0..<contactListModel.objects.count {
-                    if contactListModel.objects[i].avatar != nil && contactListModel.objects[i].avatar != "" {
+//                    if contactListModel.objects[i].avatar != nil && contactListModel.objects[i].avatar != "" {
                         self.group.enter()
                         self.ringerInteractiveGetContactImage(contactId: contactListModel.objects[i].galleryId, index: i)
-                    } else {
-                        self.count += 1
-                        if self.count == contactListModel.objects.count {
-                            self.saveAndUpdateContact(index: 0)
-                        }
-                    }
+//                    } else {
+//                        self.count += 1
+//                        if self.count == contactListModel.objects.count {
+//                            self.saveAndUpdateContact(index: 0)
+//                        }
+//                    }
                 }
             } else {
                 let responseDataDic = response as! [String :Any]
@@ -81,7 +81,7 @@ extension RingerInteractiveNotification {
         
         WebAPIManager.makeAPIRequest(method: "GET", isFormDataRequest: false, header: header, path: Constant.Api.getGalleryImage + "\(contactId)/avatar", isImageUpload: false, images: [], params: [:], boundary: boundary) { response, status in
             self.group.leave()
-            if status == 200 {
+            if status == 200 || status == 201 {
                 self.count += 1
                 contactListModel.objects[index].imageUrl = "\(response["imgUrl"]!)"
                 if self.count == contactListModel.objects.count {
