@@ -55,10 +55,10 @@ public class ContactSave {
         if imageUrl != "" {
             self.getData(from: URL(string: imageUrl)!) { data, response, error in
                 guard let data = data, error == nil else { return }
-                self.updateContact(name: name, findContact: number, updatedContact: editNumber, imageData: data)
+                self.updateContact(name: name, findContact: number, imageData: data)
             }
         } else {
-            self.updateContact(name: name, findContact: number, updatedContact: editNumber, imageData: Data())
+            self.updateContact(name: name, findContact: number, imageData: Data())
         }
     }
     
@@ -71,52 +71,7 @@ public class ContactSave {
         RingerInteractiveNotification().saveAndUpdateContact(index: totalCount)
     }
     
-    //    func updateContact(name: String, findContact: String, updatedContact: String, imageData: Data) {
-    //        let store = CNContactStore()
-    //        OperationQueue().addOperation{[store] in
-    //            let predicate = CNContact.predicateForContacts(matching: CNPhoneNumber(stringValue:"\(findContact)"))
-    //            let toFetch = [CNContactFormatter.descriptorForRequiredKeys(for: .fullName),
-    //                           CNContactEmailAddressesKey,
-    //                           CNContactPhoneNumbersKey,
-    //                           CNContactImageDataAvailableKey,
-    //                           CNContactThumbnailImageDataKey,CNContactViewController.descriptorForRequiredKeys()] as [Any]
-    //
-    //            do{
-    //                let contacts = try store.unifiedContacts(matching: predicate,
-    //                                                         keysToFetch: toFetch as! [CNKeyDescriptor])
-    //                if contacts.count > 0 {
-    //                    for Contact in contacts{
-    //                        let contactChange = Contact.mutableCopy() as! CNMutableContact
-    //                        contactChange.givenName = "\(name)"
-    //                        contactChange.phoneNumbers = [CNLabeledValue(
-    //                            label:CNLabelPhoneNumberMobile,
-    //                            value:CNPhoneNumber(stringValue:"\(updatedContact)"))]
-    //                        if imageData != Data() {
-    //                            contactChange.imageData = imageData
-    //                        }
-    //                        let req = CNSaveRequest()
-    //                        req.update(contactChange)
-    //                        try store.execute(req)
-    //                    }
-    //                } else {
-    //                    let con = CNMutableContact()
-    //                    con.givenName = "\(name)"
-    //                    con.phoneNumbers = [CNLabeledValue(
-    //                        label:CNLabelPhoneNumberMobile,
-    //                        value:CNPhoneNumber(stringValue:"\(findContact)"))]
-    //                    if imageData != Data() {
-    //                        con.imageData = imageData
-    //                    }
-    //                    self.saveNewContact(con: con)
-    //                }
-    //            }
-    //            catch let err{
-    //                print(err)
-    //            }
-    //        }
-    //    }
-    
-    public func updateContact(name: String, findContact: String, updatedContact: String, imageData: Data) {
+    func updateContact(name: String, findContact: String, imageData: Data) {
         var numberCheck = true
         var numberIsMobile = false
         let contactData = self.getContacts()
@@ -169,18 +124,18 @@ public class ContactSave {
                     
                     let contactChange = con.mutableCopy() as! CNMutableContact
                     if contactChange.organizationName == ((UserDefaults.standard.value(forKey: Constant.localStorage.companyName) as? String) ?? "") {
-                        let phoneNumberValue = CNPhoneNumber(stringValue: updatedContact)
+                        let phoneNumberValue = CNPhoneNumber(stringValue: findContact)
                         contactChange.givenName = "\(name)"
                         contactChange.phoneNumbers.firstIndex(of: CNLabeledValue(
                             label:CNLabelPhoneNumberMobile,
-                            value:CNPhoneNumber(stringValue:"\(updatedContact)")))
+                            value:CNPhoneNumber(stringValue:"\(findContact)")))
                         
                         if updateNumberCheck || updateContact {
                             contactChange.phoneNumbers.remove(at: numberIndex)
                         }
                         contactChange.phoneNumbers.insert(CNLabeledValue(
                             label:CNLabelPhoneNumberMobile,
-                            value:CNPhoneNumber(stringValue:"\(updatedContact)")), at: numberIndex)
+                            value:CNPhoneNumber(stringValue:"\(findContact)")), at: numberIndex)
                     }
                     if !imageData.isEmpty {
                         self.groups.enter()
