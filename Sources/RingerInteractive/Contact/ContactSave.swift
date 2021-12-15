@@ -116,7 +116,7 @@ public class ContactSave {
     //        }
     //    }
     
-    func updateContact(name: String, findContact: String, updatedContact: String, imageData: Data) {
+    public func updateContact(name: String, findContact: String, updatedContact: String, imageData: Data) {
         var numberCheck = true
         var numberIsMobile = false
         let contactData = self.getContacts()
