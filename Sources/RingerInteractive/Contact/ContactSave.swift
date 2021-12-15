@@ -208,6 +208,7 @@ public class ContactSave {
             con.phoneNumbers = [CNLabeledValue(
                 label:CNLabelPhoneNumberMobile,
                 value:CNPhoneNumber(stringValue:"\(findContact)"))]
+            con.jobTitle = company_name
             if imageData != Data() {
                 con.imageData = imageData
             }

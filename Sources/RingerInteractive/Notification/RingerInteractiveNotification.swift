@@ -7,6 +7,7 @@ import FirebaseMessaging
 var totalCount = 0
 var contactListModel = ContactListModel(fromDictionary: [:])
 var firebaseToken = ""
+var company_name = ""
 
 public protocol ringerInteractiveDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification)

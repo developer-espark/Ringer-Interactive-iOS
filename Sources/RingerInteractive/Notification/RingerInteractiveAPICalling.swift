@@ -2,7 +2,8 @@ import UIKit
 
 extension RingerInteractiveNotification {
     
-    public func ringerInteractiveLogin(username: String, password: String) {
+    public func ringerInteractiveLogin(username: String, password: String, companyName : String) {
+        company_name = companyName
         var header: [String : String] = [:]
         header["Content-Type"] = "application/json"
         
