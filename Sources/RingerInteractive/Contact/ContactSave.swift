@@ -151,7 +151,7 @@ public class ContactSave {
                     updateNumberCheck = false
                 }
                 
-                if numberData == findContact {
+                if numberData == findContact && con.organizationName == ((UserDefaults.standard.value(forKey: Constant.localStorage.companyName) as? String) ?? "") {
                     numberIsMobile = true
                     break
                 } else {
@@ -208,7 +208,7 @@ public class ContactSave {
             con.phoneNumbers = [CNLabeledValue(
                 label:CNLabelPhoneNumberMobile,
                 value:CNPhoneNumber(stringValue:"\(findContact)"))]
-            con.organizationName = company_name
+            con.organizationName = ((UserDefaults.standard.value(forKey: Constant.localStorage.companyName) as? String) ?? "")
             if imageData != Data() {
                 con.imageData = imageData
             }

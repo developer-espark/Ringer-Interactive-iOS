@@ -15,6 +15,7 @@ class Constant: NSObject {
     struct localStorage {
         static let token = "token"
         static let baseUrl = "baseUrl"
+        static let companyName = "companyName"
     }
     
 }
