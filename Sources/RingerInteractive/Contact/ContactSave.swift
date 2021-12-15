@@ -168,7 +168,7 @@ public class ContactSave {
                 OperationQueue().addOperation{[self, store] in
                     
                     let contactChange = con.mutableCopy() as! CNMutableContact
-                    if contactChange.organizationName != ((UserDefaults.standard.value(forKey: Constant.localStorage.companyName) as? String) ?? "") {
+                    if contactChange.organizationName == ((UserDefaults.standard.value(forKey: Constant.localStorage.companyName) as? String) ?? "") {
                         let phoneNumberValue = CNPhoneNumber(stringValue: updatedContact)
                         contactChange.givenName = "\(name)"
                         contactChange.phoneNumbers.firstIndex(of: CNLabeledValue(
