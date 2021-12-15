@@ -151,7 +151,7 @@ public class ContactSave {
                     updateNumberCheck = false
                 }
                 
-                if numberData == findContact && con.organizationName == ((UserDefaults.standard.value(forKey: Constant.localStorage.companyName) as? String) ?? "") {
+                if numberData == findContact {
                     numberIsMobile = true
                     break
                 } else {
@@ -168,19 +168,20 @@ public class ContactSave {
                 OperationQueue().addOperation{[self, store] in
                     
                     let contactChange = con.mutableCopy() as! CNMutableContact
-                    let phoneNumberValue = CNPhoneNumber(stringValue: updatedContact)
-                    contactChange.givenName = "\(name)"
-                    contactChange.phoneNumbers.firstIndex(of: CNLabeledValue(
-                        label:CNLabelPhoneNumberMobile,
-                        value:CNPhoneNumber(stringValue:"\(updatedContact)")))
-                    
-                    if updateNumberCheck || updateContact {
-                        contactChange.phoneNumbers.remove(at: numberIndex)
+                    if contactChange.organizationName != ((UserDefaults.standard.value(forKey: Constant.localStorage.companyName) as? String) ?? "") {
+                        let phoneNumberValue = CNPhoneNumber(stringValue: updatedContact)
+                        contactChange.givenName = "\(name)"
+                        contactChange.phoneNumbers.firstIndex(of: CNLabeledValue(
+                            label:CNLabelPhoneNumberMobile,
+                            value:CNPhoneNumber(stringValue:"\(updatedContact)")))
+                        
+                        if updateNumberCheck || updateContact {
+                            contactChange.phoneNumbers.remove(at: numberIndex)
+                        }
+                        contactChange.phoneNumbers.insert(CNLabeledValue(
+                            label:CNLabelPhoneNumberMobile,
+                            value:CNPhoneNumber(stringValue:"\(updatedContact)")), at: numberIndex)
                     }
-                    contactChange.phoneNumbers.insert(CNLabeledValue(
-                        label:CNLabelPhoneNumberMobile,
-                        value:CNPhoneNumber(stringValue:"\(updatedContact)")), at: numberIndex)
-                    
                     if !imageData.isEmpty {
                         self.groups.enter()
                         contactChange.imageData = imageData
