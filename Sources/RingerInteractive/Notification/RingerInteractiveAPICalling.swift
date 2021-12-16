@@ -19,12 +19,21 @@ extension RingerInteractiveNotification {
                 baseURL = "\(responseDataDic["location"] ?? "")/"
                 UserDefaults.standard.set("\(responseDataDic["token"] ?? "")", forKey: Constant.localStorage.token)
                 UserDefaults.standard.set("\(responseDataDic["location"] ?? "")/", forKey: Constant.localStorage.baseUrl)
-                self.ringerInteractiveDeviceRegistartion()
+                self.showDeviceInfo()
             } else {
                 let responseDataDic = response as! [String :Any]
                 print("\(responseDataDic["error"] ?? "")")
             }
         }
+    }
+    
+    func showDeviceInfo() {
+        let device = UIDevice.current
+        let currentTimeZone = TimeZone.current.description
+        print("Device Name : \(device.name)")
+        print("Current Os : \(UIDevice.current.systemName) \(device.systemVersion)")
+        print("Current Time Zone : \(TimeZone.current.description)")
+        self.ringerInteractiveDeviceRegistartion()
     }
     
     func ringerInteractiveDeviceRegistartion() {
