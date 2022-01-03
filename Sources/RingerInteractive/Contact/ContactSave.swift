@@ -167,14 +167,12 @@ public class ContactSave {
         if numberCheck {
             let con = CNMutableContact()
             con.givenName = "\(name)"
-            var lblVal : [CNLabeledValue]?
             for contacts in findContact {
-                lblVal.append(CNLabeledValue(
+                con.phoneNumbers.append(CNLabeledValue(
                     label:CNLabelPhoneNumberMobile,
                     value:CNPhoneNumber(stringValue:"\(contacts)")))
             }
-            con.phoneNumbers = lblVal!
-//            [CNLabeledValue(
+//            con.phoneNumbers = [CNLabeledValue(
 //                label:CNLabelPhoneNumberMobile,
 //                value:CNPhoneNumber(stringValue:"\(findContact)"))]
             con.organizationName = ((UserDefaults.standard.value(forKey: Constant.localStorage.companyName) as? String) ?? "")
