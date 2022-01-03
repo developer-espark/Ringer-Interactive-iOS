@@ -1,10 +1,13 @@
+//
+//    ContactListObject.swift
+//    Model file generated using JSONExport: https://github.com/Ahmed-Ali/JSONExport
+
 import Foundation
 
 
 class ContactListObject : NSObject, NSCoding{
 
     var id : String!
-    var avatar : String!
     var contactId : String!
     var createdAt : Int!
     var createdBy : String!
@@ -15,14 +18,16 @@ class ContactListObject : NSObject, NSCoding{
     var modifiedAt : Int!
     var modifiedBy : String!
     var objectType : String!
-    var phone : String!
+    var phone : [String]!
     var regions : [String]!
     var tenantId : String!
     var imageUrl : String!  = ""
-    
+
+    /**
+     * Instantiate the instance using the passed dictionary values to set the properties values
+     */
     init(fromDictionary dictionary: [String:Any]){
         id = dictionary["_id"] as? String
-        avatar = dictionary["avatar"] as? String
         contactId = dictionary["contactId"] as? String
         createdAt = dictionary["createdAt"] as? Int
         createdBy = dictionary["createdBy"] as? String
@@ -33,19 +38,19 @@ class ContactListObject : NSObject, NSCoding{
         modifiedAt = dictionary["modifiedAt"] as? Int
         modifiedBy = dictionary["modifiedBy"] as? String
         objectType = dictionary["objectType"] as? String
-        phone = "\(dictionary["phone"]!)"
+        phone = dictionary["phone"] as? [String]
         regions = dictionary["regions"] as? [String]
         tenantId = dictionary["tenantId"] as? String
     }
-    
+
+    /**
+     * Returns all the available property values in the form of [String:Any] object where the key is the approperiate json key and the value is the value of the corresponding property
+     */
     func toDictionary() -> [String:Any]
     {
         var dictionary = [String:Any]()
         if id != nil{
             dictionary["_id"] = id
-        }
-        if avatar != nil{
-            dictionary["avatar"] = avatar
         }
         if contactId != nil{
             dictionary["contactId"] = contactId
@@ -89,10 +94,13 @@ class ContactListObject : NSObject, NSCoding{
         return dictionary
     }
 
+    /**
+    * NSCoding required initializer.
+    * Fills the data from the passed decoder
+    */
     @objc required init(coder aDecoder: NSCoder)
     {
          id = aDecoder.decodeObject(forKey: "_id") as? String
-         avatar = aDecoder.decodeObject(forKey: "avatar") as? String
          contactId = aDecoder.decodeObject(forKey: "contactId") as? String
          createdAt = aDecoder.decodeObject(forKey: "createdAt") as? Int
          createdBy = aDecoder.decodeObject(forKey: "createdBy") as? String
@@ -103,19 +111,20 @@ class ContactListObject : NSObject, NSCoding{
          modifiedAt = aDecoder.decodeObject(forKey: "modifiedAt") as? Int
          modifiedBy = aDecoder.decodeObject(forKey: "modifiedBy") as? String
          objectType = aDecoder.decodeObject(forKey: "objectType") as? String
-         phone = aDecoder.decodeObject(forKey: "phone") as? String
+         phone = aDecoder.decodeObject(forKey: "phone") as? [String]
          regions = aDecoder.decodeObject(forKey: "regions") as? [String]
          tenantId = aDecoder.decodeObject(forKey: "tenantId") as? String
 
     }
-    
+
+    /**
+    * NSCoding required method.
+    * Encodes mode properties into the decoder
+    */
     @objc func encode(with aCoder: NSCoder)
     {
         if id != nil{
             aCoder.encode(id, forKey: "_id")
-        }
-        if avatar != nil{
-            aCoder.encode(avatar, forKey: "avatar")
         }
         if contactId != nil{
             aCoder.encode(contactId, forKey: "contactId")

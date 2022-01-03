@@ -51,7 +51,7 @@ public class ContactSave {
         URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
     }
     
-    public func downloadImageAndContactSave(name: String, number: String, editNumber: String = "", imageUrl: String = "") {
+    public func downloadImageAndContactSave(name: String, number: [String], editNumber: String = "", imageUrl: String = "") {
         if imageUrl != "" {
             self.getData(from: URL(string: imageUrl)!) { data, response, error in
                 guard let data = data, error == nil else { return }
@@ -71,7 +71,7 @@ public class ContactSave {
         RingerInteractiveNotification().saveAndUpdateContact(index: totalCount)
     }
     
-    func updateContact(name: String, findContact: String, imageData: Data) {
+    func updateContact(name: String, findContact: [String], imageData: Data) {
         var numberCheck = true
         var numberIsMobile = false
         let contactData = self.getContacts()
@@ -84,33 +84,37 @@ public class ContactSave {
             var updateContact = false
             
             for phoneNumber in con.phoneNumbers {
-                var numbers = ""
-                if let number = phoneNumber.value as? CNPhoneNumber,
-                   let _ = phoneNumber.label {
-                    numbers = number.stringValue.replacingOccurrences(of: "[(\\) \\-\\\\]", with: "", options: .regularExpression, range: nil)
-                }
-                if phoneNumber.label == "_$!<Mobile>!$_" && numbers == findContact {
-                    updateContact = true
+                for contacts in findContact {
+                    var numbers = ""
+                    if let number = phoneNumber.value as? CNPhoneNumber,
+                       let _ = phoneNumber.label {
+                        numbers = number.stringValue.replacingOccurrences(of: "[(\\) \\-\\\\]", with: "", options: .regularExpression, range: nil)
+                    }
+                    if phoneNumber.label == "_$!<Mobile>!$_" && numbers == contacts {
+                        updateContact = true
+                    }
                 }
             }
             
             for phoneNumber in con.phoneNumbers {
-                if let number = phoneNumber.value as? CNPhoneNumber,
-                   let _ = phoneNumber.label {
-                    numberData = number.stringValue.replacingOccurrences(of: "[(\\) \\-\\\\]", with: "", options: .regularExpression, range: nil)
-                    numberIndex += 1
-                }
-                
-                if phoneNumber.label != "_$!<Mobile>!$_" {
-                    numberIndex += 1
-                    updateNumberCheck = false
-                }
-                
-                if numberData == findContact {
-                    numberIsMobile = true
-                    break
-                } else {
-                    numberIsMobile = false
+                for contacts in findContact {
+                    if let number = phoneNumber.value as? CNPhoneNumber,
+                       let _ = phoneNumber.label {
+                        numberData = number.stringValue.replacingOccurrences(of: "[(\\) \\-\\\\]", with: "", options: .regularExpression, range: nil)
+                        numberIndex += 1
+                    }
+                    
+                    if phoneNumber.label != "_$!<Mobile>!$_" {
+                        numberIndex += 1
+                        updateNumberCheck = false
+                    }
+                    
+                    if numberData == contacts {
+                        numberIsMobile = true
+                        break
+                    } else {
+                        numberIsMobile = false
+                    }
                 }
             }
             
@@ -161,9 +165,16 @@ public class ContactSave {
         if numberCheck {
             let con = CNMutableContact()
             con.givenName = "\(name)"
-            con.phoneNumbers = [CNLabeledValue(
-                label:CNLabelPhoneNumberMobile,
-                value:CNPhoneNumber(stringValue:"\(findContact)"))]
+            var lblVal : [CNLabeledValue]?
+            for contacts in findContact {
+                lblVal.append(CNLabeledValue(
+                    label:CNLabelPhoneNumberMobile,
+                    value:CNPhoneNumber(stringValue:"\(contacts)")))
+            }
+            con.phoneNumbers = lblVal!
+//            [CNLabeledValue(
+//                label:CNLabelPhoneNumberMobile,
+//                value:CNPhoneNumber(stringValue:"\(findContact)"))]
             con.organizationName = ((UserDefaults.standard.value(forKey: Constant.localStorage.companyName) as? String) ?? "")
             if imageData != Data() {
                 con.imageData = imageData
