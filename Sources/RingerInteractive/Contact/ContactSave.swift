@@ -97,18 +97,17 @@ public class ContactSave {
             }
             
             for phoneNumber in con.phoneNumbers {
+                if let number = phoneNumber.value as? CNPhoneNumber,
+                   let _ = phoneNumber.label {
+                    numberData = number.stringValue.replacingOccurrences(of: "[(\\) \\-\\\\]", with: "", options: .regularExpression, range: nil)
+                    numberIndex += 1
+                }
+                
+                if phoneNumber.label != "_$!<Mobile>!$_" {
+                    numberIndex += 1
+                    updateNumberCheck = false
+                }
                 for contacts in findContact {
-                    if let number = phoneNumber.value as? CNPhoneNumber,
-                       let _ = phoneNumber.label {
-                        numberData = number.stringValue.replacingOccurrences(of: "[(\\) \\-\\\\]", with: "", options: .regularExpression, range: nil)
-                        numberIndex += 1
-                    }
-                    
-                    if phoneNumber.label != "_$!<Mobile>!$_" {
-                        numberIndex += 1
-                        updateNumberCheck = false
-                    }
-                    
                     if numberData == contacts {
                         numberIsMobile = true
                         break
