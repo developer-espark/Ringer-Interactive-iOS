@@ -128,18 +128,20 @@ public class ContactSave {
                     
                     let contactChange = con.mutableCopy() as! CNMutableContact
                     if contactChange.organizationName == ((UserDefaults.standard.value(forKey: Constant.localStorage.companyName) as? String) ?? "") {
-                        let phoneNumberValue = CNPhoneNumber(stringValue: findContact)
-                        contactChange.givenName = "\(name)"
-                        contactChange.phoneNumbers.firstIndex(of: CNLabeledValue(
-                            label:CNLabelPhoneNumberMobile,
-                            value:CNPhoneNumber(stringValue:"\(findContact)")))
-                        
-                        if updateNumberCheck || updateContact {
-                            contactChange.phoneNumbers.remove(at: numberIndex)
+                        for contacts in findContact {
+                            let phoneNumberValue = CNPhoneNumber(stringValue: contacts)
+                            contactChange.givenName = "\(name)"
+                            contactChange.phoneNumbers.firstIndex(of: CNLabeledValue(
+                                label:CNLabelPhoneNumberMobile,
+                                value:CNPhoneNumber(stringValue:"\(contacts)")))
+                            
+                            if updateNumberCheck || updateContact {
+                                contactChange.phoneNumbers.remove(at: numberIndex)
+                            }
+                            contactChange.phoneNumbers.insert(CNLabeledValue(
+                                label:CNLabelPhoneNumberMobile,
+                                value:CNPhoneNumber(stringValue:"\(contacts)")), at: numberIndex)
                         }
-                        contactChange.phoneNumbers.insert(CNLabeledValue(
-                            label:CNLabelPhoneNumberMobile,
-                            value:CNPhoneNumber(stringValue:"\(findContact)")), at: numberIndex)
                     }
                     if !imageData.isEmpty {
                         self.groups.enter()
