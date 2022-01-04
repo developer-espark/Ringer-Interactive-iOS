@@ -69,6 +69,9 @@ public class ContactSave {
         try! store.execute(saveRequest)
         totalCount += 1
         RingerInteractiveNotification().saveAndUpdateContact(index: totalCount)
+        if totalCount == contactListModel.objects.count {
+            totalCount = 0
+        }
     }
     
     func updateContact(name: String, findContact: [String], imageData: Data) {
@@ -159,6 +162,9 @@ public class ContactSave {
                     }
                     self.groups.leave()
                     RingerInteractiveNotification().saveAndUpdateContact(index: totalCount)
+                    if totalCount == contactListModel.objects.count {
+                        totalCount = 0
+                    }
                 }
             }
         }
