@@ -22,7 +22,7 @@ public class RingerInteractiveNotification: UIResponder, MessagingDelegate, UIAp
     public override init() {}
     
     let group = DispatchGroup()
-    var count = 0t
+    var count = 0
 }
 
 //MARK: Application Delegate
