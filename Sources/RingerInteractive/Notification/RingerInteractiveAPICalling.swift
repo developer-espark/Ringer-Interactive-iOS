@@ -72,6 +72,7 @@ extension RingerInteractiveNotification {
                     } else {
                         self.count += 1
                         if self.count == contactListModel.objects.count {
+                            self.count = 0
                             self.saveAndUpdateContact(index: 0)
                         }
                     }
@@ -95,6 +96,7 @@ extension RingerInteractiveNotification {
                 self.count += 1
                 contactListModel.objects[index].imageUrl = "\(response["imgUrl"]!)"
                 if self.count == contactListModel.objects.count {
+                    self.count = 0
                     self.saveAndUpdateContact(index: 0)
                 }
             } else {
