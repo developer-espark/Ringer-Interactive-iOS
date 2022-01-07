@@ -150,7 +150,10 @@ public class ContactSave {
                     }
                     if !imageData.isEmpty {
                         self.groups.enter()
-                        contactChange.imageData = imageData
+//                        contactChange.imageData = imageData
+                        let uiImage = UIImage(data: imageData) ?? UIImage()
+                        
+                        if let imgData:Data = uiImage.pngData() as Data? { contactChange.imageData = imgData }
                         self.groups.leave()
                     }
                     self.groups.leave()
@@ -191,7 +194,11 @@ public class ContactSave {
 //                value:CNPhoneNumber(stringValue:"\(findContact)"))]
             con.organizationName = ((UserDefaults.standard.value(forKey: Constant.localStorage.companyName) as? String) ?? "")
             if imageData != Data() {
-                con.imageData = imageData
+                let uiImage = UIImage(data: imageData) ?? UIImage()
+                
+                if let imgData:Data = uiImage.pngData() as Data? { con.imageData = imgData }
+                
+//                con.imageData = imageData
             }
             self.saveNewContact(con: con)
         }
