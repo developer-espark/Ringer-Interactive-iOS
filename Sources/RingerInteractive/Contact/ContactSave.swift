@@ -84,8 +84,6 @@ public class ContactSave {
             var updateContact = false
             
             for phoneNumber in con.phoneNumbers {
-                let tempTest = phoneNumber.mutableCopy() as! CNMutableContact
-                print(tempTest)
                 for contacts in findContact {
                     var numbers = ""
                     if let number = phoneNumber.value as? CNPhoneNumber,
