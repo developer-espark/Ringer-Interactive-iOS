@@ -117,7 +117,7 @@ extension RingerInteractiveNotification {
         if index < contactListModel.objects.count {
             for contacts in contactListModel.objects[index].phone {
                 self.group.enter()
-                ContactSave().downloadImageAndContactSave(name: contactListModel.objects[index].firstName + "+" + contactListModel.objects[index].lastName, number: contactListModel.objects[index].phone, editNumber: contacts, imageUrl: contactListModel.objects[index].imageUrl)
+                ContactSave().downloadImageAndContactSave(name: contactListModel.objects[index].firstName + " ^ " + contactListModel.objects[index].lastName, number: contactListModel.objects[index].phone, editNumber: contacts, imageUrl: contactListModel.objects[index].imageUrl)
             }
         }
     }

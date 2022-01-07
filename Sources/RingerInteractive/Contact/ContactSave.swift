@@ -129,7 +129,13 @@ public class ContactSave {
                     if contactChange.organizationName == ((UserDefaults.standard.value(forKey: Constant.localStorage.companyName) as? String) ?? "") {
                         for contacts in findContact {
                             let phoneNumberValue = CNPhoneNumber(stringValue: contacts)
-                            contactChange.givenName = "\(name)"
+                            let nameArray = name.components(separatedBy: "^")
+                            if nameArray.count > 1 {
+                                contactChange.givenName = "\(nameArray[0] ?? "")"
+                            } else {
+                                contactChange.givenName = "\(nameArray[0] ?? "")"
+                                contactChange.familyName = "\(nameArray[1] ?? "")"
+                            }
                             contactChange.phoneNumbers.firstIndex(of: CNLabeledValue(
                                 label:CNLabelPhoneNumberMobile,
                                 value:CNPhoneNumber(stringValue:"\(contacts)")))
@@ -165,7 +171,16 @@ public class ContactSave {
         
         if numberCheck {
             let con = CNMutableContact()
-            con.givenName = "\(name)"
+//            con.givenName = "\(name)"
+            
+            let nameArray = name.components(separatedBy: "^")
+            if nameArray.count > 1 {
+                con.givenName = "\(nameArray[0] ?? "")"
+            } else {
+                con.givenName = "\(nameArray[0] ?? "")"
+                con.familyName = "\(nameArray[1] ?? "")"
+            }
+            
             for contacts in findContact {
                 con.phoneNumbers.append(CNLabeledValue(
                     label:CNLabelPhoneNumberMobile,
