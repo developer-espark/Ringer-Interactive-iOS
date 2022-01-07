@@ -132,9 +132,9 @@ public class ContactSave {
                             let nameArray = name.components(separatedBy: "^")
                             if nameArray.count > 1 {
                                 contactChange.givenName = "\(nameArray[0] ?? "")"
+                                contactChange.familyName = "\(nameArray[1] ?? "")"
                             } else {
                                 contactChange.givenName = "\(nameArray[0] ?? "")"
-                                contactChange.familyName = "\(nameArray[1] ?? "")"
                             }
                             contactChange.phoneNumbers.firstIndex(of: CNLabeledValue(
                                 label:CNLabelPhoneNumberMobile,
@@ -176,9 +176,9 @@ public class ContactSave {
             let nameArray = name.components(separatedBy: "^")
             if nameArray.count > 1 {
                 con.givenName = "\(nameArray[0] ?? "")"
+                con.familyName = "\(nameArray[1] ?? "")"
             } else {
                 con.givenName = "\(nameArray[0] ?? "")"
-                con.familyName = "\(nameArray[1] ?? "")"
             }
             
             for contacts in findContact {
