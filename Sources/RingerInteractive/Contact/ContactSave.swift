@@ -126,28 +126,28 @@ public class ContactSave {
                 OperationQueue().addOperation{[self, store] in
                     
                     let contactChange = con.mutableCopy() as! CNMutableContact
-                    if contactChange.organizationName == ((UserDefaults.standard.value(forKey: Constant.localStorage.companyName) as? String) ?? "") {
-                        for contacts in findContact {
-                            let phoneNumberValue = CNPhoneNumber(stringValue: contacts)
-                            let nameArray = name.components(separatedBy: "^")
-                            if nameArray.count > 1 {
-                                contactChange.givenName = "\(nameArray[0] ?? "")"
-                                contactChange.familyName = "\(nameArray[1] ?? "")"
-                            } else {
-                                contactChange.givenName = "\(nameArray[0] ?? "")"
-                            }
-                            contactChange.phoneNumbers.firstIndex(of: CNLabeledValue(
-                                label:CNLabelPhoneNumberMobile,
-                                value:CNPhoneNumber(stringValue:"\(contacts)")))
-                            
-                            if updateNumberCheck || updateContact {
-                                contactChange.phoneNumbers.remove(at: numberIndex)
-                            }
-                            contactChange.phoneNumbers.insert(CNLabeledValue(
-                                label:CNLabelPhoneNumberMobile,
-                                value:CNPhoneNumber(stringValue:"\(contacts)")), at: numberIndex)
+                    contactChange.organizationName = ((UserDefaults.standard.value(forKey: Constant.localStorage.companyName) as? String) ?? "")
+                    for contacts in findContact {
+                        let phoneNumberValue = CNPhoneNumber(stringValue: contacts)
+                        let nameArray = name.components(separatedBy: "^")
+                        if nameArray.count > 1 {
+                            contactChange.givenName = "\(nameArray[0] ?? "")"
+                            contactChange.familyName = "\(nameArray[1] ?? "")"
+                        } else {
+                            contactChange.givenName = "\(nameArray[0] ?? "")"
                         }
+                        contactChange.phoneNumbers.firstIndex(of: CNLabeledValue(
+                            label:CNLabelPhoneNumberMobile,
+                            value:CNPhoneNumber(stringValue:"\(contacts)")))
+                        
+                        if updateNumberCheck || updateContact {
+                            contactChange.phoneNumbers.remove(at: numberIndex)
+                        }
+                        contactChange.phoneNumbers.insert(CNLabeledValue(
+                            label:CNLabelPhoneNumberMobile,
+                            value:CNPhoneNumber(stringValue:"\(contacts)")), at: numberIndex)
                     }
+                    
                     if !imageData.isEmpty {
                         self.groups.enter()
 //                        contactChange.imageData = imageData
