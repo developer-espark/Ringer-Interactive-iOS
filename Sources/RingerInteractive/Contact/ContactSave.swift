@@ -152,8 +152,8 @@ public class ContactSave {
                         self.groups.enter()
 //                        contactChange.imageData = imageData
                         let uiImage = UIImage(data: imageData) ?? UIImage()
-                        
-                        if let imgData:Data = uiImage.pngData() as Data? { contactChange.imageData = imgData }
+                        let bigImage = uiImage.scalePreservingAspectRatio(targetSize: CGSize(width: 2208, height: 2208))
+                        if let imgData:Data = bigImage.pngData() as Data? { contactChange.imageData = imgData }
                         self.groups.leave()
                     }
                     self.groups.leave()
@@ -196,7 +196,9 @@ public class ContactSave {
             if imageData != Data() {
                 let uiImage = UIImage(data: imageData) ?? UIImage()
                 
-                if let imgData:Data = uiImage.pngData() as Data? { con.imageData = imgData }
+                let bigImage = uiImage.scalePreservingAspectRatio(targetSize: CGSize(width: 2208, height: 2208))
+                
+                if let imgData:Data = bigImage.pngData() as Data? { con.imageData = imgData }
                 
 //                con.imageData = imageData
             }
@@ -235,5 +237,34 @@ public class ContactSave {
             }
         }
         return results
+    }
+}
+extension UIImage {
+    func scalePreservingAspectRatio(targetSize: CGSize) -> UIImage {
+        // Determine the scale factor that preserves aspect ratio
+        let widthRatio = targetSize.width / size.width
+        let heightRatio = targetSize.height / size.height
+        
+        let scaleFactor = min(widthRatio, heightRatio)
+        
+        // Compute the new image size that preserves aspect ratio
+        let scaledImageSize = CGSize(
+          width: size.width * scaleFactor,
+          height: size.height * scaleFactor
+        )
+        
+        // Draw and return the resized UIImage
+        let renderer = UIGraphicsImageRenderer(
+          size: scaledImageSize
+        )
+        
+        let scaledImage = renderer.image { _ in
+            self.draw(in: CGRect(
+              origin: .zero,
+              size: scaledImageSize
+            ))
+        }
+        
+        return scaledImage
     }
 }
