@@ -2,7 +2,7 @@ import UIKit
 
 extension RingerInteractiveNotification {
     
-    public func ringerInteractiveLogin(username: String, password: String, companyName : String) {
+    public func ringerInteractiveLogin(username: String, password: String,CompanyName companyName : String? = "") {
         totalCount = 0
         UserDefaults.standard.set(companyName, forKey: Constant.localStorage.companyName)
         var header: [String : String] = [:]
