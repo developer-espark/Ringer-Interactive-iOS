@@ -45,7 +45,7 @@ Login into sdk by using RingerInteractiveNotification object like given as below
 ```
 	ringerObject.ringerInteractiveLogin(username: “”, password: “”, CompanyName: “”)
 ```
-> Note :- CompanyName is optional.**
+> Note :- CompanyName is optional.
 ## Step 8
 Add these methods into AppDelegate to save and update contact through the notification.
 ```
@@ -63,4 +63,4 @@ Add these methods into AppDelegate to save and update contact through the notifi
 	}
 ```
 
-> Note :- iOS version above 13 is required to use this sdk.**
+> Note :- iOS version above 13 is required to use this sdk.
