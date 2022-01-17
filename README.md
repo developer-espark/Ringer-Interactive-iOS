@@ -14,7 +14,7 @@ Add the package using swift package manager in to your project.
 Firebase is required so if there is already an existing firebase pod in the project than uninstall it.
 
 ## Step 3
-Add delegate (ringerInteractiveDelegate) into file for access notification.
+Add delegate (`ringerInteractiveDelegate`) into file for access notification.
 
 ## Step 4
 Configure firebase using FirebaseApp.configure()
@@ -45,7 +45,7 @@ Login into sdk by using RingerInteractiveNotification object like given as below
 ```
 	ringerObject.ringerInteractiveLogin(username: “”, password: “”, CompanyName: “”)
 ```
-**Note :- CompanyName is optional.**
+> Note :- CompanyName is optional.**
 ## Step 8
 Add these methods into AppDelegate to save and update contact through the notification.
 ```
@@ -63,4 +63,4 @@ Add these methods into AppDelegate to save and update contact through the notifi
 	}
 ```
 
-**Note :- iOS version above 13 is required to use this sdk.**
+> Note :- iOS version above 13 is required to use this sdk.**
