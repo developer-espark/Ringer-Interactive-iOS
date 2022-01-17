@@ -23,15 +23,15 @@ Add GoogleService-Info.plist file downloaded from firebase configuration.
 ## Step 5
 Create object of RingerInteractiveNotification.
 ```
-	let obj_name = RingerInteractiveNotification()
+	let ringerObject = RingerInteractiveNotification()
 ```
 Register notification by using RingerInteractiveNotification object name.
 ```
-	obj_name.notificationRegister()
+	ringerObject.notificationRegister()
 ```
 Add delegate to self.
 ```
-	obj_name.ringerInteractiveDelegate = self
+	ringerObject.ringerInteractiveDelegate = self
 ```
 ## Step 6
 Add contact usage description in Info.plist using give lines as below  :-
@@ -39,27 +39,28 @@ Add contact usage description in Info.plist using give lines as below  :-
 	<key>NSContactsUsageDescription</key>
 	<string>Our application needs to your contacts</string>
 ```
-	Note :- Contact permission and iOS version above 13 is required to use this sdk.
 
 ## Step 7
 Login into sdk by using RingerInteractiveNotification object like given as below  :-
 ```
-	obj_name.ringerInteractiveLogin(username: “”, password: “”, CompanyName: “”)
-	Note :- CompanyName is optional.
+	ringerObject.ringerInteractiveLogin(username: “”, password: “”, CompanyName: “”)
 ```
+**Note :- CompanyName is optional.**
 ## Step 8
 Add these methods into AppDelegate to save and update contact through the notification.
 ```
 	func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification) {
-		obj_name.ringerInteractiveLogin(username: "", password: "")
+		ringerObject.ringerInteractiveLogin(username: "", password: "")
 	}
     
 	func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) {
-		obj_name.ringerInteractiveLogin(username: "", password: "")
+		ringerObject.ringerInteractiveLogin(username: "", password: "")
 	}
     
 	func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any],fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-		obj_name.ringerInteractiveLogin(username: "", password: "")
+		ringerObject.ringerInteractiveLogin(username: "", password: "")
 		completionHandler(.newData)
 	}
 ```
+
+**Note :- iOS version above 13 is required to use this sdk.**
