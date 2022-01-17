@@ -6,21 +6,21 @@ Ringer is a swift package to save and update contact along with notification and
 
 ### Here is the instruction how to use the sdk 
 
-##Step 1
+## Step 1
 Go to the [Releases](https://github.com/developer-espark/Ringer-Interactive-iOS) to get latest package
 Add the package using swift package manager in to your project.
 
-##Step 2
+## Step 2
 Firebase is required so if there is already an existing firebase pod in the project than uninstall it.
 
-##Step 3
+## Step 3
 Add delegate (ringerInteractiveDelegate) into file for access notification.
 
-##Step 4
+## Step 4
 Configure firebase using FirebaseApp.configure()
 Add GoogleService-Info.plist file downloaded from firebase configuration.
 
-##Step 5
+## Step 5
 Create object of RingerInteractiveNotification.
 ```
 	let obj_name = RingerInteractiveNotification()
@@ -33,7 +33,7 @@ Add delegate to self.
 ```
 	obj_name.ringerInteractiveDelegate = self
 ```
-##Step 6
+## Step 6
 Add contact usage description in Info.plist using give lines as below  :-
 ```	
 	<key>NSContactsUsageDescription</key>
@@ -41,13 +41,13 @@ Add contact usage description in Info.plist using give lines as below  :-
 ```
 	Note :- Contact permission and iOS version above 13 is required to use this sdk.
 
-##Step 7
+## Step 7
 Login into sdk by using RingerInteractiveNotification object like given as below  :-
 ```
 	obj_name.ringerInteractiveLogin(username: “”, password: “”, CompanyName: “”)
 	Note :- CompanyName is optional.
 ```
-##Step 8
+## Step 8
 Add these methods into AppDelegate to save and update contact through the notification.
 ```
 	func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification) {
