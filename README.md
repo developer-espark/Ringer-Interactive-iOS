@@ -1,4 +1,4 @@
-<h1 align="center">Ringer</h1>
+<h1 align="center">Ringer Interactive</h1>
 
 <p align="center">
 Ringer is a swift package to save and update contact along with notification and provide Information of device like os version of device, device name, and timezone in device.

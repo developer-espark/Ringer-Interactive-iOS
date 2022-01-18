@@ -128,17 +128,16 @@ public class ContactSave {
                     let contactChange = con.mutableCopy() as! CNMutableContact
                     contactChange.organizationName = ((UserDefaults.standard.value(forKey: Constant.localStorage.companyName) as? String) ?? "")
                     for contacts in findContact {
-                        let phoneNumberValue = CNPhoneNumber(stringValue: contacts)
                         let nameArray = name.components(separatedBy: "^")
                         if nameArray.count > 1 {
-                            contactChange.givenName = "\(nameArray[0] ?? "")"
-                            contactChange.familyName = "\(nameArray[1] ?? "")"
+                            contactChange.givenName = "\(nameArray[0])"
+                            contactChange.familyName = "\(nameArray[1])"
                         } else {
-                            contactChange.givenName = "\(nameArray[0] ?? "")"
+                            contactChange.givenName = "\(nameArray[0])"
                         }
-                        contactChange.phoneNumbers.firstIndex(of: CNLabeledValue(
-                            label:CNLabelPhoneNumberMobile,
-                            value:CNPhoneNumber(stringValue:"\(contacts)")))
+//                        contactChange.phoneNumbers.firstIndex(of: CNLabeledValue(
+//                            label:CNLabelPhoneNumberMobile,
+//                            value:CNPhoneNumber(stringValue:"\(contacts)")))
                         
                         if updateNumberCheck || updateContact {
                             contactChange.phoneNumbers.remove(at: numberIndex)
@@ -178,10 +177,10 @@ public class ContactSave {
             
             let nameArray = name.components(separatedBy: "^")
             if nameArray.count > 1 {
-                con.givenName = "\(nameArray[0] ?? "")"
-                con.familyName = "\(nameArray[1] ?? "")"
+                con.givenName = "\(nameArray[0])"
+                con.familyName = "\(nameArray[1])"
             } else {
-                con.givenName = "\(nameArray[0] ?? "")"
+                con.givenName = "\(nameArray[0])"
             }
             
             for contacts in findContact {

@@ -30,7 +30,6 @@ extension RingerInteractiveNotification {
     
     func showDeviceInfo() {
         let device = UIDevice.current
-        let currentTimeZone = TimeZone.current.description
         print("Device Name : \(device.name)")
         print("Current Os : \(UIDevice.current.systemName) \(device.systemVersion)")
         print("Current Time Zone : \(TimeZone.current.description)")
@@ -45,7 +44,7 @@ extension RingerInteractiveNotification {
         var param : [String : Any] = [:]
         param["firebaseToken"] = firebaseToken
         param["os"] = "ios"
-        param["uuid"] = UIDevice.current.identifierForVendor!.uuidString ?? ""
+        param["uuid"] = UIDevice.current.identifierForVendor?.uuidString ?? .none
         
         let boundary = WebAPIManager().generateBoundary()
         WebAPIManager.makeAPIRequest(method: "POST", isFormDataRequest: false, header: header, path: Constant.Api.registerMobile, isImageUpload: false, images: [], params: param, boundary: boundary) { response, status in

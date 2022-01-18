@@ -61,7 +61,7 @@ extension RingerInteractiveNotification {
             if let error = error {
                 print(error)
             } else if let token = token {
-                firebaseToken = token ?? ""
+                firebaseToken = token
                 self.ringerInteractiveDelegate?.tokenGenerate(token: token)
             }
         }
