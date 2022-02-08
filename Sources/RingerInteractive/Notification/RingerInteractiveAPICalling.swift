@@ -68,7 +68,7 @@ extension RingerInteractiveNotification {
                 for i in 0..<contactListModel.objects.count {
                     if contactListModel.objects[i].galleryId != nil && contactListModel.objects[i].galleryId != "" {
                         self.group.enter()
-                        self.ringerInteractiveGetContactImage(contactId: contactListModel.objects[i].galleryId, index: i)
+                        self.ringerInteractiveGetContactImage(contactId: contactListModel.objects[i].galleryId, contactNumber:contactListModel.objects[i].phone[0], index: i)
                     } else {
                         self.count += 1
                         if self.count == contactListModel.objects.count {
@@ -84,13 +84,16 @@ extension RingerInteractiveNotification {
         }
     }
     
-    func ringerInteractiveGetContactImage(contactId : String, index: Int) {
+    func ringerInteractiveGetContactImage(contactId : String, contactNumber : String, index: Int) {
         var header: [String : String] = [:]
         header["Authorization"] = GlobalFunction.getUserToken()
         
+        var param : [String : Any] = [:]
+        param["phone"] = contactNumber
+        
         let boundary = WebAPIManager().generateBoundary()
         
-        WebAPIManager.makeAPIRequest(method: "GET", isFormDataRequest: false, header: header, path: Constant.Api.getGalleryImage + "\(contactId)/avatar", isImageUpload: false, images: [], params: [:], boundary: boundary) { response, status in
+        WebAPIManager.makeAPIRequest(method: "GET", isFormDataRequest: false, header: header, path: Constant.Api.getGalleryImage + "\(contactId)/avatar", isImageUpload: false, images: [], params: param, boundary: boundary) { response, status in
             self.group.leave()
             if status == 200 || status == 201 {
                 self.count += 1
