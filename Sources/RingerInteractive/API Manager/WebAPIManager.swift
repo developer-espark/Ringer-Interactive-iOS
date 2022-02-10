@@ -60,7 +60,7 @@ class WebAPIManager: NSObject {
                     var dict = [AnyHashable: Any]()
                     dict["error"] = "Oops! Something went wrong. Please try again."
                     if (((response as? HTTPURLResponse)?.statusCode) ?? 200) == 409 {
-                        dict["status"] = (((response as? HTTPURLResponse)?.statusCode) ?? 200)
+                        dict["status"] = (((response as? HTTPURLResponse)?.statusCode) ?? 0)
                     } else {
                         dict["status"] = 0
                     }
