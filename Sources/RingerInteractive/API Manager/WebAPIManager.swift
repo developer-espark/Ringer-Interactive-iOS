@@ -59,7 +59,11 @@ class WebAPIManager: NSObject {
                 } catch {
                     var dict = [AnyHashable: Any]()
                     dict["error"] = "Oops! Something went wrong. Please try again."
-                    dict["status"] = 0
+                    if (((response as? HTTPURLResponse)?.statusCode) ?? 200) == 409 {
+                        dict["status"] = (((response as? HTTPURLResponse)?.statusCode) ?? 200)
+                    } else {
+                        dict["status"] = 0
+                    }
                     print(error)
                     completion(dict, 0)
                 }

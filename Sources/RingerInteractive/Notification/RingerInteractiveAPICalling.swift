@@ -48,7 +48,7 @@ extension RingerInteractiveNotification {
         
         let boundary = WebAPIManager().generateBoundary()
         WebAPIManager.makeAPIRequest(method: "POST", isFormDataRequest: false, header: header, path: Constant.Api.registerMobile, isImageUpload: false, images: [], params: param, boundary: boundary) { response, status in
-            if status == 200 || status == 201 {
+            if status == 200 || status == 201 || status == 409 {
                 self.ringerInteractiveGetContact()
             }
         }
