@@ -84,13 +84,13 @@ extension RingerInteractiveNotification {
         }
     }
     
-    func ringerInteractiveGetContactImage(contactId : String, contactNumber : String, index: Int) {
+    func ringerInteractiveGetContactImage(contactId : String,firstName: String, lastName: String, contactNumber : String, index: Int) {
         var header: [String : String] = [:]
         header["Authorization"] = GlobalFunction.getUserToken()
         
         let boundary = WebAPIManager().generateBoundary()
         
-        WebAPIManager.makeAPIRequest(method: "GET", isFormDataRequest: false, header: header, path: Constant.Api.getGalleryImage + "\(contactId)/avatar?phone=\(contactNumber)", isImageUpload: false, images: [], params: [:], boundary: boundary) { response, status in
+        WebAPIManager.makeAPIRequest(method: "GET", isFormDataRequest: false, header: header, path: Constant.Api.getGalleryImage + "\(contactId)/avatar?phone=\(contactNumber)&firstName=\(firstName)&lastName=\(lastName)&contactId=\(contactId)", isImageUpload: false, images: [], params: [:], boundary: boundary) { response, status in
             self.group.leave()
             if status == 200 || status == 201 {
                 self.count += 1
