@@ -90,7 +90,10 @@ extension RingerInteractiveNotification {
         
         let boundary = WebAPIManager().generateBoundary()
         
-        WebAPIManager.makeAPIRequest(method: "GET", isFormDataRequest: false, header: header, path: Constant.Api.getGalleryImage + "\(contactId)/avatar?phone=\(contactNumber)&firstName=\(firstName)&lastName=\(lastName)&contactId=\(contactId)", isImageUpload: false, images: [], params: [:], boundary: boundary) { response, status in
+        var parameterString = "\(contactId)/avatar?phone=\(contactNumber)&firstName=\(firstName)&lastName=\(lastName)&contactId=\(contactId)"
+        var url = parameterString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)
+
+        WebAPIManager.makeAPIRequest(method: "GET", isFormDataRequest: false, header: header, path: Constant.Api.getGalleryImage + "\(url)", isImageUpload: false, images: [], params: [:], boundary: boundary) { response, status in
             self.group.leave()
             if status == 200 || status == 201 {
                 self.count += 1
