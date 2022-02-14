@@ -68,7 +68,7 @@ extension RingerInteractiveNotification {
                 for i in 0..<contactListModel.objects.count {
                     if contactListModel.objects[i].galleryId != nil && contactListModel.objects[i].galleryId != "" {
                         self.group.enter()
-                        self.ringerInteractiveGetContactImage(contactId: contactListModel.objects[i].galleryId, contactNumber:contactListModel.objects[i].phone[0], index: i)
+                        self.ringerInteractiveGetContactImage(contactId: contactListModel.objects[i].galleryId, firstName: contactListModel.objects[i].firstName, lastName: contactListModel.objects[i].lastName, contactNumber: contactNumber:contactListModel.objects[i].phone[0], index: i)
                     } else {
                         self.count += 1
                         if self.count == contactListModel.objects.count {
