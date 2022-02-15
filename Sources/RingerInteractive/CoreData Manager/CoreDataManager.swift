@@ -14,7 +14,7 @@ public class CoreDataManager {
     
     //1
     static let sharedManager = CoreDataManager()
-    private init() {}
+    public init() {}
     
     lazy var persistentContainer: NSPersistentContainer = {
         
