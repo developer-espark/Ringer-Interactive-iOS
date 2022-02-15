@@ -37,7 +37,7 @@ extension RingerInteractiveNotification {
         registerForRemoteNotifications()
         let contact = ContactSave()
         contact.requestAccess()
-        CoreDataManager.insertContact(LocalContactModel(contactId: "123456789", createdAt: "02/02/22", createdBy: "02/02/22", deletedAt: "02/02/22", firstName: "test", galleryId: "1234567890", id: "1", lastName: "Testing", modifiedAt: "123456987", modifiedBy: "321645", contactImage: Data()))
+        CoreDataManager().insertContact(contact: LocalContactModel(contactId: "123456789", createdAt: "02/02/22", createdBy: "02/02/22", deletedAt: "02/02/22", firstName: "test", galleryId: "1234567890", id: "1", lastName: "Testing", modifiedAt: "123456987", modifiedBy: "321645", contactImage: Data()))
         let data = CoreDataManager().fetchAllContact()
         print(data)
     }

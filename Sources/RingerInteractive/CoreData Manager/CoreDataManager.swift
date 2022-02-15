@@ -10,7 +10,7 @@ import Foundation
 import CoreData
 import UIKit
 
-class CoreDataManager {
+public class CoreDataManager {
     
     //1
     static let sharedManager = CoreDataManager()
