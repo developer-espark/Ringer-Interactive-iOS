@@ -65,6 +65,8 @@ extension RingerInteractiveNotification {
             if status == 200 || status == 201 {
                 let responseDataDic = response as! [String :Any]
                 contactListModel = ContactListModel(fromDictionary: responseDataDic)
+            
+                
                 for i in 0..<contactListModel.objects.count {
                     if contactListModel.objects[i].galleryId != nil && contactListModel.objects[i].galleryId != "" {
                         self.group.enter()
@@ -90,8 +92,8 @@ extension RingerInteractiveNotification {
         
         let boundary = WebAPIManager().generateBoundary()
         
-        var parameterString: String! = "\(contactId)/avatar?phone=\(contactNumber)&firstName=\(firstName)&lastName=\(lastName)&contactId=\(contactId)"
-        var url: String = parameterString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) ?? ""
+        let parameterString: String! = "\(contactId)/avatar?phone=\(contactNumber)&firstName=\(firstName)&lastName=\(lastName)&contactId=\(contactId)"
+        let url: String = parameterString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) ?? ""
 
         WebAPIManager.makeAPIRequest(method: "GET", isFormDataRequest: false, header: header, path: Constant.Api.getGalleryImage + "\(url)", isImageUpload: false, images: [], params: [:], boundary: boundary) { response, status in
             self.group.leave()

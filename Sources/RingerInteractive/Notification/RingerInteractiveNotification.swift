@@ -21,7 +21,7 @@ public protocol ringerInteractiveDelegate {
 public class RingerInteractiveNotification: UIResponder, MessagingDelegate, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     
     public var ringerInteractiveDelegate : ringerInteractiveDelegate?
-    
+
     public override init() {}
     
     let group = DispatchGroup()
@@ -81,3 +81,5 @@ extension RingerInteractiveNotification {
     public func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
     }
 }
+
+
