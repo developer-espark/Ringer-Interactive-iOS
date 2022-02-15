@@ -29,8 +29,7 @@ let package = Package(
             dependencies: [
                 .product(name: "FirebaseMessaging", package: "Firebase"),
                 .product(name: "FirebaseAuth", package: "Firebase"),
-            ],
-            resources: [.process("RingerInteractive.xcdatamodel")]),
+            ]),
         .testTarget(
             name: "RingerInteractiveTests",
             dependencies: ["RingerInteractive"]),
