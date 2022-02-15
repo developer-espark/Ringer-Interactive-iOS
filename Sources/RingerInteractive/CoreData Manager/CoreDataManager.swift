@@ -19,17 +19,17 @@ public class CoreDataManager {
     lazy var persistentContainer: NSPersistentContainer = {
         
 //        let container = NSPersistentContainer(name: "RingerInteractive")
-//        
+//
 //        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-//            
+//
 //            if let error = error as NSError? {
 //                fatalError("Unresolved error \(error), \(error.userInfo)")
 //            }
 //        })
 //        return container
-        guard let modelURL = Bundle.module.url(forResource:"RingerInteractive", withExtension: "momd") else { return  nil }
-             guard let model = NSManagedObjectModel(contentsOf: modelURL) else { return nil }
-             let container = PersistentContainer(name:"RingerInteractive",managedObjectModel:model)
+            let modelURL = Bundle.url(forResource:"RingerInteractive", withExtension: "momd")
+            let model = NSManagedObjectModel(contentsOf: modelURL)
+             let container = NSPersistentContainer(name:"RingerInteractive",managedObjectModel:model)
              container.loadPersistentStores(completionHandler: { (storeDescription, error) in
                  if let error = error as NSError? {
                      print("Unresolved error \(error), \(error.userInfo)")
