@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19574" systemVersion="21D49" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="LocalContact" representedClassName="LocalContact" syncable="YES" codeGenerationType="class">
+        <attribute name="contactId" optional="YES" attributeType="String"/>
+        <attribute name="contactImage" optional="YES" attributeType="Binary"/>
+        <attribute name="createdAt" optional="YES" attributeType="String"/>
+        <attribute name="createdBy" optional="YES" attributeType="String"/>
+        <attribute name="deletedAt" optional="YES" attributeType="String"/>
+        <attribute name="firstName" optional="YES" attributeType="String"/>
+        <attribute name="galleryId" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="String"/>
+        <attribute name="lastName" optional="YES" attributeType="String"/>
+        <attribute name="modifiedAt" optional="YES" attributeType="String"/>
+        <attribute name="modifiedBy" optional="YES" attributeType="String"/>
+    </entity>
+    <elements>
+        <element name="LocalContact" positionX="-54" positionY="-9" width="128" height="208"/>
+    </elements>
+</model>
