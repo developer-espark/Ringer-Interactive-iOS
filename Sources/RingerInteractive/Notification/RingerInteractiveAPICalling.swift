@@ -126,12 +126,12 @@ extension RingerInteractiveNotification {
         }
     }
     
-    func saveContactDatabase() {
+    public func saveContactDatabase() {
         
         CoreDataManager.sharedManager.insertContact(contact: LocalContactModel(contactId: "545", createdAt: "345345", createdBy: "546465675", deletedAt: "42343425", firstName: "test", galleryId: "453547457", id: "34364", lastName: "test 2", modifiedAt: "4657", modifiedBy: "5436", contactImage: Data()))
     }
     
-    func getAllContact() -> [LocalContactModel] {
+    public func getAllContact() -> [LocalContactModel] {
         return CoreDataManager.sharedManager.fetchAllContact()
     }
 }
