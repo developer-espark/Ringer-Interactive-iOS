@@ -7,8 +7,11 @@ class WebAPIManager: NSObject {
     
     class func makeAPIRequest(method: String = "POST", isFormDataRequest: Bool, header: [String : String], path: String, isImageUpload: Bool,images:[Media], auth: Bool = false, authDic: [String:Any] = [:], params: [String:Any], baseUrl: String = baseURL, boundary:String, completion: @escaping (_ response: [AnyHashable: Any],_ status: Int) -> Void) {
         
-        
-        mainURL = baseUrl + path
+        if GlobalFunction.getUserToken() != "" {
+            mainURL = GlobalFunction.getUserToken() + "/" + path
+        } else {
+            mainURL = baseUrl + path
+        }
 
         var request = URLRequest(url: URL(string: mainURL)!)
         request.httpMethod = method

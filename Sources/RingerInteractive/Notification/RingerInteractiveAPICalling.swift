@@ -14,12 +14,11 @@ extension RingerInteractiveNotification {
         
         let boundary = WebAPIManager().generateBoundary()
         
-        WebAPIManager.makeAPIRequest(method: "GET", isFormDataRequest: false, header: header, path: Constant.Api.token_with_authorities, isImageUpload: false, images: [], auth: true, authDic: authDic, params: [:], baseUrl: "https://sandbox.thrio.io/", boundary: boundary) { response, status in
+        WebAPIManager.makeAPIRequest(method: "GET", isFormDataRequest: false, header: header, path: Constant.Api.token_with_authorities, isImageUpload: false, images: [], auth: true, authDic: authDic, params: [:], boundary: boundary) { response, status in
             if status == 200 || status == 201  {
                 let responseDataDic = response as! [String :Any]
-                baseURL = "\(responseDataDic["location"] ?? "")/"
                 UserDefaults.standard.set("\(responseDataDic["token"] ?? "")", forKey: Constant.localStorage.token)
-                UserDefaults.standard.set("\(responseDataDic["location"] ?? "")/", forKey: Constant.localStorage.baseUrl)
+                UserDefaults.standard.set("\(responseDataDic["location"] ?? "")", forKey: Constant.localStorage.baseUrl)
                 self.showDeviceInfo()
             } else {
                 let responseDataDic = response as! [String :Any]
@@ -65,7 +64,7 @@ extension RingerInteractiveNotification {
             if status == 200 || status == 201 {
                 let responseDataDic = response as! [String :Any]
                 contactListModel = ContactListModel(fromDictionary: responseDataDic)
-                var contactList = self.getContactList()
+                var contactList = GlobalFunction.getContactList()
                 if (contactList?.count ?? 0) > 0 {
                     let localContacts = contactList!.map{$0.contactId ?? ""}
                     let apiContacts = contactListModel.objects.map{$0.contactId ?? ""}
@@ -80,7 +79,7 @@ extension RingerInteractiveNotification {
                                 contactList!.remove(at: Int(index!))
                             }
                         }
-                        self.setContactList(contactListModel: contactList)
+                        GlobalFunction.setContactList(contactListModel: contactList)
                         self.ringerInteractiveGetContactCheck()
                     } else {
                         self.ringerInteractiveGetContactCheck()
@@ -96,10 +95,10 @@ extension RingerInteractiveNotification {
     }
     
     func ringerInteractiveGetContactCheck() {
-        var localContactList = self.getContactList()
+        var localContactList = GlobalFunction.getContactList()
         if (localContactList?.count ?? 0) > 0 {
             for i in 0..<contactListModel.objects.count {
-                localContactList = self.getContactList()
+                localContactList = GlobalFunction.getContactList()
                 let localContactData = localContactList?.filter {$0.contactId == contactListModel.objects[i].contactId}
                 if (localContactData?.count ?? 0) > 0 {
                     let localContactModify = localContactList?.filter {($0.contactId == contactListModel.objects[i].contactId) && ($0.modifiedAt < contactListModel.objects[i].modifiedAt)}
@@ -107,7 +106,7 @@ extension RingerInteractiveNotification {
                         let index = localContactList?.firstIndex(where: {$0.contactId == contactListModel.objects[i].contactId})
                         if index != nil {
                             localContactList![Int(index!)] = contactListModel.objects[i]
-                            self.setContactList(contactListModel: localContactList)
+                            GlobalFunction.setContactList(contactListModel: localContactList)
                         }
                         if contactListModel.objects[i].galleryId != nil && contactListModel.objects[i].galleryId != "" {
                             self.group.enter()
@@ -139,7 +138,7 @@ extension RingerInteractiveNotification {
                 }
             }
         } else {
-            self.setContactList(contactListModel: contactListModel.objects)
+            GlobalFunction.setContactList(contactListModel: contactListModel.objects)
             for i in 0..<contactListModel.objects.count {
                 if contactListModel.objects[i].galleryId != nil && contactListModel.objects[i].galleryId != "" {
                     self.group.enter()
@@ -196,38 +195,9 @@ extension RingerInteractiveNotification {
     }
     
     func addNewContact(newContact : ContactListObject) {
-        var contactList = self.getContactList()
+        var contactList = GlobalFunction.getContactList()
         contactList?.append(newContact)
-        self.setContactList(contactListModel: contactList)
+        GlobalFunction.setContactList(contactListModel: contactList)
     }
     
-    func setContactList(contactListModel: [ContactListObject]?) {
-        if let contactModel = contactListModel {
-            do {
-                let archivedServerModules = try NSKeyedArchiver.archivedData(withRootObject: contactModel, requiringSecureCoding: false)
-                UserDefaults.standard.set(archivedServerModules, forKey: "contactList")
-                UserDefaults.standard.synchronize()
-            }catch {
-                
-            }
-        }
-    }
-    
-    func getContactList() -> [ContactListObject]! {
-        if GlobalFunction.isKeyPresentInUserDefaults(key: "contactList"){
-            do {
-                let data = UserDefaults.standard.data(forKey: "contactList")
-                let decodedUserData = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data!) as! [ContactListObject]
-                return decodedUserData
-            } catch {
-                return []
-            }
-        } else {
-            return []
-        }
-    }
-    
-    func isKeyPresentInUserDefaults(key: String) -> Bool {
-        return UserDefaults.standard.object(forKey: key) != nil
-    }
 }
