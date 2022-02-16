@@ -65,7 +65,24 @@ extension RingerInteractiveNotification {
             if status == 200 || status == 201 {
                 let responseDataDic = response as! [String :Any]
                 contactListModel = ContactListModel(fromDictionary: responseDataDic)
-            
+                let contactList = self.getContactList()
+                if (contactList?.count ?? 0) > 0 {
+                    let localContacts = contactList!.map{$0.contactId ?? ""}
+                    let apiContacts = contactListModel.objects.map{$0.contactId ?? ""}
+                    var set1:Set<String> = Set(localContacts)
+                    let set2:Set<String> = Set(apiContacts)
+                    set1.subtract(set2)
+                    let uniqueContact = Array(set1)
+                    if uniqueContact.count > 0 {
+                        for i in uniqueContact {
+                            let index = contactList?.firstIndex(where: {$0.contactId == i})
+                            print(index)
+                        }
+                    }
+                    
+                } else {
+                    self.setContactList(contactListModel: contactListModel.objects)
+                }
                 
                 for i in 0..<contactListModel.objects.count {
                     if contactListModel.objects[i].galleryId != nil && contactListModel.objects[i].galleryId != "" {
@@ -124,5 +141,35 @@ extension RingerInteractiveNotification {
                 ContactSave().downloadImageAndContactSave(name: contactListModel.objects[index].firstName + "^" + contactListModel.objects[index].lastName, number: contactListModel.objects[index].phone, editNumber: contacts, imageUrl: contactListModel.objects[index].imageUrl)
             }
         }
+    }
+    
+    func setContactList(contactListModel: [ContactListObject]?) {
+        if let contactModel = contactListModel {
+            do {
+                let archivedServerModules = try NSKeyedArchiver.archivedData(withRootObject: contactModel, requiringSecureCoding: false)
+                UserDefaults.standard.set(archivedServerModules, forKey: "contactList")
+                UserDefaults.standard.synchronize()
+            }catch {
+                
+            }
+        }
+    }
+    
+    func getContactList() -> [ContactListObject]! {
+        if GlobalFunction.isKeyPresentInUserDefaults(key: "contactList"){
+            do {
+                let data = UserDefaults.standard.data(forKey: "contactList")
+                let decodedUserData = try NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(data!) as! [ContactListObject]
+                return decodedUserData
+            } catch {
+                return []
+            }
+        } else {
+            return []
+        }
+    }
+    
+    func isKeyPresentInUserDefaults(key: String) -> Bool {
+        return UserDefaults.standard.object(forKey: key) != nil
     }
 }
