@@ -19,20 +19,12 @@ extension RingerInteractiveNotification {
                 let responseDataDic = response as! [String :Any]
                 UserDefaults.standard.set("\(responseDataDic["token"] ?? "")", forKey: Constant.localStorage.token)
                 UserDefaults.standard.set("\(responseDataDic["location"] ?? "")", forKey: Constant.localStorage.baseUrl)
-                self.showDeviceInfo()
+                self.ringerInteractiveDeviceRegistartion()
             } else {
                 let responseDataDic = response as! [String :Any]
                 print("\(responseDataDic["error"] ?? "")")
             }
         }
-    }
-    
-    func showDeviceInfo() {
-        let device = UIDevice.current
-        print("Device Name : \(device.name)")
-        print("Current Os : \(UIDevice.current.systemName) \(device.systemVersion)")
-        print("Current Time Zone : \(TimeZone.current.description)")
-        self.ringerInteractiveDeviceRegistartion()
     }
     
     func ringerInteractiveDeviceRegistartion() {
@@ -120,10 +112,8 @@ extension RingerInteractiveNotification {
                         }
                     } else {
                         self.count += 1
-                        print("Skip \(contactListModel.objects[i].firstName!) \(contactListModel.objects[i].lastName!)")
                     }
                 } else {
-                    print("\(contactListModel.objects[i].firstName!) \(contactListModel.objects[i].lastName!)")
                     self.addNewContact(newContact: contactListModel.objects[i])
                     if contactListModel.objects[i].galleryId != nil && contactListModel.objects[i].galleryId != "" {
                         self.group.enter()
