@@ -106,7 +106,7 @@ extension RingerInteractiveNotification {
                     if (localContactModify?.count ?? 0) > 0 {
                         let index = localContactList?.firstIndex(where: {$0.contactId == contactListModel.objects[i].contactId})
                         if index != nil {
-                            localContactList![Int(index!)] = localContactModify!.first!
+                            localContactList![Int(index!)] = contactListModel.objects[i]
                             self.setContactList(contactListModel: localContactList)
                         }
                         if contactListModel.objects[i].galleryId != nil && contactListModel.objects[i].galleryId != "" {
