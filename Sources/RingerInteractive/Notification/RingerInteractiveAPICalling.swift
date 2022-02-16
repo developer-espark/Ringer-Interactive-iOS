@@ -104,7 +104,7 @@ extension RingerInteractiveNotification {
             for i in 0..<contactListModel.objects.count {
                 let localContactData = localContactList?.filter {$0.contactId == contactListModel.objects[i].contactId}
                 if (localContactData?.count ?? 0) > 0 {
-                    let localContactModify = localContactList?.filter { $0.modifiedAt < contactListModel.objects[i].modifiedAt }
+                    let localContactModify = localContactList?.filter {($0.contactId == contactListModel.objects[i].contactId) && ($0.modifiedAt < contactListModel.objects[i].modifiedAt)}
                     if (localContactModify?.count ?? 0) > 0 {
                         let index = localContactModify?.firstIndex(where: {$0.contactId == contactListModel.objects[i].contactId})
                         if index != nil {
