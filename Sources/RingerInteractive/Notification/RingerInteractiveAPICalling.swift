@@ -123,11 +123,10 @@ extension RingerInteractiveNotification {
                         }
                     } else {
                         self.count += 1
-                        print("\(contactListModel.objects[i].firstName) \(contactListModel.objects[i].lastName)")
-                        print("skip")
+                        print("Skip \(contactListModel.objects[i].firstName!) \(contactListModel.objects[i].lastName!)")
                     }
                 } else {
-                    print("\(contactListModel.objects[i].firstName) \(contactListModel.objects[i].lastName)")
+                    print("\(contactListModel.objects[i].firstName!) \(contactListModel.objects[i].lastName!)")
                     self.addNewContact(newContact: contactListModel.objects[i])
                     if contactListModel.objects[i].galleryId != nil && contactListModel.objects[i].galleryId != "" {
                         self.group.enter()
