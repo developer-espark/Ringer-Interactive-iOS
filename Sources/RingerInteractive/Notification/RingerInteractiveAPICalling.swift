@@ -65,7 +65,7 @@ extension RingerInteractiveNotification {
             if status == 200 || status == 201 {
                 let responseDataDic = response as! [String :Any]
                 contactListModel = ContactListModel(fromDictionary: responseDataDic)
-                let contactList = self.getContactList()
+                var contactList = self.getContactList()
                 if (contactList?.count ?? 0) > 0 {
                     let localContacts = contactList!.map{$0.contactId ?? ""}
                     let apiContacts = contactListModel.objects.map{$0.contactId ?? ""}
@@ -76,29 +76,48 @@ extension RingerInteractiveNotification {
                     if uniqueContact.count > 0 {
                         for i in uniqueContact {
                             let index = contactList?.firstIndex(where: {$0.contactId == i})
-                            print(index)
+                            if index != nil {
+                                contactList!.remove(at: Int(index!))
+                            }
                         }
+                        self.setContactList(contactListModel: contactList)
+                        self.addNewContact()
+                    } else {
+                        self.addNewContact()
                     }
-                    
                 } else {
                     self.setContactList(contactListModel: contactListModel.objects)
-                }
-                
-                for i in 0..<contactListModel.objects.count {
-                    if contactListModel.objects[i].galleryId != nil && contactListModel.objects[i].galleryId != "" {
-                        self.group.enter()
-                        self.ringerInteractiveGetContactImage(contactId: contactListModel.objects[i].galleryId, firstName: contactListModel.objects[i].firstName, lastName: contactListModel.objects[i].lastName, contactNumber: contactListModel.objects[i].phone[0], index: i)
-                    } else {
-                        self.count += 1
-                        if self.count == contactListModel.objects.count {
-                            self.count = 0
-                            self.saveAndUpdateContact(index: 0)
-                        }
-                    }
+                    self.ringerInteractiveGetContactCheck()
                 }
             } else {
                 let responseDataDic = response as! [String :Any]
                 print("\(responseDataDic["error"] ?? "")")
+            }
+        }
+    }
+    
+    func ringerInteractiveGetContactCheck() {
+        var localContactList = self.getContactList()
+        for i in 0..<contactListModel.objects.count {
+            let localContactData = localContactList?.filter {($0.contactId == contactListModel.objects[i].contactId) && ($0.modifiedAt < contactListModel.objects[i].modifiedAt)}
+            if (localContactData?.count ?? 0) > 0 {
+                let index = localContactList?.firstIndex(where: {$0.contactId == contactListModel.objects[i].contactId})
+                if index != nil {
+                    localContactList![Int(index!)] = localContactData!.first!
+                    self.setContactList(contactListModel: localContactList)
+                }
+                if contactListModel.objects[i].galleryId != nil && contactListModel.objects[i].galleryId != "" {
+                    self.group.enter()
+                    self.ringerInteractiveGetContactImage(contactId: contactListModel.objects[i].galleryId, firstName: contactListModel.objects[i].firstName, lastName: contactListModel.objects[i].lastName, contactNumber: contactListModel.objects[i].phone[0], index: i)
+                } else {
+                    self.count += 1
+                    if self.count == contactListModel.objects.count {
+                        self.count = 0
+                        self.saveAndUpdateContact(index: 0)
+                    }
+                }
+            } else {
+                self.count += 1
             }
         }
     }
@@ -139,6 +158,30 @@ extension RingerInteractiveNotification {
             for contacts in contactListModel.objects[index].phone {
                 self.group.enter()
                 ContactSave().downloadImageAndContactSave(name: contactListModel.objects[index].firstName + "^" + contactListModel.objects[index].lastName, number: contactListModel.objects[index].phone, editNumber: contacts, imageUrl: contactListModel.objects[index].imageUrl)
+            }
+        }
+    }
+    
+    func addNewContact() {
+        var contactList = self.getContactList()
+        if (contactList?.count ?? 0) > 0 {
+            let localContacts = contactList!.map{$0.contactId ?? ""}
+            let apiContacts = contactListModel.objects.map{$0.contactId ?? ""}
+            let set1:Set<String> = Set(localContacts)
+            var set2:Set<String> = Set(apiContacts)
+            set2.subtract(set1)
+            let newContact = Array(set2)
+            if newContact.count > 0 {
+                for i in newContact {
+                    let newContactModel = contactListModel.objects.filter {$0.contactId == i}
+                    if newContactModel.count > 0 {
+                        contactList?.append(newContactModel.first!)
+                    }
+                }
+                self.setContactList(contactListModel: contactList)
+                self.ringerInteractiveGetContactCheck()
+            } else {
+                self.ringerInteractiveGetContactCheck()
             }
         }
     }
