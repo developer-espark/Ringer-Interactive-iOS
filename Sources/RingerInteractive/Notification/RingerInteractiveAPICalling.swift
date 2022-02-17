@@ -183,6 +183,7 @@ extension RingerInteractiveNotification {
             }
             if index == contactListModel.objects.count - 1 {
                 self.ringerInteractiveDelegate?.completionFinishTask()
+                self.completionFinishTask?()
             }
         }
     }

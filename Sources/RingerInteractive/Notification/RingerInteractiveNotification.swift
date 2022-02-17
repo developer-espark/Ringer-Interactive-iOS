@@ -22,6 +22,7 @@ public protocol ringerInteractiveDelegate {
 public class RingerInteractiveNotification: UIResponder, MessagingDelegate, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     
     public var ringerInteractiveDelegate : ringerInteractiveDelegate?
+    public var completionFinishTask : (()->())?
     public override init() {}
     
     let group = DispatchGroup()
