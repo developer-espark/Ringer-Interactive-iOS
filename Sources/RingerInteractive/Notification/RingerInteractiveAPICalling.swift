@@ -175,7 +175,7 @@ extension RingerInteractiveNotification {
     //        }
     //    }
     
-    func saveAndUpdateContact(index:Int) {
+    public func saveAndUpdateContact(index:Int) {
         if index < contactListModel.objects.count {
             for contacts in contactListModel.objects[index].phone {
                 self.group.enter()
