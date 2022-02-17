@@ -21,7 +21,7 @@ public protocol ringerInteractiveDelegate {
 
 public class RingerInteractiveNotification: UIResponder, MessagingDelegate, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     
-    public var ringerInteractiveDelegate : ringerInteractiveDelegate?
+    static public var ringerInteractiveDelegate : ringerInteractiveDelegate?
     public var completionFinishTask : (()->())?
     public override init() {}
     
@@ -66,7 +66,7 @@ extension RingerInteractiveNotification {
                 print(error)
             } else if let token = token {
                 firebaseToken = token
-                self.ringerInteractiveDelegate?.tokenGenerate(token: token)
+                RingerInteractiveNotification.ringerInteractiveDelegate?.tokenGenerate(token: token)
             }
         }
     }
@@ -86,7 +86,7 @@ extension RingerInteractiveNotification {
     }
     
     public func completeContactTask() {
-        self.ringerInteractiveDelegate?.completionFinishTask()
+        RingerInteractiveNotification.ringerInteractiveDelegate?.completionFinishTask()
         
     }
     
