@@ -16,12 +16,12 @@ public protocol ringerInteractiveDelegate {
                      didReceiveRemoteNotification userInfo: [AnyHashable : Any],
                      fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void)
     func tokenGenerate(token: String)
+    func completionFinishTask()
 }
 
 public class RingerInteractiveNotification: UIResponder, MessagingDelegate, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     
     public var ringerInteractiveDelegate : ringerInteractiveDelegate?
-    public var completionFinishTask: (() -> Void)?
     public override init() {}
     
     let group = DispatchGroup()

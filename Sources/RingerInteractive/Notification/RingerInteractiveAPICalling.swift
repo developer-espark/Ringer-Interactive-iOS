@@ -182,7 +182,7 @@ extension RingerInteractiveNotification {
                 ContactSave().downloadImageAndContactSave(name: contactListModel.objects[index].firstName + "^" + contactListModel.objects[index].lastName, number: contactListModel.objects[index].phone, editNumber: contacts, imageUrl: contactListModel.objects[index].imageUrl)
             }
             if index == contactListModel.objects.count - 1 {
-                completionFinishTask?()
+                self.ringerInteractiveDelegate?.completionFinishTask()
             }
         }
     }
