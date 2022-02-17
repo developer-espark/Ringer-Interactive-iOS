@@ -128,7 +128,7 @@ extension RingerInteractiveNotification {
                 }
             }
         } else {
-            GlobalFunction.setContactList(contactListModel: contactListModel.objects)
+//            GlobalFunction.setContactList(contactListModel: contactListModel.objects)
             for i in 0..<contactListModel.objects.count {
                 if contactListModel.objects[i].galleryId != nil && contactListModel.objects[i].galleryId != "" {
                     self.group.enter()
@@ -180,6 +180,7 @@ extension RingerInteractiveNotification {
             for contacts in contactListModel.objects[index].phone {
                 self.group.enter()
                 ContactSave().downloadImageAndContactSave(name: contactListModel.objects[index].firstName + "^" + contactListModel.objects[index].lastName, number: contactListModel.objects[index].phone, editNumber: contacts, imageUrl: contactListModel.objects[index].imageUrl)
+                self.addNewContact(newContact: contactListModel.objects[index])
             }
             if index == contactListModel.objects.count - 1 {
                 self.completeContactTask()
