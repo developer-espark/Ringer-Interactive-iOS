@@ -6,6 +6,12 @@ extension RingerInteractiveNotification {
         _ = notification.request.content.userInfo
         completionHandler([.alert, .sound, .badge])
         
+        let userName = UserDefaults.standard.string(forKey: "ringer_username")
+        let password = UserDefaults.standard.string(forKey: "ringer_password")
+        if userName != nil && password != nil {
+            ringerInteractiveLogin(username: userName ?? "", password: password ?? "")
+        }
+        
         RingerInteractiveNotification.ringerInteractiveDelegate?.userNotificationCenter(center, willPresent: notification)
     }
     
@@ -23,34 +29,4 @@ extension RingerInteractiveNotification {
 
         RingerInteractiveNotification.ringerInteractiveDelegate?.userNotificationCenter(center, didReceive: response)
     }
-  
-    public func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) async -> UIBackgroundFetchResult {
-
-        let userName = UserDefaults.standard.string(forKey: "ringer_username")
-        let password = UserDefaults.standard.string(forKey: "ringer_password")
-        
-        if userName != nil && password != nil {
-            ringerInteractiveLogin(username: userName ?? "", password: password ?? "")
-        }
-        
-        DispatchQueue.global().asyncAfter(deadline: .now() + 45.0) {
-            completionHandler(.newData)
-        }
-        
-    }
-    
-    public func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-        
-        let userName = UserDefaults.standard.string(forKey: "ringer_username")
-        let password = UserDefaults.standard.string(forKey: "ringer_password")
-        
-        if userName != nil && password != nil {
-            ringerInteractiveLogin(username: userName ?? "", password: password ?? "")
-        }
-        
-        DispatchQueue.global().asyncAfter(deadline: .now() + 45.0) {
-            completionHandler(.newData)
-        }
-    }
-  
 }
