@@ -23,5 +23,16 @@ extension RingerInteractiveNotification {
 
         RingerInteractiveNotification.ringerInteractiveDelegate?.userNotificationCenter(center, didReceive: response)
     }
+    
+    public func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+        
+        if userName != nil && password != nil {
+            ringerInteractiveLogin(username: userName ?? "", password: password ?? "")
+        }
+
+        DispatchQueue.global().asyncAfter(deadline: .now() + 45.0) {
+            completionHandler(.newData)
+        }
+    }
   
 }
