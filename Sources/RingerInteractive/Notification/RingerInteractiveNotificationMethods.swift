@@ -18,7 +18,7 @@ extension RingerInteractiveNotification {
         let userName = UserDefaults.standard.string(forKey: "ringer_username")
         let password = UserDefaults.standard.string(forKey: "ringer_password")
         if userName != nil && password != nil {
-            ringerInteractiveLogin(username: userName, password: password)
+            ringerInteractiveLogin(username: userName ?? "", password: password ?? "")
         }
 
         RingerInteractiveNotification.ringerInteractiveDelegate?.userNotificationCenter(center, didReceive: response)
