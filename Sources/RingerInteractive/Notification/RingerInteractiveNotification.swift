@@ -32,6 +32,10 @@ public class RingerInteractiveNotification: UIResponder, MessagingDelegate, UIAp
 //MARK: Application Delegate
 extension RingerInteractiveNotification {
 
+    public func applicationDidBecomeActive(_ application: UIApplication) {
+        print("SDK applicationDidBecomeActive")
+    }
+    
     public func notificationRegister() {
         Messaging.messaging().delegate = self
         UNUserNotificationCenter.current().delegate = self
@@ -74,14 +78,6 @@ extension RingerInteractiveNotification {
     }
     
     public func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-    }
-    
-    public func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification) async -> UNNotificationPresentationOptions {
-        print("SDK willPresent")
-    }
-    
-    public func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) async {
-        print("SDK didReceive")
     }
     
     public func application(_ application: UIApplication, handleActionWithIdentifier identifier: String?, forRemoteNotification userInfo: [AnyHashable: Any], completionHandler: @escaping () -> Void) {
