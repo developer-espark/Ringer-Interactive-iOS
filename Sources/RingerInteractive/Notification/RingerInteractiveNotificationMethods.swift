@@ -26,6 +26,9 @@ extension RingerInteractiveNotification {
     
     public func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         
+        let userName = UserDefaults.standard.string(forKey: "ringer_username")
+        let password = UserDefaults.standard.string(forKey: "ringer_password")
+        
         if userName != nil && password != nil {
             ringerInteractiveLogin(username: userName ?? "", password: password ?? "")
         }
