@@ -23,10 +23,8 @@ extension RingerInteractiveNotification {
 
         RingerInteractiveNotification.ringerInteractiveDelegate?.userNotificationCenter(center, didReceive: response)
     }
-    
-    public func application(_ application: UIApplication,
-                            didReceiveRemoteNotification userInfo: [AnyHashable : Any],
-                            fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
+  
+    public func application(_ application: UIApplication, performFetchWithCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
         
         let userName = UserDefaults.standard.string(forKey: "ringer_username")
         let password = UserDefaults.standard.string(forKey: "ringer_password")
@@ -38,6 +36,7 @@ extension RingerInteractiveNotification {
         DispatchQueue.global().asyncAfter(deadline: .now() + 45.0) {
             completionHandler(.newData)
         }
+        
     }
   
 }
