@@ -57,8 +57,9 @@ extension RingerInteractiveNotification {
         UIApplication.shared.registerForRemoteNotifications()
     }
     
-    public func applicationDidFinishLaunching(_ application: UIApplication) {
-     print("SDK applicationDidFinishLaunching")
+    public func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
+        print("SDK applicationDidFinishLaunching")
+        return true
     }
     
     public func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
