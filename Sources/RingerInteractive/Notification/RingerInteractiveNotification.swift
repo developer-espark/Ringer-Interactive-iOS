@@ -35,14 +35,6 @@ public class RingerInteractiveNotification: UIResponder, MessagingDelegate, UIAp
 //MARK: Application Delegate
 extension RingerInteractiveNotification {
     
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification) {
-        print("SDK willPresent")
-    }
-    
-    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) {
-        print("SDK didReceive")
-    }
-    
     public func notificationRegister() {
         Messaging.messaging().delegate = self
         UNUserNotificationCenter.current().delegate = self

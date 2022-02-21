@@ -12,6 +12,10 @@ extension RingerInteractiveNotification {
         authDic["username"] = username
         authDic["password"] = password
         
+        UserDefaults.standard.set(username, forKey: "ringer_username")
+        UserDefaults.standard.set(password, forKey: "ringer_password")
+        UserDefaults.standard.synchronize()
+        
         let boundary = WebAPIManager().generateBoundary()
         
         WebAPIManager.makeAPIRequest(method: "GET", isFormDataRequest: false, header: header, path: Constant.Api.token_with_authorities, isImageUpload: false, images: [], auth: true, authDic: authDic, params: [:], boundary: boundary) { response, status in
