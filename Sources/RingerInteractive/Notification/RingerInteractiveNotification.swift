@@ -27,13 +27,20 @@ public class RingerInteractiveNotification: UIResponder, MessagingDelegate, UIAp
     
     let group = DispatchGroup()
     var count = 0
+    
+    
+    
 }
 
 //MARK: Application Delegate
 extension RingerInteractiveNotification {
-
-    public func applicationDidBecomeActive(_ application: UIApplication) {
-        print("SDK applicationDidBecomeActive")
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification) {
+        print("SDK willPresent")
+    }
+    
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) {
+        print("SDK didReceive")
     }
     
     public func notificationRegister() {
