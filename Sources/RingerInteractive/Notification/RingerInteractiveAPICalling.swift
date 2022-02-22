@@ -217,8 +217,16 @@ extension RingerInteractiveNotification {
     
     func addNewContact(newContact : ContactListObject) {
         var contactList = GlobalFunction.getContactList()
-        contactList?.append(newContact)
-        GlobalFunction.setContactList(contactListModel: contactList)
+        if (contactList?.count ?? 0) > 0 {
+            let localContactData = contactList?.filter {$0.contactId == newContact.contactId}
+            if (localContactData?.count ?? 0) == 0 {
+                contactList?.append(newContact)
+                GlobalFunction.setContactList(contactListModel: contactList)
+            }
+        } else {
+            contactList?.append(newContact)
+            GlobalFunction.setContactList(contactListModel: contactList)
+        }
     }
     
 }
