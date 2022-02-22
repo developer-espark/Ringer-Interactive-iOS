@@ -108,13 +108,14 @@ extension RingerInteractiveNotification {
                         }
                         if contactListModel.objects[i].galleryId != nil && contactListModel.objects[i].galleryId != "" {
                             self.group.enter()
-                            self.ringerInteractiveGetContactImage(contactId: contactListModel.objects[i].galleryId, firstName: contactListModel.objects[i].firstName, lastName: contactListModel.objects[i].lastName, contactNumber: contactListModel.objects[i].phone[0], index: i)
+                            self.ringerInteractiveGetContactImage(contactId: contactListModel.objects[i].galleryId, firstName: contactListModel.objects[i].firstName, lastName: contactListModel.objects[i].lastName, contactNumber: contactListModel.objects[i].phone[0], index: i, statusContact: false)
                         } else {
                             self.count += 1
-                            if self.count == contactListModel.objects.count {
-                                self.count = 0
-                                self.saveAndUpdateContact(index: 0)
-                            }
+                            self.saveAndUpdateContact(index: i, statusContact: false)
+//                            if self.count == contactListModel.objects.count {
+//                                self.count = 0
+//                                self.saveAndUpdateContact(index: 0)
+//                            }
                         }
                     } else {
                         self.count += 1
@@ -123,13 +124,14 @@ extension RingerInteractiveNotification {
                     self.addNewContact(newContact: contactListModel.objects[i])
                     if contactListModel.objects[i].galleryId != nil && contactListModel.objects[i].galleryId != "" {
                         self.group.enter()
-                        self.ringerInteractiveGetContactImage(contactId: contactListModel.objects[i].galleryId, firstName: contactListModel.objects[i].firstName, lastName: contactListModel.objects[i].lastName, contactNumber: contactListModel.objects[i].phone[0], index: i)
+                        self.ringerInteractiveGetContactImage(contactId: contactListModel.objects[i].galleryId, firstName: contactListModel.objects[i].firstName, lastName: contactListModel.objects[i].lastName, contactNumber: contactListModel.objects[i].phone[0], index: i, statusContact: false)
                     } else {
                         self.count += 1
-                        if self.count == contactListModel.objects.count {
-                            self.count = 0
-                            self.saveAndUpdateContact(index: 0)
-                        }
+                        self.saveAndUpdateContact(index: i, statusContact: false)
+//                        if self.count == contactListModel.objects.count {
+//                            self.count = 0
+//                            self.saveAndUpdateContact(index: 0)
+//                        }
                     }
                 }
             }
@@ -137,19 +139,19 @@ extension RingerInteractiveNotification {
             for i in 0..<contactListModel.objects.count {
                 if contactListModel.objects[i].galleryId != nil && contactListModel.objects[i].galleryId != "" {
                     self.group.enter()
-                    self.ringerInteractiveGetContactImage(contactId: contactListModel.objects[i].galleryId, firstName: contactListModel.objects[i].firstName, lastName: contactListModel.objects[i].lastName, contactNumber: contactListModel.objects[i].phone[0], index: i)
+                    self.ringerInteractiveGetContactImage(contactId: contactListModel.objects[i].galleryId, firstName: contactListModel.objects[i].firstName, lastName: contactListModel.objects[i].lastName, contactNumber: contactListModel.objects[i].phone[0], index: i, statusContact: true)
                 } else {
                     self.count += 1
                     if self.count == contactListModel.objects.count {
                         self.count = 0
-                        self.saveAndUpdateContact(index: 0)
+                        self.saveAndUpdateContact(index: 0, statusContact: true)
                     }
                     
                 }
             }
         }
     }
-    func ringerInteractiveGetContactImage(contactId : String,firstName: String, lastName: String, contactNumber : String, index: Int) {
+    func ringerInteractiveGetContactImage(contactId : String,firstName: String, lastName: String, contactNumber : String, index: Int, statusContact: Bool) {
         var header: [String : String] = [:]
         header["Authorization"] = GlobalFunction.getUserToken()
         
@@ -163,16 +165,24 @@ extension RingerInteractiveNotification {
             if status == 200 || status == 201 {
                 self.count += 1
                 contactListModel.objects[index].imageUrl = "\(response["imgUrl"]!)"
-                if self.count == contactListModel.objects.count {
-                    self.count = 0
-                    self.saveAndUpdateContact(index: 0)
+                if statusContact {
+                    if self.count == contactListModel.objects.count {
+                        self.count = 0
+                        self.saveAndUpdateContact(index: 0, statusContact: statusContact)
+                    }
+                } else {
+                    self.saveAndUpdateContact(index: index, statusContact: statusContact)
                 }
             } else {
                 self.count += 1
                 contactListModel.objects[index].imageUrl = ""
-                if self.count == contactListModel.objects.count {
-                    self.count = 0
-                    self.saveAndUpdateContact(index: 0)
+                if statusContact {
+                    if self.count == contactListModel.objects.count {
+                        self.count = 0
+                        self.saveAndUpdateContact(index: 0, statusContact: statusContact)
+                    }
+                } else {
+                    self.saveAndUpdateContact(index: index, statusContact: statusContact)
                 }
                 let responseDataDic = response as! [String :Any]
                 print("\(responseDataDic["error"] ?? "")")
@@ -186,11 +196,11 @@ extension RingerInteractiveNotification {
     //        }
     //    }
     
-    public func saveAndUpdateContact(index:Int) {
+    public func saveAndUpdateContact(index:Int, statusContact:Bool) {
         if index < contactListModel.objects.count {
             for contacts in contactListModel.objects[index].phone {
                 self.group.enter()
-                ContactSave().downloadImageAndContactSave(name: contactListModel.objects[index].firstName + "^" + contactListModel.objects[index].lastName, number: contactListModel.objects[index].phone, editNumber: contacts, imageUrl: contactListModel.objects[index].imageUrl)
+                ContactSave().downloadImageAndContactSave(name: contactListModel.objects[index].firstName + "^" + contactListModel.objects[index].lastName, number: contactListModel.objects[index].phone, editNumber: contacts, imageUrl: contactListModel.objects[index].imageUrl, statusContact: statusContact)
                 self.addNewContact(newContact: contactListModel.objects[index])
             }
             if index == contactListModel.objects.count - 1 {

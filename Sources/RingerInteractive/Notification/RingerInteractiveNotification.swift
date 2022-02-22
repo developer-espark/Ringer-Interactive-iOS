@@ -27,9 +27,6 @@ public class RingerInteractiveNotification: UIResponder, MessagingDelegate, UIAp
     
     let group = DispatchGroup()
     var count = 0
-    
-    
-    
 }
 
 //MARK: Application Delegate

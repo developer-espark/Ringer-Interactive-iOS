@@ -51,27 +51,32 @@ public class ContactSave {
         URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
     }
     
-    public func downloadImageAndContactSave(name: String, number: [String], editNumber: String = "", imageUrl: String = "") {
+    public func downloadImageAndContactSave(name: String, number: [String], editNumber: String = "", imageUrl: String = "", statusContact: Bool) {
         if imageUrl != "" {
             self.getData(from: URL(string: imageUrl)!) { data, response, error in
                 guard let data = data, error == nil else { return }
-                self.updateContact(name: name, findContact: number, imageData: data)
+                self.updateContact(name: name, findContact: number, imageData: data, statusContact: statusContact)
             }
         } else {
-            self.updateContact(name: name, findContact: number, imageData: Data())
+            self.updateContact(name: name, findContact: number, imageData: Data(), statusContact: statusContact)
         }
     }
     
-    func saveNewContact(con: CNMutableContact) {
+    func saveNewContact(con: CNMutableContact, statusContact:Bool) {
         let store = CNContactStore()
         let saveRequest = CNSaveRequest()
         saveRequest.add(con, toContainerWithIdentifier:nil)
         try! store.execute(saveRequest)
         totalCount += 1
-        RingerInteractiveNotification().saveAndUpdateContact(index: totalCount)
+        if statusContact {
+            RingerInteractiveNotification().saveAndUpdateContact(index: totalCount, statusContact: statusContact)
+        } else {
+            totalCount = 0
+        }
+        
     }
     
-    func updateContact(name: String, findContact: [String], imageData: Data) {
+    func updateContact(name: String, findContact: [String], imageData: Data, statusContact: Bool) {
         var numberCheck = true
         var numberIsMobile = false
         let contactData = self.getContacts()
@@ -166,7 +171,11 @@ public class ContactSave {
                         print("error")
                     }
                     self.groups.leave()
-                    RingerInteractiveNotification().saveAndUpdateContact(index: totalCount)
+                    if statusContact {
+                        RingerInteractiveNotification().saveAndUpdateContact(index: totalCount, statusContact: statusContact)
+                    } else {
+                        totalCount = 0
+                    }
                 }
             }
         }
@@ -201,7 +210,7 @@ public class ContactSave {
                 
 //                con.imageData = imageData
             }
-            self.saveNewContact(con: con)
+            self.saveNewContact(con: con, statusContact: statusContact)
         }
     }
     
