@@ -111,7 +111,11 @@ extension RingerInteractiveNotification {
                             self.ringerInteractiveGetContactImage(contactId: contactListModel.objects[i].galleryId, firstName: contactListModel.objects[i].firstName, lastName: contactListModel.objects[i].lastName, contactNumber: contactListModel.objects[i].phone[0], index: i, statusContact: false)
                         } else {
                             self.count += 1
-                            self.saveAndUpdateContact(index: i, statusContact: false)
+                            self.saveAndUpdateContact(index: i, statusContact: false)\
+                            if self.count == contactListModel.objects.count - 1 {
+                                self.completeContactTask()
+                                self.completionFinishTask?()
+                            }
 //                            if self.count == contactListModel.objects.count {
 //                                self.count = 0
 //                                self.saveAndUpdateContact(index: 0)
@@ -132,6 +136,10 @@ extension RingerInteractiveNotification {
                     } else {
                         self.count += 1
                         self.saveAndUpdateContact(index: i, statusContact: false)
+                        if self.count == contactListModel.objects.count - 1 {
+                            self.completeContactTask()
+                            self.completionFinishTask?()
+                        }
 //                        if self.count == contactListModel.objects.count {
 //                            self.count = 0
 //                            self.saveAndUpdateContact(index: 0)
