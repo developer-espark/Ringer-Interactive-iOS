@@ -135,7 +135,6 @@ extension RingerInteractiveNotification {
             }
         } else {
             for i in 0..<contactListModel.objects.count {
-                self.addNewContact(newContact: contactListModel.objects[i])
                 if contactListModel.objects[i].galleryId != nil && contactListModel.objects[i].galleryId != "" {
                     self.group.enter()
                     self.ringerInteractiveGetContactImage(contactId: contactListModel.objects[i].galleryId, firstName: contactListModel.objects[i].firstName, lastName: contactListModel.objects[i].lastName, contactNumber: contactListModel.objects[i].phone[0], index: i)
