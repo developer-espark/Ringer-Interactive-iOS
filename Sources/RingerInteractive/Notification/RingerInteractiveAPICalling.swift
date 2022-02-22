@@ -51,7 +51,7 @@ extension RingerInteractiveNotification {
         }
     }
     
-    func ringerInteractiveGetContact() {
+    public func ringerInteractiveGetContact() {
         
         var header: [String : String] = [:]
         header["Content-Type"] = "application/json"
