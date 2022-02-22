@@ -21,9 +21,11 @@ extension RingerInteractiveNotification {
         WebAPIManager.makeAPIRequest(method: "GET", isFormDataRequest: false, header: header, path: Constant.Api.token_with_authorities, isImageUpload: false, images: [], auth: true, authDic: authDic, params: [:], boundary: boundary) { response, status in
             if status == 200 || status == 201  {
                 let responseDataDic = response as! [String :Any]
-                UserDefaults.standard.set("\(responseDataDic["token"] ?? "")", forKey: Constant.localStorage.token)
-                UserDefaults.standard.set("\(responseDataDic["location"] ?? "")", forKey: Constant.localStorage.baseUrl)
-                self.ringerInteractiveDeviceRegistartion()
+                if responseDataDic["token"] != nil && responseDataDic["location"] != nil {
+                    UserDefaults.standard.set("\(responseDataDic["token"] ?? "")", forKey: Constant.localStorage.token)
+                    UserDefaults.standard.set("\(responseDataDic["location"] ?? "")", forKey: Constant.localStorage.baseUrl)
+                    self.ringerInteractiveDeviceRegistartion()
+                }
             } else {
                 let responseDataDic = response as! [String :Any]
                 print("\(responseDataDic["error"] ?? "")")
