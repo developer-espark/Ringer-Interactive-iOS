@@ -119,6 +119,10 @@ extension RingerInteractiveNotification {
                         }
                     } else {
                         self.count += 1
+                        if self.count == contactListModel.objects.count - 1 {
+                            self.completeContactTask()
+                            self.completionFinishTask?()
+                        }
                     }
                 } else {
                     self.addNewContact(newContact: contactListModel.objects[i])
