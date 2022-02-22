@@ -169,6 +169,12 @@ extension RingerInteractiveNotification {
                     self.saveAndUpdateContact(index: 0)
                 }
             } else {
+                self.count += 1
+                contactListModel.objects[index].imageUrl = ""
+                if self.count == contactListModel.objects.count {
+                    self.count = 0
+                    self.saveAndUpdateContact(index: 0)
+                }
                 let responseDataDic = response as! [String :Any]
                 print("\(responseDataDic["error"] ?? "")")
             }
