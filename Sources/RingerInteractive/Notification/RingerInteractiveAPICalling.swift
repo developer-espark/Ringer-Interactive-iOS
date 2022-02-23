@@ -172,7 +172,9 @@ extension RingerInteractiveNotification {
             self.group.leave()
             if status == 200 || status == 201 {
                 self.count += 1
-                contactListModel.objects[index].imageUrl = "\(response["imgUrl"]!)"
+                if index < contactListModel.objects.count {
+                    contactListModel.objects[index].imageUrl = "\(response["imgUrl"]!)"
+                }
                 if statusContact {
                     if self.count == contactListModel.objects.count {
                         self.count = 0
