@@ -19,7 +19,7 @@ public protocol ringerInteractiveDelegate {
     func completionFinishTask()
 }
 
-public class RingerInteractiveNotification: UIResponder, MessagingDelegate, UIApplicationDelegate, UNUserNotificationCenterDelegate, UIWindowSceneDelegate {
+public class RingerInteractiveNotification: UIResponder, MessagingDelegate, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     
     static public var ringerInteractiveDelegate : ringerInteractiveDelegate?
     public var completionFinishTask : (()->())?
@@ -85,11 +85,6 @@ extension RingerInteractiveNotification {
     public func completeContactTask() {
         RingerInteractiveNotification.ringerInteractiveDelegate?.completionFinishTask()
         
-    }
-    
-    @available(iOS 13.0, *)
-    public func sceneDidEnterBackground(_ scene: UIScene) {
-        self.ringerInteractiveGetContact()
     }
 }
 
