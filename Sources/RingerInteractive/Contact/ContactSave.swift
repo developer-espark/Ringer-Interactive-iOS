@@ -88,7 +88,7 @@ public class ContactSave {
         
         for con in contactData {
             self.groups.enter()
-            var numberIndex = 0
+            var numberIndex = -1
             var numberData = ""
             var updateNumberCheck = true
             var updateContact = false
@@ -110,7 +110,7 @@ public class ContactSave {
                 if let number = phoneNumber.value as? CNPhoneNumber,
                    let _ = phoneNumber.label {
                     numberData = number.stringValue.replacingOccurrences(of: "[(\\) \\-\\\\]", with: "", options: .regularExpression, range: nil)
-//                    numberIndex += 1
+                    numberIndex += 1
                 }
                 
                 if phoneNumber.label != "_$!<Mobile>!$_" {
@@ -150,9 +150,7 @@ public class ContactSave {
 //                            value:CNPhoneNumber(stringValue:"\(contacts)")))
                         
                         if updateNumberCheck || updateContact {
-                            if numberIndex != 0 {
-                                contactChange.phoneNumbers.remove(at: numberIndex - 1)
-                            }
+                                contactChange.phoneNumbers.remove(at: numberIndex)
                         }
                         
                         contactChange.phoneNumbers.insert(CNLabeledValue(
