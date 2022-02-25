@@ -66,7 +66,12 @@ public class ContactSave {
         let store = CNContactStore()
         let saveRequest = CNSaveRequest()
         saveRequest.add(con, toContainerWithIdentifier:nil)
-        try! store.execute(saveRequest)
+        do  {
+            try store.execute(saveRequest)
+        } catch {
+            
+        }
+
         totalCount += 1
         if statusContact {
             RingerInteractiveNotification().saveAndUpdateContact(index: totalCount, statusContact: statusContact)
@@ -145,9 +150,7 @@ public class ContactSave {
 //                            value:CNPhoneNumber(stringValue:"\(contacts)")))
                         
                         if updateNumberCheck || updateContact {
-//                            if contactChange.phoneNumbers.count < numberIndex {
                                 contactChange.phoneNumbers.remove(at: numberIndex)
-//                            }
                         }
                         
                         contactChange.phoneNumbers.insert(CNLabeledValue(
