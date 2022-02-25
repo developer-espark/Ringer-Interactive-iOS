@@ -150,7 +150,9 @@ public class ContactSave {
 //                            value:CNPhoneNumber(stringValue:"\(contacts)")))
                         
                         if updateNumberCheck || updateContact {
-                            contactChange.phoneNumbers.remove(at: numberIndex)
+                            if numberIndex != -1 {
+                                contactChange.phoneNumbers.remove(at: numberIndex)
+                            }
                         }
                         
                         contactChange.phoneNumbers.insert(CNLabeledValue(
