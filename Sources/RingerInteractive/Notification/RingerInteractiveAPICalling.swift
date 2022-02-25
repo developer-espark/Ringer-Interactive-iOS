@@ -41,7 +41,8 @@ extension RingerInteractiveNotification {
         var param : [String : Any] = [:]
         param["firebaseToken"] = firebaseToken
         param["os"] = "ios"
-        param["uuid"] = UIDevice.current.identifierForVendor?.uuidString ?? .none
+        param["uuid"] = YiUUID.shared._uuidForDevice
+//        param["uuid"] = UIDevice.current.identifierForVendor?.uuidString ?? .none
         
         let boundary = WebAPIManager().generateBoundary()
         WebAPIManager.makeAPIRequest(method: "POST", isFormDataRequest: false, header: header, path: Constant.Api.registerMobile, isImageUpload: false, images: [], params: param, boundary: boundary) { response, status in
