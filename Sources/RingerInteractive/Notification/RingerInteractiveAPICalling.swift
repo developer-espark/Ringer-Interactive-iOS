@@ -40,7 +40,7 @@ extension RingerInteractiveNotification {
         
         let token = keychain["Ringer-UUID"]
         
-        if token != nil {
+        if token == nil {
             let keychain = Keychain(service: "Ringer-Interactive-iOS")
             keychain["Ringer-UUID"] = UIDevice.current.identifierForVendor?.uuidString ?? .none
         }
