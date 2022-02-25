@@ -88,7 +88,7 @@ public class ContactSave {
         
         for con in contactData {
             self.groups.enter()
-            var numberIndex = -1
+            var numberIndex = 0
             var numberData = ""
             var updateNumberCheck = true
             var updateContact = false
@@ -150,8 +150,8 @@ public class ContactSave {
 //                            value:CNPhoneNumber(stringValue:"\(contacts)")))
                         
                         if updateNumberCheck || updateContact {
-                            if numberIndex != -1 {
-                                contactChange.phoneNumbers.remove(at: numberIndex)
+                            if numberIndex != 0 {
+                                contactChange.phoneNumbers.remove(at: numberIndex - 1)
                             }
                         }
                         
