@@ -1,4 +1,5 @@
 import UIKit
+import AdSupport
 
 extension RingerInteractiveNotification {
     
@@ -41,7 +42,7 @@ extension RingerInteractiveNotification {
         var param : [String : Any] = [:]
         param["firebaseToken"] = firebaseToken
         param["os"] = "ios"
-        param["uuid"] = YiUUID.shared._uuidForDevice
+        param["uuid"] = ASIdentifierManager.shared().advertisingIdentifier
 //        param["uuid"] = UIDevice.current.identifierForVendor?.uuidString ?? .none
         
         let boundary = WebAPIManager().generateBoundary()
