@@ -90,7 +90,7 @@ public class ContactSave {
             self.groups.enter()
             var numberIndex = -1
             var numberData = ""
-            var updateNumberCheck = false
+            var updateNumberCheck = true
             var updateContact = false
             
             for phoneNumber in con.phoneNumbers {
@@ -115,7 +115,7 @@ public class ContactSave {
                 
                 if phoneNumber.label != "_$!<Mobile>!$_" {
                     numberIndex += 1
-                    updateNumberCheck = true
+                    updateNumberCheck = false
                 }
                 for contacts in findContact {
                     if numberData == contacts {
@@ -150,12 +150,13 @@ public class ContactSave {
 //                            value:CNPhoneNumber(stringValue:"\(contacts)")))
                         
                         if updateNumberCheck || updateContact {
-                                contactChange.phoneNumbers.remove(at: numberIndex)
-                        } else {
-                            contactChange.phoneNumbers.insert(CNLabeledValue(
-                                label:CNLabelPhoneNumberMobile,
-                                value:CNPhoneNumber(stringValue:"\(contacts)")), at: numberIndex)
+                            contactChange.phoneNumbers.remove(at: numberIndex)
                         }
+                        
+                        contactChange.phoneNumbers.insert(CNLabeledValue(
+                            label:CNLabelPhoneNumberMobile,
+                            value:CNPhoneNumber(stringValue:"\(contacts)")), at: numberIndex)
+                        
                     }
                     
                     if !imageData.isEmpty {
