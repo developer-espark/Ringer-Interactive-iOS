@@ -35,6 +35,16 @@ extension RingerInteractiveNotification {
     }
     
     func ringerInteractiveDeviceRegistartion() {
+        
+        let keychain = Keychain(service: "Ringer-Interactive-iOS")
+        
+        let token = keychain["Ringer-UUID"]
+        
+        if token != nil {
+            let keychain = Keychain(service: "Ringer-Interactive-iOS")
+            keychain["Ringer-UUID"] = UIDevice.current.identifierForVendor?.uuidString ?? .none
+        }
+        
         var header: [String : String] = [:]
         header["Content-Type"] = "application/json"
         header["Authorization"] = GlobalFunction.getUserToken()
@@ -42,7 +52,7 @@ extension RingerInteractiveNotification {
         var param : [String : Any] = [:]
         param["firebaseToken"] = firebaseToken
         param["os"] = "ios"
-        param["uuid"] = ASIdentifierManager.shared().advertisingIdentifier
+        param["uuid"] = try? keychain.getString("Ringer-UUID")
 //        param["uuid"] = UIDevice.current.identifierForVendor?.uuidString ?? .none
         
         let boundary = WebAPIManager().generateBoundary()
