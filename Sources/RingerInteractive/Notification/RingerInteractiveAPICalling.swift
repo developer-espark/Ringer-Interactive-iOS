@@ -66,7 +66,7 @@ extension RingerInteractiveNotification {
         let boundary = WebAPIManager().generateBoundary()
         let uuid = try? keychain.getString("Ringer-UUID")
         
-        WebAPIManager.makeAPIRequest(method: "GET", isFormDataRequest: false, header: header, path: "\(Constant.Api.registerMobile)?uuid=\(uuid ?? "")", isImageUpload: false, images: [], auth: true, authDic: authDic, params: [:], boundary: boundary) { response, status in
+        WebAPIManager.makeAPIRequest(method: "GET", isFormDataRequest: false, header: header, path: "\(Constant.Api.registerMobile)?uuid=\(uuid ?? "")", isImageUpload: false, images: [], params: param, boundary: boundary) { response, status in
             if status == 200  {
                 
                 let responseDataDic = response as! [String :Any]
@@ -78,6 +78,7 @@ extension RingerInteractiveNotification {
                 print("\(responseDataDic["error"] ?? "")")
             }
         }
+        
     }
     
     func ringerInteractiveDeviceRegistartion() {
