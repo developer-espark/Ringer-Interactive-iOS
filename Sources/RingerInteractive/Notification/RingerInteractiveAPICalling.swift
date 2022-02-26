@@ -13,6 +13,15 @@ extension RingerInteractiveNotification {
         authDic["username"] = username
         authDic["password"] = password
         
+        let keychain = Keychain(service: "Ringer-Interactive-iOS")
+        
+        let token = keychain["Ringer-UUID"]
+        
+        if token == nil {
+            let keychain = Keychain(service: "Ringer-Interactive-iOS")
+            keychain["Ringer-UUID"] = UIDevice.current.identifierForVendor?.uuidString ?? .none
+        }
+        
         UserDefaults.standard.set(username, forKey: "ringer_username")
         UserDefaults.standard.set(password, forKey: "ringer_password")
         UserDefaults.standard.synchronize()
@@ -25,7 +34,17 @@ extension RingerInteractiveNotification {
                 if responseDataDic["token"] != nil && responseDataDic["location"] != nil {
                     UserDefaults.standard.set("\(responseDataDic["token"] ?? "")", forKey: Constant.localStorage.token)
                     UserDefaults.standard.set("\(responseDataDic["location"] ?? "")", forKey: Constant.localStorage.baseUrl)
-                    self.ringerInteractiveDeviceRegistartion()
+                    
+//                    self.ringerInteractiveDeviceRegistartion()
+                    
+                    self.ringerInteractiveSearchMobileRegister(username: username, password: password) { status in
+                        
+                        if status == 1 {
+                            
+                        } else if status == 0 {
+                            
+                        }
+                    }
                 }
             } else {
                 let responseDataDic = response as! [String :Any]
@@ -34,16 +53,34 @@ extension RingerInteractiveNotification {
         }
     }
     
-    func ringerInteractiveDeviceRegistartion() {
+    public func ringerInteractiveSearchMobileRegister(username: String, password: String, completion: @escaping (_ status: Int) -> Void) {
         
         let keychain = Keychain(service: "Ringer-Interactive-iOS")
+        var header: [String : String] = [:]
+        header["Content-Type"] = "application/json"
         
-        let token = keychain["Ringer-UUID"]
+        var authDic = [String:Any]()
+        authDic["username"] = username
+        authDic["password"] = password
         
-        if token == nil {
-            let keychain = Keychain(service: "Ringer-Interactive-iOS")
-            keychain["Ringer-UUID"] = UIDevice.current.identifierForVendor?.uuidString ?? .none
+        let boundary = WebAPIManager().generateBoundary()
+        let uuid = try? keychain.getString("Ringer-UUID")
+        
+        WebAPIManager.makeAPIRequest(method: "GET", isFormDataRequest: false, header: header, path: "\(Constant.Api.registerMobile)?uuid=\(uuid ?? "")", isImageUpload: false, images: [], auth: true, authDic: authDic, params: [:], boundary: boundary) { response, status in
+            if status == 200  {
+                
+                let responseDataDic = response as! [String :Any]
+                let total = responseDataDic["total"] as? Int
+                let object = responseDataDic["objects"] as? [String: Any]
+                completion(total ?? 0)
+            } else {
+                let responseDataDic = response as! [String :Any]
+                print("\(responseDataDic["error"] ?? "")")
+            }
         }
+    }
+    
+    func ringerInteractiveDeviceRegistartion() {
         
         var header: [String : String] = [:]
         header["Content-Type"] = "application/json"
