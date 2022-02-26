@@ -4,51 +4,63 @@ import AdSupport
 extension RingerInteractiveNotification {
     
     public func ringerInteractiveLogin(username: String, password: String,CompanyName companyName : String? = "") {
-        totalCount = 0
-        UserDefaults.standard.set(companyName, forKey: Constant.localStorage.companyName)
-        var header: [String : String] = [:]
-        header["Content-Type"] = "application/json"
         
-        var authDic = [String:Any]()
-        authDic["username"] = username
-        authDic["password"] = password
+        // firstSync object true when user call mobileRegister API
+        // if firstSync true then it direct call GetContact API
+        let firstSync = UserDefaults.standard.bool(forKey: Constant.localStorage.firstSync)
         
-        let keychain = Keychain(service: "Ringer-Interactive-iOS")
-        
-        let token = keychain["Ringer-UUID"]
-        
-        if token == nil {
+        if firstSync {
+            self.ringerInteractiveGetContact()
+        } else {
+            totalCount = 0
+            UserDefaults.standard.set(companyName, forKey: Constant.localStorage.companyName)
+            var header: [String : String] = [:]
+            header["Content-Type"] = "application/json"
+            
+            var authDic = [String:Any]()
+            authDic["username"] = username
+            authDic["password"] = password
+            
             let keychain = Keychain(service: "Ringer-Interactive-iOS")
-            keychain["Ringer-UUID"] = UIDevice.current.identifierForVendor?.uuidString ?? .none
-        }
-        
-        UserDefaults.standard.set(username, forKey: "ringer_username")
-        UserDefaults.standard.set(password, forKey: "ringer_password")
-        UserDefaults.standard.synchronize()
-        
-        let boundary = WebAPIManager().generateBoundary()
-        
-        WebAPIManager.makeAPIRequest(method: "GET", isFormDataRequest: false, header: header, path: Constant.Api.token_with_authorities, isImageUpload: false, images: [], auth: true, authDic: authDic, params: [:], boundary: boundary) { response, status in
-            if status == 200 || status == 201  {
-                let responseDataDic = response as! [String :Any]
-                if responseDataDic["token"] != nil && responseDataDic["location"] != nil {
-                    UserDefaults.standard.set("\(responseDataDic["token"] ?? "")", forKey: Constant.localStorage.token)
-                    UserDefaults.standard.set("\(responseDataDic["location"] ?? "")", forKey: Constant.localStorage.baseUrl)
-                    
-//                    self.ringerInteractiveDeviceRegistartion()
-                    
-                    self.ringerInteractiveSearchMobileRegister(username: username, password: password) { (mobileRegisterID, status)  in
+            
+            let token = keychain["Ringer-UUID"]
+            
+            if token == nil {
+                let keychain = Keychain(service: "Ringer-Interactive-iOS")
+                keychain["Ringer-UUID"] = UIDevice.current.identifierForVendor?.uuidString ?? .none
+            }
+            
+            UserDefaults.standard.set(username, forKey: "ringer_username")
+            UserDefaults.standard.set(password, forKey: "ringer_password")
+            UserDefaults.standard.synchronize()
+            
+            let boundary = WebAPIManager().generateBoundary()
+            
+            WebAPIManager.makeAPIRequest(method: "GET", isFormDataRequest: false, header: header, path: Constant.Api.token_with_authorities, isImageUpload: false, images: [], auth: true, authDic: authDic, params: [:], boundary: boundary) { response, status in
+                if status == 200 || status == 201  {
+                    let responseDataDic = response as! [String :Any]
+                    if responseDataDic["token"] != nil && responseDataDic["location"] != nil {
+                        UserDefaults.standard.set("\(responseDataDic["token"] ?? "")", forKey: Constant.localStorage.token)
+                        UserDefaults.standard.set("\(responseDataDic["location"] ?? "")", forKey: Constant.localStorage.baseUrl)
                         
-                        if status == 1 {
+                        self.ringerInteractiveSearchMobileRegister(username: username, password: password) { (mobileRegisterID, status)  in
                             
-                        } else if status == 0 {
+                            if status == 1 {
+                                self.ringerInteractiveDeleteMobileRegister(username: username, password: password) { status in
                             
+                                    if status == 204 {
+                                        self.ringerInteractiveDeviceRegistartion()
+                                    }
+                                }
+                            } else if status == 0 {
+                                self.ringerInteractiveDeviceRegistartion()
+                            }
                         }
                     }
+                } else {
+                    let responseDataDic = response as! [String :Any]
+                    print("\(responseDataDic["error"] ?? "")")
                 }
-            } else {
-                let responseDataDic = response as! [String :Any]
-                print("\(responseDataDic["error"] ?? "")")
             }
         }
     }
@@ -81,7 +93,33 @@ extension RingerInteractiveNotification {
                 print("\(responseDataDic["error"] ?? "")")
             }
         }
+    }
+    
+    public func ringerInteractiveDeleteMobileRegister(username: String, password: String, completion: @escaping (_ status: Int) -> Void) {
         
+        let keychain = Keychain(service: "Ringer-Interactive-iOS")
+        var header: [String : String] = [:]
+        header["Content-Type"] = "application/json"
+        header["Authorization"] = GlobalFunction.getUserToken()
+        
+        var authDic = [String:Any]()
+        authDic["username"] = username
+        authDic["password"] = password
+        
+        let boundary = WebAPIManager().generateBoundary()
+        let uuid = try? keychain.getString("Ringer-UUID")
+        
+        UserDefaults.standard.set(true, forKey: Constant.localStorage.firstSync)
+        UserDefaults.standard.synchronize()
+        
+        WebAPIManager.makeAPIRequest(method: "GET", isFormDataRequest: false, header: header, path: "\(Constant.Api.registerMobile)?uuid=\(uuid ?? "")", isImageUpload: false, images: [], params: [: ], boundary: boundary) { response, status in
+            if status == 200  {
+                completion(status)
+            } else {
+                let responseDataDic = response as! [String :Any]
+                print("\(responseDataDic["error"] ?? "")")
+            }
+        }
     }
     
     func ringerInteractiveDeviceRegistartion() {

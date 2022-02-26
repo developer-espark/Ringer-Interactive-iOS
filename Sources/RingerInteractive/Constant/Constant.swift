@@ -17,6 +17,7 @@ class Constant: NSObject {
         static let baseUrl = "baseUrl"
         static let companyName = "companyName"
         static let contactList = "contactList"
+        static let firstSync = "firstSync"
     }
     
 }
