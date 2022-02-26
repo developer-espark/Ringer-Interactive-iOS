@@ -74,7 +74,7 @@ extension RingerInteractiveNotification {
                 let total = responseDataDic["total"] as? Int
                 let object = responseDataDic["objects"] as? NSArray
                 let mobileDic = object?[0] as? [String: Any]
-                let mobileID = mobileDic["mobileregistrationId"] as? String
+                let mobileID = mobileDic?["mobileregistrationId"] as? String
                 completion(total ?? 0)
             } else {
                 let responseDataDic = response as! [String :Any]
