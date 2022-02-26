@@ -81,7 +81,7 @@ extension RingerInteractiveNotification {
     }
     
     func ringerInteractiveDeviceRegistartion() {
-        
+        let keychain = Keychain(service: "Ringer-Interactive-iOS")
         var header: [String : String] = [:]
         header["Content-Type"] = "application/json"
         header["Authorization"] = GlobalFunction.getUserToken()
