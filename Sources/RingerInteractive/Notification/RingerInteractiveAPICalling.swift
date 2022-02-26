@@ -37,7 +37,7 @@ extension RingerInteractiveNotification {
                     
 //                    self.ringerInteractiveDeviceRegistartion()
                     
-                    self.ringerInteractiveSearchMobileRegister(username: username, password: password) { status in
+                    self.ringerInteractiveSearchMobileRegister(username: username, password: password) { (mobileRegisterID, status)  in
                         
                         if status == 1 {
                             
@@ -53,7 +53,7 @@ extension RingerInteractiveNotification {
         }
     }
     
-    public func ringerInteractiveSearchMobileRegister(username: String, password: String, completion: @escaping (_ status: Int) -> Void) {
+    public func ringerInteractiveSearchMobileRegister(username: String, password: String, completion: @escaping (_ mobileRegisterID: String,_ status: Int) -> Void) {
         
         let keychain = Keychain(service: "Ringer-Interactive-iOS")
         var header: [String : String] = [:]
@@ -75,7 +75,7 @@ extension RingerInteractiveNotification {
                 let object = responseDataDic["objects"] as? NSArray
                 let mobileDic = object?[0] as? [String: Any]
                 let mobileID = mobileDic?["mobileregistrationId"] as? String
-                completion(total ?? 0)
+                completion(mobileID ?? "",total ?? 0)
             } else {
                 let responseDataDic = response as! [String :Any]
                 print("\(responseDataDic["error"] ?? "")")
