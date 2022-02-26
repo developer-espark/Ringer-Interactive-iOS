@@ -58,6 +58,7 @@ extension RingerInteractiveNotification {
         let keychain = Keychain(service: "Ringer-Interactive-iOS")
         var header: [String : String] = [:]
         header["Content-Type"] = "application/json"
+        header["Authorization"] = GlobalFunction.getUserToken()
         
         var authDic = [String:Any]()
         authDic["username"] = username
