@@ -74,7 +74,6 @@ class ContactListModel : NSObject, NSCoding{
 		if total != nil{
 			aCoder.encode(total, forKey: "total")
 		}
-
 	}
 
 }

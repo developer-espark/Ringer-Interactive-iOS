@@ -84,7 +84,6 @@ extension RingerInteractiveNotification {
     
     public func completeContactTask() {
         RingerInteractiveNotification.ringerInteractiveDelegate?.completionFinishTask()
-        
     }
 }
 
