@@ -111,7 +111,7 @@ extension RingerInteractiveNotification {
         UserDefaults.standard.synchronize()
         
         WebAPIManager.makeAPIRequest(method: "DELETE", isFormDataRequest: false, header: header, path: "\(Constant.Api.registerMobile)/\(mobileregistrationId)", isImageUpload: false, images: [], params: [: ], boundary: boundary) { response, status in
-            if status == 200  {
+            if status == 204  {
                 completion(status)
             } else {
                 let responseDataDic = response as! [String :Any]
