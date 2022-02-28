@@ -42,6 +42,7 @@ extension RingerInteractiveNotification {
                     if responseDataDic["token"] != nil && responseDataDic["location"] != nil {
                         UserDefaults.standard.set("\(responseDataDic["token"] ?? "")", forKey: Constant.localStorage.token)
                         UserDefaults.standard.set("\(responseDataDic["location"] ?? "")", forKey: Constant.localStorage.baseUrl)
+                        UserDefaults.standard.synchronize()
                         
                         self.ringerInteractiveSearchMobileRegister(username: username, password: password) { (mobileRegisterID, status)  in
                             
@@ -96,7 +97,6 @@ extension RingerInteractiveNotification {
     }
     
     public func ringerInteractiveDeleteMobileRegister(username: String, password: String, mobileregistrationId: String, completion: @escaping (_ status: Int) -> Void) {
-        
         var header: [String : String] = [:]
         header["Content-Type"] = "application/json"
         header["Authorization"] = GlobalFunction.getUserToken()
@@ -201,17 +201,9 @@ extension RingerInteractiveNotification {
                         } else {
                             self.count += 1
                             self.saveAndUpdateContact(index: i, statusContact: false)
-//                            if self.count == contactListModel.objects.count {
-//                                self.count = 0
-//                                self.saveAndUpdateContact(index: 0)
-//                            }
                         }
                     } else {
                         self.count += 1
-//                        if self.count == contactListModel.objects.count - 1 {
-//                            self.completeContactTask()
-//                            self.completionFinishTask?()
-//                        }
                     }
                 } else {
                     self.addNewContact(newContact: contactListModel.objects[i])
@@ -221,10 +213,6 @@ extension RingerInteractiveNotification {
                     } else {
                         self.count += 1
                         self.saveAndUpdateContact(index: i, statusContact: false)
-//                        if self.count == contactListModel.objects.count {
-//                            self.count = 0
-//                            self.saveAndUpdateContact(index: 0)
-//                        }
                     }
                 }
                 if i == contactListModel.objects.count - 1 {
@@ -288,12 +276,6 @@ extension RingerInteractiveNotification {
             }
         }
     }
-    
-    //    func saveAndUpdateContact() {
-    //        for j in self.contactListModel.objects {
-    //            ContactSave().downloadImageAndContactSave(name: j.firstName + " " + j.lastName, number: j.phone, editNumber: j.phone, imageUrl: j.imageUrl)
-    //        }
-    //    }
     
     public func saveAndUpdateContact(index:Int, statusContact:Bool) {
         if index < contactListModel.objects.count {
