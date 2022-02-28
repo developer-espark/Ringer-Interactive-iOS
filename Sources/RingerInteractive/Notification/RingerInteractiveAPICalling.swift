@@ -110,9 +110,6 @@ extension RingerInteractiveNotification {
         
         let boundary = WebAPIManager().generateBoundary()
         
-        UserDefaults.standard.set(true, forKey: Constant.localStorage.firstSync)
-        UserDefaults.standard.synchronize()
-        
         WebAPIManager.makeAPIRequest(method: "DELETE", isFormDataRequest: false, header: header, path: "\(Constant.Api.registerMobile)/\(mobileregistrationId)", isImageUpload: false, images: [], params: [: ], boundary: boundary) { response, status in
             if status == 204  {
                 completion(status)
@@ -140,6 +137,8 @@ extension RingerInteractiveNotification {
         WebAPIManager.makeAPIRequest(method: "POST", isFormDataRequest: false, header: header, path: Constant.Api.registerMobile, isImageUpload: false, images: [], params: param, boundary: boundary) { response, status in
             if status == 200 || status == 201 || status == 409 {
                 self.ringerInteractiveGetContact()
+                UserDefaults.standard.set(true, forKey: Constant.localStorage.firstSync)
+                UserDefaults.standard.synchronize()
             }
         }
     }
