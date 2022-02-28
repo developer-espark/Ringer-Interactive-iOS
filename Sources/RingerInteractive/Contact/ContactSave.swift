@@ -47,10 +47,12 @@ public class ContactSave {
         topWindow?.rootViewController?.present(alert, animated: true)
     }
     
+    //Download data from url
     func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
         URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
     }
     
+    //Checking image data
     public func downloadImageAndContactSave(name: String, number: [String], editNumber: String = "", imageUrl: String = "", statusContact: Bool) {
         if imageUrl != "" {
             self.getData(from: URL(string: imageUrl)!) { data, response, error in
@@ -62,6 +64,7 @@ public class ContactSave {
         }
     }
     
+    //add new contact io contacts
     func saveNewContact(con: CNMutableContact, statusContact:Bool) {
         let store = CNContactStore()
         let saveRequest = CNSaveRequest()
@@ -81,17 +84,18 @@ public class ContactSave {
         
     }
     
+    //Update Contact in contact
     func updateContact(name: String, findContact: [String], imageData: Data, statusContact: Bool) {
-        var numberCheck = true
-        var numberIsMobile = false
-        let contactData = self.getContacts()
+        var numberCheck = true // number is available or not in contacts
+        var numberIsMobile = false // number is available in contacts but checking it is mobile or not
+        let contactData = self.getContacts() // mobile contacts
         
         for con in contactData {
             self.groups.enter()
-            var numberIndex = -1
-            var numberData = ""
-            var updateNumberCheck = true
-            var updateContact = false
+            var numberIndex = -1 // checking position of number in contacts
+            var numberData = "" // remove white space and other symbols from api contacts
+            var updateNumberCheck = true // number is available but not in mobile field
+            var updateContact = false // update number or not
             
             for phoneNumber in con.phoneNumbers {
                 for contacts in findContact {
@@ -222,6 +226,7 @@ public class ContactSave {
         }
     }
     
+    //MARK: Contacts get from device
     func getContacts() -> [CNContact] {
         
         let contactStore = CNContactStore()
@@ -255,6 +260,8 @@ public class ContactSave {
         return results
     }
 }
+
+//MARK: UIImage extension for proper size of image
 extension UIImage {
     func scalePreservingAspectRatio(targetSize: CGSize) -> UIImage {
         // Determine the scale factor that preserves aspect ratio
