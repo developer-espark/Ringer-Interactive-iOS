@@ -102,6 +102,7 @@ public class ContactSave {
                     }
                     if phoneNumber.label == "_$!<Mobile>!$_" && numbers == contacts {
                         updateContact = true
+                        numberIndex += 1
                     }
                 }
             }
@@ -110,7 +111,7 @@ public class ContactSave {
                 if let number = phoneNumber.value as? CNPhoneNumber,
                    let _ = phoneNumber.label {
                     numberData = number.stringValue.replacingOccurrences(of: "[(\\) \\-\\\\]", with: "", options: .regularExpression, range: nil)
-                    numberIndex += 1
+//                    numberIndex += 1
                 }
                 
                 if phoneNumber.label != "_$!<Mobile>!$_" {
