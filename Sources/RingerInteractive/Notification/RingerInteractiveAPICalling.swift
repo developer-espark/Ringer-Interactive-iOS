@@ -3,6 +3,7 @@ import AdSupport
 
 extension RingerInteractiveNotification {
     
+    //MARK: API Calling for Token
     public func ringerInteractiveLogin(username: String, password: String,CompanyName companyName : String? = "") {
         
         // firstSync object true when user call mobileRegister API
@@ -66,6 +67,7 @@ extension RingerInteractiveNotification {
         }
     }
     
+    //MARK: API Calling For Find Search Mobile Register
     public func ringerInteractiveSearchMobileRegister(username: String, password: String, completion: @escaping (_ mobileRegisterID: String,_ status: Int) -> Void) {
         
         let keychain = Keychain(service: "Ringer-Interactive-iOS")
@@ -96,6 +98,7 @@ extension RingerInteractiveNotification {
         }
     }
     
+    //MARK: API Calling For Delete Mobile Registration
     public func ringerInteractiveDeleteMobileRegister(username: String, password: String, mobileregistrationId: String, completion: @escaping (_ status: Int) -> Void) {
         var header: [String : String] = [:]
         header["Content-Type"] = "application/json"
@@ -120,6 +123,7 @@ extension RingerInteractiveNotification {
         }
     }
     
+    //MARK: API Calling For Mobile Registration
     func ringerInteractiveDeviceRegistartion() {
         let keychain = Keychain(service: "Ringer-Interactive-iOS")
         var header: [String : String] = [:]
@@ -140,6 +144,7 @@ extension RingerInteractiveNotification {
         }
     }
     
+    //MARK: API Calling For Contact Get
     public func ringerInteractiveGetContact() {
         
         var header: [String : String] = [:]
@@ -181,6 +186,7 @@ extension RingerInteractiveNotification {
         }
     }
     
+    //MARK: Checking contacts is available or not in local
     func ringerInteractiveGetContactCheck() {
         var localContactList = GlobalFunction.getContactList()
         if (localContactList?.count ?? 0) > 0 {
@@ -203,9 +209,11 @@ extension RingerInteractiveNotification {
                             self.saveAndUpdateContact(index: i, statusContact: false)
                         }
                     } else {
+                        // Contact is not updated then skip contact
                         self.count += 1
                     }
                 } else {
+                    // new contact added
                     self.addNewContact(newContact: contactListModel.objects[i])
                     if contactListModel.objects[i].galleryId != nil && contactListModel.objects[i].galleryId != "" {
                         self.group.enter()
@@ -221,6 +229,7 @@ extension RingerInteractiveNotification {
                 }
             }
         } else {
+            // local contact is empty
             for i in 0..<contactListModel.objects.count {
                 if contactListModel.objects[i].galleryId != nil && contactListModel.objects[i].galleryId != "" {
                     self.group.enter()
@@ -236,6 +245,8 @@ extension RingerInteractiveNotification {
             }
         }
     }
+    
+    //MARK: API Calling For Contact Image Get
     func ringerInteractiveGetContactImage(contactId : String,firstName: String, lastName: String, contactNumber : String, index: Int, statusContact: Bool) {
         var header: [String : String] = [:]
         header["Authorization"] = GlobalFunction.getUserToken()
@@ -292,6 +303,7 @@ extension RingerInteractiveNotification {
         }
     }
     
+    // add contacts in local from api
     func addNewContact(newContact : ContactListObject) {
         var contactList = GlobalFunction.getContactList()
         if (contactList?.count ?? 0) > 0 {
