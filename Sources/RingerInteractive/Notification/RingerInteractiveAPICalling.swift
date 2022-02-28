@@ -46,7 +46,7 @@ extension RingerInteractiveNotification {
                         self.ringerInteractiveSearchMobileRegister(username: username, password: password) { (mobileRegisterID, status)  in
                             
                             if status == 1 {
-                                self.ringerInteractiveDeleteMobileRegister(username: username, password: password) { status in
+                                self.ringerInteractiveDeleteMobileRegister(username: username, password: password, mobileregistrationId: mobileRegisterID) { status in
                             
                                     if status == 204 {
                                         self.ringerInteractiveDeviceRegistartion()
@@ -95,9 +95,8 @@ extension RingerInteractiveNotification {
         }
     }
     
-    public func ringerInteractiveDeleteMobileRegister(username: String, password: String, completion: @escaping (_ status: Int) -> Void) {
+    public func ringerInteractiveDeleteMobileRegister(username: String, password: String, mobileregistrationId: String, completion: @escaping (_ status: Int) -> Void) {
         
-        let keychain = Keychain(service: "Ringer-Interactive-iOS")
         var header: [String : String] = [:]
         header["Content-Type"] = "application/json"
         header["Authorization"] = GlobalFunction.getUserToken()
@@ -107,12 +106,11 @@ extension RingerInteractiveNotification {
         authDic["password"] = password
         
         let boundary = WebAPIManager().generateBoundary()
-        let uuid = try? keychain.getString("Ringer-UUID")
         
         UserDefaults.standard.set(true, forKey: Constant.localStorage.firstSync)
         UserDefaults.standard.synchronize()
         
-        WebAPIManager.makeAPIRequest(method: "GET", isFormDataRequest: false, header: header, path: "\(Constant.Api.registerMobile)?uuid=\(uuid ?? "")", isImageUpload: false, images: [], params: [: ], boundary: boundary) { response, status in
+        WebAPIManager.makeAPIRequest(method: "DELETE", isFormDataRequest: false, header: header, path: "\(Constant.Api.registerMobile)/\(mobileregistrationId)", isImageUpload: false, images: [], params: [: ], boundary: boundary) { response, status in
             if status == 200  {
                 completion(status)
             } else {
