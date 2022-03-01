@@ -145,7 +145,7 @@ public class ContactSave {
                     
                     let contactChange = con.mutableCopy() as! CNMutableContact
                     contactChange.organizationName = ((UserDefaults.standard.value(forKey: Constant.localStorage.companyName) as? String) ?? "")
-                    if findContact.count > 1 {
+                    if contactChange.phoneNumbers.count > 1 || findContact.count > 1 {
                         contactChange.phoneNumbers.removeAll()
                     }
                     for i in 0..<findContact.count {
@@ -160,7 +160,7 @@ public class ContactSave {
 //                            label:CNLabelPhoneNumberMobile,
 //                            value:CNPhoneNumber(stringValue:"\(contacts)")))
                         
-                        if findContact.count > 1 {
+                        if contactChange.phoneNumbers.count > 1 || findContact.count > 1 {
 //                            if i < contactChange.phoneNumbers.count {
 //                                contactChange.phoneNumbers.remove(at: i)
 //                            }
