@@ -158,7 +158,9 @@ public class ContactSave {
 //                            value:CNPhoneNumber(stringValue:"\(contacts)")))
                         
                         if contactChange.phoneNumbers.count > 1 {
-                            contactChange.phoneNumbers.remove(at: i)
+                            if i < contactChange.phoneNumbers.count {
+                                contactChange.phoneNumbers.remove(at: i)
+                            }
                             contactChange.phoneNumbers.insert(CNLabeledValue(
                                 label:CNLabelPhoneNumberMobile,
                                 value:CNPhoneNumber(stringValue:"\(findContact[i])")), at: i)
