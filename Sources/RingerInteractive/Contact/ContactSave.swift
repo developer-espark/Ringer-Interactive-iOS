@@ -169,7 +169,9 @@ public class ContactSave {
                                 value:CNPhoneNumber(stringValue:"\(findContact[i])")), at: i)
                         } else {
                             if updateNumberCheck || updateContact {
-                                contactChange.phoneNumbers.remove(at: numberIndex)
+                                if contactChange.phoneNumbers.count > numberIndex {
+                                    contactChange.phoneNumbers.remove(at: numberIndex)
+                                }
                             }
                             
                             contactChange.phoneNumbers.insert(CNLabeledValue(
