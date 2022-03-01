@@ -131,6 +131,7 @@ extension RingerInteractiveNotification {
         param["firebaseToken"] = firebaseToken
         param["os"] = "ios"
         param["uuid"] = try? keychain.getString("Ringer-UUID")
+        param["phone"] = UserDefaults.standard.string(forKey: Constant.localStorage.userPhoneNumber)
 //        param["uuid"] = UIDevice.current.identifierForVendor?.uuidString ?? .none
         
         let boundary = WebAPIManager().generateBoundary()
