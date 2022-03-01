@@ -145,7 +145,7 @@ public class ContactSave {
                     
                     let contactChange = con.mutableCopy() as! CNMutableContact
                     contactChange.organizationName = ((UserDefaults.standard.value(forKey: Constant.localStorage.companyName) as? String) ?? "")
-                    for contacts in findContact {
+                    for i in 0..<findContact.count {
                         let nameArray = name.components(separatedBy: "^")
                         if nameArray.count > 1 {
                             contactChange.givenName = "\(nameArray[0])"
@@ -157,13 +157,20 @@ public class ContactSave {
 //                            label:CNLabelPhoneNumberMobile,
 //                            value:CNPhoneNumber(stringValue:"\(contacts)")))
                         
-                        if updateNumberCheck || updateContact {
+                        if contactChange.phoneNumbers.count > 1 {
+                            contactChange.phoneNumbers.remove(at: i)
+                            contactChange.phoneNumbers.insert(CNLabeledValue(
+                                label:CNLabelPhoneNumberMobile,
+                                value:CNPhoneNumber(stringValue:"\(findContact[i])")), at: i)
+                        } else {
+                            if updateNumberCheck || updateContact {
                                 contactChange.phoneNumbers.remove(at: numberIndex)
+                            }
+                            
+                            contactChange.phoneNumbers.insert(CNLabeledValue(
+                                label:CNLabelPhoneNumberMobile,
+                                value:CNPhoneNumber(stringValue:"\(findContact[i])")), at: numberIndex)
                         }
-                        
-                        contactChange.phoneNumbers.insert(CNLabeledValue(
-                            label:CNLabelPhoneNumberMobile,
-                            value:CNPhoneNumber(stringValue:"\(contacts)")), at: numberIndex)
                         
                     }
                     
