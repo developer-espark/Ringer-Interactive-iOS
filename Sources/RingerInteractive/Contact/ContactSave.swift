@@ -157,7 +157,7 @@ public class ContactSave {
 //                            label:CNLabelPhoneNumberMobile,
 //                            value:CNPhoneNumber(stringValue:"\(contacts)")))
                         
-                        if contactChange.phoneNumbers.count > 1 {
+                        if contactChange.phoneNumbers.count > 1 || findContact.count > 1 {
                             if i < contactChange.phoneNumbers.count {
                                 contactChange.phoneNumbers.remove(at: i)
                             }
