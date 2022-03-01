@@ -130,6 +130,9 @@ public class ContactSave {
                         numberIsMobile = false
                     }
                 }
+                if numberIsMobile {
+                    break
+                }
             }
             
             if numberIsMobile {
