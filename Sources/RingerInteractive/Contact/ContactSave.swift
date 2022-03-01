@@ -174,10 +174,11 @@ public class ContactSave {
                                     contactChange.phoneNumbers.insert(CNLabeledValue(
                                         label:CNLabelPhoneNumberMobile,
                                         value:CNPhoneNumber(stringValue:"\(findContact[i])")), at: numberIndex)
+                                } else {
+                                    contactChange.phoneNumbers.insert(CNLabeledValue(
+                                        label:CNLabelPhoneNumberMobile,
+                                        value:CNPhoneNumber(stringValue:"\(findContact[i])")), at: i)
                                 }
-                                contactChange.phoneNumbers.insert(CNLabeledValue(
-                                    label:CNLabelPhoneNumberMobile,
-                                    value:CNPhoneNumber(stringValue:"\(findContact[i])")), at: i)
                             }
                         }
                         
