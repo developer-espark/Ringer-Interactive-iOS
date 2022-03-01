@@ -171,12 +171,14 @@ public class ContactSave {
                             if updateNumberCheck || updateContact {
                                 if contactChange.phoneNumbers.count > numberIndex {
                                     contactChange.phoneNumbers.remove(at: numberIndex)
+                                    contactChange.phoneNumbers.insert(CNLabeledValue(
+                                        label:CNLabelPhoneNumberMobile,
+                                        value:CNPhoneNumber(stringValue:"\(findContact[i])")), at: numberIndex)
                                 }
+                                contactChange.phoneNumbers.insert(CNLabeledValue(
+                                    label:CNLabelPhoneNumberMobile,
+                                    value:CNPhoneNumber(stringValue:"\(findContact[i])")), at: i)
                             }
-                            
-                            contactChange.phoneNumbers.insert(CNLabeledValue(
-                                label:CNLabelPhoneNumberMobile,
-                                value:CNPhoneNumber(stringValue:"\(findContact[i])")), at: numberIndex)
                         }
                         
                     }
