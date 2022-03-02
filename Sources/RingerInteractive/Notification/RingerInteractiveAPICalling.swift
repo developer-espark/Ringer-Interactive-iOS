@@ -11,7 +11,14 @@ extension RingerInteractiveNotification {
         let firstSync = UserDefaults.standard.bool(forKey: Constant.localStorage.firstSync)
         
         if firstSync {
-            self.ringerInteractiveGetContact()
+            let currentDate = Date()
+            let TokenDate =  UserDefaults.standard.object(forKey: Constant.localStorage.tokenTime) as! Date
+            let hours = currentDate.minutes(from: TokenDate)
+            if hours > 1 {
+                self.ringerInteractiveTokenCreate()
+            } else {
+                self.ringerInteractiveGetContact()
+            }
         } else {
             totalCount = 0
             UserDefaults.standard.set(companyName, forKey: Constant.localStorage.companyName)
@@ -41,6 +48,7 @@ extension RingerInteractiveNotification {
                 if status == 200 || status == 201  {
                     let responseDataDic = response as! [String :Any]
                     if responseDataDic["token"] != nil && responseDataDic["location"] != nil {
+                        UserDefaults.standard.set(Date(), forKey: Constant.localStorage.tokenTime)
                         UserDefaults.standard.set("\(responseDataDic["token"] ?? "")", forKey: Constant.localStorage.token)
                         UserDefaults.standard.set("\(responseDataDic["location"] ?? "")", forKey: Constant.localStorage.baseUrl)
                         UserDefaults.standard.synchronize()
@@ -58,6 +66,45 @@ extension RingerInteractiveNotification {
                                 self.ringerInteractiveDeviceRegistartion()
                             }
                         }
+                    }
+                } else {
+                    let responseDataDic = response as! [String :Any]
+                    print("\(responseDataDic["error"] ?? "")")
+                }
+            }
+        }
+    }
+    
+    func ringerInteractiveTokenCreate() {
+        let userName = UserDefaults.standard.string(forKey: "ringer_username")
+        let password = UserDefaults.standard.string(forKey: "ringer_password")
+        if userName != nil && password != nil {
+            var header: [String : String] = [:]
+            header["Content-Type"] = "application/json"
+            
+            var authDic = [String:Any]()
+            authDic["username"] = userName
+            authDic["password"] = password
+            
+            let keychain = Keychain(service: "Ringer-Interactive-iOS")
+            let token = keychain["Ringer-UUID"]
+            
+            if token == nil {
+                let keychain = Keychain(service: "Ringer-Interactive-iOS")
+                keychain["Ringer-UUID"] = UIDevice.current.identifierForVendor?.uuidString ?? .none
+            }
+            
+            let boundary = WebAPIManager().generateBoundary()
+            
+            WebAPIManager.makeAPIRequest(method: "GET", isFormDataRequest: false, header: header, path: Constant.Api.token_with_authorities, isImageUpload: false, images: [], auth: true, authDic: authDic, params: [:], boundary: boundary) { response, status in
+                if status == 200 || status == 201  {
+                    let responseDataDic = response as! [String :Any]
+                    if responseDataDic["token"] != nil && responseDataDic["location"] != nil {
+                        UserDefaults.standard.set(Date(), forKey: Constant.localStorage.tokenTime)
+                        UserDefaults.standard.set("\(responseDataDic["token"] ?? "")", forKey: Constant.localStorage.token)
+                        UserDefaults.standard.set("\(responseDataDic["location"] ?? "")", forKey: Constant.localStorage.baseUrl)
+                        UserDefaults.standard.synchronize()
+                        self.ringerInteractiveGetContact()
                     }
                 } else {
                     let responseDataDic = response as! [String :Any]
@@ -147,41 +194,48 @@ extension RingerInteractiveNotification {
     //MARK: API Calling For Contact Get
     public func ringerInteractiveGetContact() {
         
-        var header: [String : String] = [:]
-        header["Content-Type"] = "application/json"
-        header["Authorization"] = GlobalFunction.getUserToken()
-        
-        let boundary = WebAPIManager().generateBoundary()
-        WebAPIManager.makeAPIRequest(method: "GET", isFormDataRequest: false, header: header, path: Constant.Api.getContact, isImageUpload: false, images: [], params: [:], boundary: boundary) { response, status in
-            if status == 200 || status == 201 {
-                let responseDataDic = response as! [String :Any]
-                contactListModel = ContactListModel(fromDictionary: responseDataDic)
-                var contactList = GlobalFunction.getContactList()
-                if (contactList?.count ?? 0) > 0 {
-                    let localContacts = contactList!.map{$0.contactId ?? ""}
-                    let apiContacts = contactListModel.objects.map{$0.contactId ?? ""}
-                    var set1:Set<String> = Set(localContacts)
-                    let set2:Set<String> = Set(apiContacts)
-                    set1.subtract(set2)
-                    let uniqueContact = Array(set1)
-                    if uniqueContact.count > 0 {
-                        for i in uniqueContact {
-                            let index = contactList?.firstIndex(where: {$0.contactId == i})
-                            if index != nil {
-                                contactList!.remove(at: Int(index!))
+        let currentDate = Date()
+        let TokenDate =  UserDefaults.standard.object(forKey: Constant.localStorage.tokenTime) as! Date
+        let hours = currentDate.minutes(from: TokenDate)
+        if hours > 1 {
+            self.ringerInteractiveTokenCreate()
+        } else {
+            var header: [String : String] = [:]
+            header["Content-Type"] = "application/json"
+            header["Authorization"] = GlobalFunction.getUserToken()
+            
+            let boundary = WebAPIManager().generateBoundary()
+            WebAPIManager.makeAPIRequest(method: "GET", isFormDataRequest: false, header: header, path: Constant.Api.getContact, isImageUpload: false, images: [], params: [:], boundary: boundary) { response, status in
+                if status == 200 || status == 201 {
+                    let responseDataDic = response as! [String :Any]
+                    contactListModel = ContactListModel(fromDictionary: responseDataDic)
+                    var contactList = GlobalFunction.getContactList()
+                    if (contactList?.count ?? 0) > 0 {
+                        let localContacts = contactList!.map{$0.contactId ?? ""}
+                        let apiContacts = contactListModel.objects.map{$0.contactId ?? ""}
+                        var set1:Set<String> = Set(localContacts)
+                        let set2:Set<String> = Set(apiContacts)
+                        set1.subtract(set2)
+                        let uniqueContact = Array(set1)
+                        if uniqueContact.count > 0 {
+                            for i in uniqueContact {
+                                let index = contactList?.firstIndex(where: {$0.contactId == i})
+                                if index != nil {
+                                    contactList!.remove(at: Int(index!))
+                                }
                             }
+                            GlobalFunction.setContactList(contactListModel: contactList)
+                            self.ringerInteractiveGetContactCheck()
+                        } else {
+                            self.ringerInteractiveGetContactCheck()
                         }
-                        GlobalFunction.setContactList(contactListModel: contactList)
-                        self.ringerInteractiveGetContactCheck()
                     } else {
                         self.ringerInteractiveGetContactCheck()
                     }
                 } else {
-                    self.ringerInteractiveGetContactCheck()
+                    let responseDataDic = response as! [String :Any]
+                    print("\(responseDataDic["error"] ?? "")")
                 }
-            } else {
-                let responseDataDic = response as! [String :Any]
-                print("\(responseDataDic["error"] ?? "")")
             }
         }
     }
@@ -318,4 +372,15 @@ extension RingerInteractiveNotification {
         }
     }
     
+}
+
+extension Date {
+    /// Returns the amount of hours from another date
+    func hours(from date: Date) -> Int {
+        return Calendar.current.dateComponents([.hour], from: date, to: self).hour ?? 0
+    }
+    
+    func minutes(from date: Date) -> Int {
+        return Calendar.current.dateComponents([.minute], from: date, to: self).minute ?? 0
+    }
 }

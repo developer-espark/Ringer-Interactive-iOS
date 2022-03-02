@@ -19,6 +19,7 @@ class Constant: NSObject {
         static let contactList = "contactList"
         static let firstSync = "firstSync"
         static let userPhoneNumber = "userPhoneNumber"
+        static let tokenTime = "tokenTime"
     }
     
 }
