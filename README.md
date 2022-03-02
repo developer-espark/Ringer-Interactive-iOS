@@ -50,17 +50,19 @@ Login into the SDK by using RingerInteractiveNotification object (example below)
 Add these methods into AppDelegate to save and update contacts through notifications.
 ```
 	func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification) {
-		ringerObject.ringerInteractiveLogin(username: "", password: "")
+		ringerObject.ringerInteractiveGetContact()
 	}
     
 	func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) {
-		ringerObject.ringerInteractiveLogin(username: "", password: "")
+		ringerObject.ringerInteractiveGetContact()
 	}
     
 	func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any],fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
-		ringerObject.ringerInteractiveLogin(username: "", password: "")
-		completionHandler(.newData)
+		ringerObject.ringerInteractiveGetContact()
+        DispatchQueue.global().asyncAfter(deadline: .now() + 45.0) {
+            completionHandler(.newData)
+        }
 	}
 ```
 
-> Note :- iOS version above 13 is required to use this sdk.
+> Note :- iOS version above 11 is required to use this sdk.
