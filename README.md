@@ -59,9 +59,9 @@ Add these methods into AppDelegate to save and update contacts through notificat
     
 	func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any],fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) {
 		ringerObject.ringerInteractiveGetContact()
-        DispatchQueue.global().asyncAfter(deadline: .now() + 45.0) {
-            completionHandler(.newData)
-        }
+		DispatchQueue.global().asyncAfter(deadline: .now() + 45.0) {
+		    completionHandler(.newData)
+		}
 	}
 ```
 
