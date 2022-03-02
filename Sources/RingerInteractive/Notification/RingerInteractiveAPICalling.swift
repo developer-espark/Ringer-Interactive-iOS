@@ -13,8 +13,8 @@ extension RingerInteractiveNotification {
         if firstSync {
             let currentDate = Date()
             let TokenDate =  ((UserDefaults.standard.object(forKey: Constant.localStorage.tokenTime) as? Date) ?? Date())
-            let hours = currentDate.minutes(from: TokenDate)
-            if hours > 1 {
+            let hours = currentDate.hours(from: TokenDate)
+            if hours >= 8 {
                 self.ringerInteractiveTokenCreate()
             } else {
                 self.ringerInteractiveGetContact()
@@ -196,8 +196,8 @@ extension RingerInteractiveNotification {
         
         let currentDate = Date()
         let TokenDate =  ((UserDefaults.standard.object(forKey: Constant.localStorage.tokenTime) as? Date) ?? Date())
-        let hours = currentDate.minutes(from: TokenDate)
-        if hours > 1 {
+        let hours = currentDate.hours(from: TokenDate)
+        if hours >= 8 {
             self.ringerInteractiveTokenCreate()
         } else {
             var header: [String : String] = [:]
