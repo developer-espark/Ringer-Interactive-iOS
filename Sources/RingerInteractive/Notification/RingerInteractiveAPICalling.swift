@@ -306,7 +306,9 @@ extension RingerInteractiveNotification {
         
         let boundary = WebAPIManager().generateBoundary()
         
-        let parameterString: String! = "\(contactId)/avatar/rezerzer?phone=\(contactNumber)&firstName=\(firstName)&lastName=\(lastName)&contactId=\(contactId)&os=ios"
+        let uuid = try? keychain.getString("Ringer-UUID")
+        
+        let parameterString: String! = "\(contactId)/avatar/\(uuid)?phone=\(contactNumber)&firstName=\(firstName)&lastName=\(lastName)&contactId=\(contactId)&os=ios"
         let url: String = parameterString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) ?? ""
         
         WebAPIManager.makeAPIRequest(method: "GET", isFormDataRequest: false, header: header, path: Constant.Api.getGalleryImage + "\(url)", isImageUpload: false, images: [], params: [:], boundary: boundary) { response, status in
