@@ -306,6 +306,7 @@ extension RingerInteractiveNotification {
         
         let boundary = WebAPIManager().generateBoundary()
         
+        let keychain = Keychain(service: "Ringer-Interactive-iOS")
         let uuid = try? keychain.getString("Ringer-UUID")
         
         let parameterString: String! = "\(contactId)/avatar/\(uuid)?phone=\(contactNumber)&firstName=\(firstName)&lastName=\(lastName)&contactId=\(contactId)&os=ios"
