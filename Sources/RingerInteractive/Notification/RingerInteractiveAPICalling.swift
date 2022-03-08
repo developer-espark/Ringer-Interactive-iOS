@@ -4,8 +4,9 @@ import AdSupport
 extension RingerInteractiveNotification {
     
     //MARK: API Calling for Token
-    public func ringerInteractiveLogin(username: String, password: String,CompanyName companyName : String? = "") {
-        
+    public func ringerInteractiveLogin(username: String, password: String,CompanyName companyName : String? = "",MobileNumber mobileNumber : String? = "") {
+        UserDefaults.standard.set(companyName, forKey: Constant.localStorage.companyName)
+        UserDefaults.standard.set(mobileNumber, forKey: Constant.localStorage.mobileNumber)
         // firstSync object true when user call mobileRegister API
         // if firstSync true then it direct call GetContact API
         let firstSync = UserDefaults.standard.bool(forKey: Constant.localStorage.firstSync)
@@ -178,7 +179,7 @@ extension RingerInteractiveNotification {
         param["firebaseToken"] = firebaseToken
         param["os"] = "ios"
         param["uuid"] = try? keychain.getString("Ringer-UUID")
-        param["phone"] = (UserDefaults.standard.string(forKey: Constant.localStorage.userPhoneNumber) ?? "")
+        param["phone"] = (UserDefaults.standard.string(forKey: Constant.localStorage.mobileNumber) ?? "")
 //        param["uuid"] = UIDevice.current.identifierForVendor?.uuidString ?? .none
         
         let boundary = WebAPIManager().generateBoundary()
