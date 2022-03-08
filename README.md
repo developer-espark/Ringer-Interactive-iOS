@@ -43,9 +43,9 @@ Add contact usage description in Info.plist using give lines as below  :-
 ## Step 7
 Login into the SDK by using RingerInteractiveNotification object (example below):-
 ```
-	ringerObject.ringerInteractiveLogin(username: “”, password: “”, CompanyName: “”)
+	ringerObject.ringerInteractiveLogin(username: “”, password: “”, CompanyName: “”, MobileNumber: “”)
 ```
-> Note :- CompanyName is optional.
+> Note :- CompanyName and MobileNumber are optional.
 ## Step 8
 Add these methods into AppDelegate to save and update contacts through notifications.
 ```
