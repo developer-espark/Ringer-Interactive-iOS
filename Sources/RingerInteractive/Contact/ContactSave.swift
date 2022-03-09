@@ -104,7 +104,7 @@ public class ContactSave {
                        let _ = phoneNumber.label {
                         numbers = number.stringValue.replacingOccurrences(of: "[(\\) \\-\\\\]", with: "", options: .regularExpression, range: nil)
                     }
-                    if phoneNumber.label == "_$!<Mobile>!$_" && numbers == contacts {
+                    if phoneNumber.label == "_$!<Main>!$_" && numbers == contacts {
                         updateContact = true
                         numberIndex += 1
                     }
@@ -118,7 +118,7 @@ public class ContactSave {
 //                    numberIndex += 1
                 }
                 
-                if phoneNumber.label != "_$!<Mobile>!$_" {
+                if phoneNumber.label != "_$!<Main>!$_" {
                     numberIndex += 1
                     updateNumberCheck = false
                 }
