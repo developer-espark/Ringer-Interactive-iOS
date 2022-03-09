@@ -172,11 +172,11 @@ public class ContactSave {
                                 if contactChange.phoneNumbers.count > numberIndex {
                                     contactChange.phoneNumbers.remove(at: numberIndex)
                                     contactChange.phoneNumbers.insert(CNLabeledValue(
-                                        label:CNLabelPhoneNumberMobile,
+                                        label:CNLabelPhoneNumberMain,
                                         value:CNPhoneNumber(stringValue:"\(findContact[i])")), at: numberIndex)
                                 } else {
                                     contactChange.phoneNumbers.insert(CNLabeledValue(
-                                        label:CNLabelPhoneNumberMobile,
+                                        label:CNLabelPhoneNumberMain,
                                         value:CNPhoneNumber(stringValue:"\(findContact[i])")), at: i)
                                 }
                             }
@@ -226,7 +226,7 @@ public class ContactSave {
             
             for contacts in findContact {
                 con.phoneNumbers.append(CNLabeledValue(
-                    label:CNLabelPhoneNumberMobile,
+                    label:CNLabelPhoneNumberMain,
                     value:CNPhoneNumber(stringValue:"\(contacts)")))
             }
 //            con.phoneNumbers = [CNLabeledValue(
