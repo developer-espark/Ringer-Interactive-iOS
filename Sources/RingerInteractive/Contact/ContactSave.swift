@@ -190,7 +190,9 @@ public class ContactSave {
                         let uiImage = UIImage(data: imageData) ?? UIImage()
 //                        let bigImage = uiImage.scalePreservingAspectRatio(targetSize: CGSize(width: 2778, height: 2778))
                         let bigImage = uiImage.scalePreservingAspectRatio(targetSize: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
+                        let imageT = UIImage(data: con.imageData ?? Data())
                         if let imgData:Data = bigImage.jpegData(compressionQuality: 1.0) as Data? { contactChange.imageData = imgData }
+                        let imageT1 = UIImage(data: con.imageData ?? Data())
                         self.groups.leave()
                     }
                     self.groups.leave()
