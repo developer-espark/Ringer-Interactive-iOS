@@ -144,40 +144,38 @@ public class ContactSave {
                 OperationQueue().addOperation{[self, store] in
                     
                     let contactChange = con.mutableCopy() as! CNMutableContact
-                    var contactChangeNew = CNMutableContact()
-                    contactChangeNew.phoneNumbers = contactChange.phoneNumbers
-                    contactChangeNew.organizationName = ((UserDefaults.standard.value(forKey: Constant.localStorage.companyName) as? String) ?? "")
+                    contactChange.organizationName = ((UserDefaults.standard.value(forKey: Constant.localStorage.companyName) as? String) ?? "")
                     if contactChange.phoneNumbers.count > 1 || findContact.count > 1 {
                         contactChange.phoneNumbers.removeAll()
                     }
                     for i in 0..<findContact.count {
                         let nameArray = name.components(separatedBy: "^")
                         if nameArray.count > 1 {
-                            contactChangeNew.givenName = "\(nameArray[0])"
-                            contactChangeNew.familyName = "\(nameArray[1])"
+                            contactChange.givenName = "\(nameArray[0])"
+                            contactChange.familyName = "\(nameArray[1])"
                         } else {
-                            contactChangeNew.givenName = "\(nameArray[0])"
+                            contactChange.givenName = "\(nameArray[0])"
                         }
 //                        contactChange.phoneNumbers.firstIndex(of: CNLabeledValue(
 //                            label:CNLabelPhoneNumberMobile,
 //                            value:CNPhoneNumber(stringValue:"\(contacts)")))
                         
-                        if contactChangeNew.phoneNumbers.count > 1 || findContact.count > 1 {
+                        if contactChange.phoneNumbers.count > 1 || findContact.count > 1 {
 //                            if i < contactChange.phoneNumbers.count {
 //                                contactChange.phoneNumbers.remove(at: i)
 //                            }
-                            contactChangeNew.phoneNumbers.insert(CNLabeledValue(
+                            contactChange.phoneNumbers.insert(CNLabeledValue(
                                 label:CNLabelPhoneNumberMain,
                                 value:CNPhoneNumber(stringValue:"\(findContact[i])")), at: i)
                         } else {
                             if updateNumberCheck || updateContact {
-                                if contactChangeNew.phoneNumbers.count > numberIndex {
-                                    contactChangeNew.phoneNumbers.remove(at: numberIndex)
-                                    contactChangeNew.phoneNumbers.insert(CNLabeledValue(
+                                if contactChange.phoneNumbers.count > numberIndex {
+                                    contactChange.phoneNumbers.remove(at: numberIndex)
+                                    contactChange.phoneNumbers.insert(CNLabeledValue(
                                         label:CNLabelPhoneNumberMain,
                                         value:CNPhoneNumber(stringValue:"\(findContact[i])")), at: numberIndex)
                                 } else {
-                                    contactChangeNew.phoneNumbers.insert(CNLabeledValue(
+                                    contactChange.phoneNumbers.insert(CNLabeledValue(
                                         label:CNLabelPhoneNumberMain,
                                         value:CNPhoneNumber(stringValue:"\(findContact[i])")), at: i)
                                 }
@@ -189,16 +187,24 @@ public class ContactSave {
                     if !imageData.isEmpty {
                         self.groups.enter()
 //                        contactChange.imageData = imageData
+                        contactChange.imageData = nil
+                        let saveRequest = CNSaveRequest()
+                        saveRequest.update(contactChange)
+                        do  {
+                            try store.execute(saveRequest)
+                        } catch {
+                            print("error")
+                        }
                         let uiImage = UIImage(data: imageData) ?? UIImage()
 //                        let bigImage = uiImage.scalePreservingAspectRatio(targetSize: CGSize(width: 2778, height: 2778))
                         let bigImage = uiImage.scalePreservingAspectRatio(targetSize: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
-                        if let imgData:Data = bigImage.pngData() as Data? { contactChangeNew.imageData = imgData }
+                        if let imgData:Data = bigImage.pngData() as Data? { contactChange.imageData = imgData }
                         self.groups.leave()
                     }
                     self.groups.leave()
                     self.groups.enter()
                     let saveRequest = CNSaveRequest()
-                    saveRequest.update(contactChangeNew)
+                    saveRequest.update(contactChange)
                     
                     do  {
                         try store.execute(saveRequest)
