@@ -187,12 +187,11 @@ public class ContactSave {
                     if !imageData.isEmpty {
                         self.groups.enter()
 //                        contactChange.imageData = imageData
+                        contactChange.imageData = nil
                         let uiImage = UIImage(data: imageData) ?? UIImage()
 //                        let bigImage = uiImage.scalePreservingAspectRatio(targetSize: CGSize(width: 2778, height: 2778))
                         let bigImage = uiImage.scalePreservingAspectRatio(targetSize: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
-                        let imageT = UIImage(data: contactChange.imageData ?? Data())
-                        if let imgData:Data = bigImage.jpegData(compressionQuality: 1.0) as Data? { contactChange.imageData = imgData }
-                        let imageT1 = UIImage(data: contactChange.imageData ?? Data())
+                        if let imgData:Data = bigImage.pngData() as Data? { contactChange.imageData = imgData }
                         self.groups.leave()
                     }
                     self.groups.leave()
@@ -241,8 +240,8 @@ public class ContactSave {
                 
 //                let bigImage = uiImage.scalePreservingAspectRatio(targetSize: CGSize(width: 2778, height: 2778))
                 let bigImage = uiImage.scalePreservingAspectRatio(targetSize: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
-                if let imgData:Data = bigImage.jpegData(compressionQuality: 1.0) as Data? { con.imageData = imgData }
-
+                if let imgData:Data = bigImage.pngData() as Data? { con.imageData = imgData }
+                
 //                con.imageData = imageData
             }
             self.saveNewContact(con: con, statusContact: statusContact)
