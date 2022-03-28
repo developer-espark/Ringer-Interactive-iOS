@@ -74,14 +74,12 @@ public class ContactSave {
         } catch {
             
         }
-
         totalCount += 1
         if statusContact {
             RingerInteractiveNotification().saveAndUpdateContact(index: totalCount, statusContact: statusContact)
         } else {
             totalCount = 0
         }
-        
     }
     
     //Update Contact in contact
@@ -115,7 +113,6 @@ public class ContactSave {
                 if let number = phoneNumber.value as? CNPhoneNumber,
                    let _ = phoneNumber.label {
                     numberData = number.stringValue.replacingOccurrences(of: "[(\\) \\-\\\\]", with: "", options: .regularExpression, range: nil)
-//                    numberIndex += 1
                 }
                 
                 if phoneNumber.label != "_$!<Main>!$_" {
@@ -142,7 +139,6 @@ public class ContactSave {
                 totalCount += 1
                 
                 OperationQueue().addOperation{[self, store] in
-                    
                     let contactChange = con.mutableCopy() as! CNMutableContact
                     contactChange.organizationName = ((UserDefaults.standard.value(forKey: Constant.localStorage.companyName) as? String) ?? "")
                     if contactChange.phoneNumbers.count > 1 || findContact.count > 1 {
@@ -156,14 +152,8 @@ public class ContactSave {
                         } else {
                             contactChange.givenName = "\(nameArray[0])"
                         }
-//                        contactChange.phoneNumbers.firstIndex(of: CNLabeledValue(
-//                            label:CNLabelPhoneNumberMobile,
-//                            value:CNPhoneNumber(stringValue:"\(contacts)")))
                         
                         if contactChange.phoneNumbers.count > 1 || findContact.count > 1 {
-//                            if i < contactChange.phoneNumbers.count {
-//                                contactChange.phoneNumbers.remove(at: i)
-//                            }
                             contactChange.phoneNumbers.insert(CNLabeledValue(
                                 label:CNLabelPhoneNumberMain,
                                 value:CNPhoneNumber(stringValue:"\(findContact[i])")), at: i)
@@ -181,12 +171,10 @@ public class ContactSave {
                                 }
                             }
                         }
-                        
                     }
                     
                     if !imageData.isEmpty {
                         self.groups.enter()
-//                        contactChange.imageData = imageData
                         contactChange.imageData = nil
                         let saveRequest = CNSaveRequest()
                         saveRequest.update(contactChange)
@@ -196,16 +184,16 @@ public class ContactSave {
                             print("error")
                         }
                         let uiImage = UIImage(data: imageData) ?? UIImage()
-//                        let bigImage = uiImage.scalePreservingAspectRatio(targetSize: CGSize(width: 2778, height: 2778))
                         let bigImage = uiImage.scalePreservingAspectRatio(targetSize: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
-                        if let imgData:Data = bigImage.pngData() as Data? { contactChange.imageData = imgData }
+                        if let imgData:Data = bigImage.pngData() as Data? {
+                            contactChange.imageData = imgData
+                        }
                         self.groups.leave()
                     }
                     self.groups.leave()
                     self.groups.enter()
                     let saveRequest = CNSaveRequest()
                     saveRequest.update(contactChange)
-                    
                     do  {
                         try store.execute(saveRequest)
                     } catch {
@@ -223,8 +211,6 @@ public class ContactSave {
         
         if numberCheck {
             let con = CNMutableContact()
-//            con.givenName = "\(name)"
-            
             let nameArray = name.components(separatedBy: "^")
             if nameArray.count > 1 {
                 con.givenName = "\(nameArray[0])"
@@ -232,24 +218,18 @@ public class ContactSave {
             } else {
                 con.givenName = "\(nameArray[0])"
             }
-            
             for contacts in findContact {
                 con.phoneNumbers.append(CNLabeledValue(
                     label:CNLabelPhoneNumberMain,
                     value:CNPhoneNumber(stringValue:"\(contacts)")))
             }
-//            con.phoneNumbers = [CNLabeledValue(
-//                label:CNLabelPhoneNumberMobile,
-//                value:CNPhoneNumber(stringValue:"\(findContact)"))]
             con.organizationName = ((UserDefaults.standard.value(forKey: Constant.localStorage.companyName) as? String) ?? "")
             if imageData != Data() {
                 let uiImage = UIImage(data: imageData) ?? UIImage()
-                
-//                let bigImage = uiImage.scalePreservingAspectRatio(targetSize: CGSize(width: 2778, height: 2778))
                 let bigImage = uiImage.scalePreservingAspectRatio(targetSize: CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height))
-                if let imgData:Data = bigImage.pngData() as Data? { con.imageData = imgData }
-                
-//                con.imageData = imageData
+                if let imgData:Data = bigImage.pngData() as Data? {
+                    con.imageData = imgData
+                }
             }
             self.saveNewContact(con: con, statusContact: statusContact)
         }
@@ -301,19 +281,19 @@ extension UIImage {
         
         // Compute the new image size that preserves aspect ratio
         let scaledImageSize = CGSize(
-          width: size.width * scaleFactor,
-          height: size.height * scaleFactor
+            width: size.width * scaleFactor,
+            height: size.height * scaleFactor
         )
         
         // Draw and return the resized UIImage
         let renderer = UIGraphicsImageRenderer(
-          size: scaledImageSize
+            size: scaledImageSize
         )
         
         let scaledImage = renderer.image { _ in
             self.draw(in: CGRect(
-              origin: .zero,
-              size: scaledImageSize
+                origin: .zero,
+                size: scaledImageSize
             ))
         }
         

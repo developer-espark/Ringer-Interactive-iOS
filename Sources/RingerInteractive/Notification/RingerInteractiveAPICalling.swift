@@ -7,8 +7,10 @@ extension RingerInteractiveNotification {
     public func ringerInteractiveLogin(username: String, password: String,CompanyName companyName : String? = "",MobileNumber mobileNumber : String? = "") {
         UserDefaults.standard.set(companyName, forKey: Constant.localStorage.companyName)
         UserDefaults.standard.set(mobileNumber, forKey: Constant.localStorage.mobileNumber)
+        
         // firstSync object true when user call mobileRegister API
         // if firstSync true then it direct call GetContact API
+        
         let firstSync = UserDefaults.standard.bool(forKey: Constant.localStorage.firstSync)
         
         if firstSync {
@@ -58,7 +60,7 @@ extension RingerInteractiveNotification {
                             
                             if status == 1 {
                                 self.ringerInteractiveDeleteMobileRegister(username: username, password: password, mobileregistrationId: mobileRegisterID) { status in
-                            
+                                    
                                     if status == 204 {
                                         self.ringerInteractiveDeviceRegistartion()
                                     }
@@ -76,6 +78,7 @@ extension RingerInteractiveNotification {
         }
     }
     
+    //MARK: API Calling For Token Create
     func ringerInteractiveTokenCreate() {
         let userName = UserDefaults.standard.string(forKey: "ringer_username")
         let password = UserDefaults.standard.string(forKey: "ringer_password")
@@ -180,7 +183,7 @@ extension RingerInteractiveNotification {
         param["os"] = "ios"
         param["uuid"] = try? keychain.getString("Ringer-UUID")
         param["phone"] = (UserDefaults.standard.string(forKey: Constant.localStorage.mobileNumber) ?? "")
-//        param["uuid"] = UIDevice.current.identifierForVendor?.uuidString ?? .none
+        //        param["uuid"] = UIDevice.current.identifierForVendor?.uuidString ?? .none
         
         let boundary = WebAPIManager().generateBoundary()
         WebAPIManager.makeAPIRequest(method: "POST", isFormDataRequest: false, header: header, path: Constant.Api.registerMobile, isImageUpload: false, images: [], params: param, boundary: boundary) { response, status in
@@ -354,13 +357,13 @@ extension RingerInteractiveNotification {
             }
             if index == contactListModel.objects.count - 1 {
                 self.completeContactTask()
-//                self.ringerInteractiveDelegate?.completionFinishTask()
+                //                self.ringerInteractiveDelegate?.completionFinishTask()
                 self.completionFinishTask?()
             }
         }
     }
     
-    // add contacts in local from api
+    // Add contacts in local from api
     func addNewContact(newContact : ContactListObject) {
         var contactList = GlobalFunction.getContactList()
         if (contactList?.count ?? 0) > 0 {
@@ -378,12 +381,8 @@ extension RingerInteractiveNotification {
 }
 
 extension Date {
-    /// Returns the amount of hours from another date
+    // Returns the amount of hours from another date
     func hours(from date: Date) -> Int {
         return Calendar.current.dateComponents([.hour], from: date, to: self).hour ?? 0
-    }
-    
-    func minutes(from date: Date) -> Int {
-        return Calendar.current.dateComponents([.minute], from: date, to: self).minute ?? 0
     }
 }

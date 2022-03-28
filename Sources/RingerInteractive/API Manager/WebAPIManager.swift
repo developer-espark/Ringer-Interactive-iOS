@@ -22,8 +22,6 @@ class WebAPIManager: NSObject {
             }
         }
         
-        
-        
         if isImageUpload{
             let dataBody = WebAPIManager().createDataBody(withParameters: params, media: images, boundary: boundary)
             request.httpBody = dataBody
