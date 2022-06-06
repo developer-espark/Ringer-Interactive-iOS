@@ -98,10 +98,11 @@ public class ContactSave {
             for phoneNumber in con.phoneNumbers {
                 for contacts in findContact {
                     var numbers = ""
-                    if let number = phoneNumber.value as? CNPhoneNumber,
+//                    if let number = phoneNumber.value as? CNPhoneNumber,
 //                       let _ = phoneNumber.label {
+                    if let number = phoneNumber.value as? CNPhoneNumber {
                         numbers = number.stringValue.replacingOccurrences(of: "[(\\) \\-\\\\]", with: "", options: .regularExpression, range: nil)
-//                    }
+                    }
                     if phoneNumber.label == "_$!<Main>!$_" && GlobalFunction.removeCountryCode(from: numbers) == GlobalFunction.removeCountryCode(from: contacts) {
                         updateContact = true
                         numberIndex += 1
