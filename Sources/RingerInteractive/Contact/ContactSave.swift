@@ -111,8 +111,9 @@ public class ContactSave {
             }
             
             for phoneNumber in con.phoneNumbers {
-                if let number = phoneNumber.value as? CNPhoneNumber,
-                   let _ = phoneNumber.label {
+//                if let number = phoneNumber.value as? CNPhoneNumber,
+//                   let _ = phoneNumber.label {
+                if let number = phoneNumber.value as? CNPhoneNumber {
                     numberData = number.stringValue.replacingOccurrences(of: "[(\\) \\-\\\\]", with: "", options: .regularExpression, range: nil)
                 }
                 
