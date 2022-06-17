@@ -1,10 +1,3 @@
-//
-//  YiUUID.swift
-//  YiUUID
-//
-//  Created by coderyi on 2020/11/28.
-//
-
 import UIKit
 
 open class YiUUID {
