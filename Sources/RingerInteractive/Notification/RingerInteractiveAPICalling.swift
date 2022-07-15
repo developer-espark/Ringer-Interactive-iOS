@@ -197,6 +197,7 @@ extension RingerInteractiveNotification {
     
     //MARK: API Calling For Contact Get
     public func ringerInteractiveGetContact() {
+        self.count = 0
         let currentDate = Date()
         let TokenDate =  ((UserDefaults.standard.object(forKey: Constant.localStorage.tokenTime) as? Date) ?? Date())
         let hours = currentDate.hours(from: TokenDate)
