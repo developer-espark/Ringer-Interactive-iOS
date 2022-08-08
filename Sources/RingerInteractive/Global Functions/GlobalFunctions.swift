@@ -62,4 +62,12 @@ class GlobalFunction: NSObject {
         return str_ret
     }
     
+    //MARK: Function for check valid URL
+    static func isValidUrl(_ urlSring: String?) -> Bool {
+        let urlPattern = "^(https?|http?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=ō~_|]"
+        let urlPred = NSPredicate(format: "SELF MATCHES %@", urlPattern)
+        
+        let result = urlPred.evaluate(with: urlSring)
+        return result
+    }
 }
