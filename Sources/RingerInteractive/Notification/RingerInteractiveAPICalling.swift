@@ -212,7 +212,7 @@ extension RingerInteractiveNotification {
             WebAPIManager.makeAPIRequest(method: "GET", isFormDataRequest: false, header: header, path: Constant.Api.getContact, isImageUpload: false, images: [], params: [:], boundary: boundary) { response, status in
                 if status == 200 || status == 201 {
                     let responseDataDic = response as! [String :Any]
-                    if !(responseDataDic["imgUrl"] as? URL) && !GlobalFunction.isValidUrl("\(responseDataDic["imgUrl"] as? URL)") {
+                    if "\(responseDataDic["imgUrl"] ?? "")" == "" {
                         contactListModel = ContactListModel(fromDictionary: responseDataDic)
                     }
                     var contactList = GlobalFunction.getContactList()
